@@ -15,13 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'assignsubmission_tipnc', language 'en'
+ * Events
  *
  * @package     assignsubmission_tipnc
  * @copyright   2021 Tresipunt
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
-
-$string['pluginname'] = 'NextCloud Submission';
-$string['urldoc'] = 'URL NextCloud document';
+$observers = array(
+    array(
+        'eventname'   => 'core\event\course_module_created',
+        'callback'    => 'assignsubmission_tipnc_observer::course_module_created',
+        'priority'    => 100,
+        'internal'    => false,
+    )
+);

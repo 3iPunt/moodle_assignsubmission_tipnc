@@ -15,13 +15,47 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'assignsubmission_tipnc', language 'en'
+ * Class Observer assignsubmission_tipnc
+ *
+ * @package     assignsubmission_tipnc
+ * @copyright   2021 Tresipunt
+ */
+
+use assignsubmission_tipnc\nextcloud;
+use core\event\course_module_created;
+
+defined('MOODLE_INTERNAL') || die();
+
+global $CFG;
+
+/**
+ * Class Event observer for assignsubmission_tipnc.
  *
  * @package     assignsubmission_tipnc
  * @copyright   2021 Tresipunt
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ *
  */
+class assignsubmission_tipnc_observer {
 
+    /**
+     * Evento que controla la creación del curso.
+     *
+     * @param course_module_created $event
+     * @return bool
+     */
+    public static function course_module_created(course_module_created $event): bool {
 
-$string['pluginname'] = 'NextCloud Submission';
-$string['urldoc'] = 'URL NextCloud document';
+        echo "<pre>";
+
+        $cmid = $event->objectid;
+
+        $nextcloud = new nextcloud();
+        $nextcloud->teacher_create($cmid);
+
+        // TODO. copiar archivo base a 'enun_cmid'
+
+        return true;
+    }
+
+}

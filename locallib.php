@@ -21,8 +21,12 @@
  *
  * @package     assignsubmission_tipnc
  * @copyright   2021 Tresipunt
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+use assignsubmission_tipnc\nextcloud;
+use assignsubmission_tipnc\output\url_submission_component;
+use assignsubmission_tipnc\output\view_submission_component;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -55,6 +59,17 @@ class assign_submission_tipnc extends assign_submission_plugin {
         global $DB;
         return $DB->get_record('assignsubmission_tipnc', array('submission'=>$submissionid));
     }
+    /**
+     * Get tipnc submission information from the database by ID.
+     *
+     * @param int $tipncid
+     * @return mixed
+     * @throws dml_exception
+     */
+    private function get_tipnc_submission_by_id(int $tipncid) {
+        global $DB;
+        return $DB->get_record('assignsubmission_tipnc', array('id'=>$tipncid));
+    }
 
     /**
      * Get the default setting for file submission plugin
@@ -72,7 +87,6 @@ class assign_submission_tipnc extends assign_submission_plugin {
      * @return bool
      */
     public function save_settings(stdClass $data): bool {
-
         return true;
     }
 
@@ -83,8 +97,16 @@ class assign_submission_tipnc extends assign_submission_plugin {
      * @param MoodleQuickForm $mform
      * @param stdClass $data
      * @return bool
+     * @throws coding_exception|dml_exception
      */
     public function get_form_elements($submission, MoodleQuickForm $mform, stdClass $data): bool {
+        global $PAGE;
+        $tipnc = $this->get_tipnc_submission($submission->id);
+        $mform->addElement('hidden', 'url', $tipnc->url);
+        $output = $PAGE->get_renderer('assignsubmission_tipnc');
+        $component = new view_submission_component($tipnc->url);
+        $render = $output->render($component);
+        $mform->addElement('static', 'iframe', '', $render);
         return true;
     }
 
@@ -102,15 +124,19 @@ class assign_submission_tipnc extends assign_submission_plugin {
         global $DB;
         $tipncsubmission = $this->get_tipnc_submission($submission->id);
         if ($tipncsubmission) {
-            $tipncsubmission->onlyoffice = 1077;
+            $tipncsubmission->url = $data->url;
             $DB->update_record('assignsubmission_tipnc', $tipncsubmission);
         } else {
             $tipnc = new stdClass();
             $tipnc->assignment = $submission->assignment;
             $tipnc->submission = $submission->id;
-            $tipnc->onlyoffice = 1077;
-            $DB->insert_record('assignsubmission_tipnc', $tipnc);
+            $tipnc->url = $data->url;
+            $tipncid = $DB->insert_record('assignsubmission_tipnc', $tipnc);
+            $tipncsubmission = $this->get_tipnc_submission_by_id($tipncid);
         }
+
+        $nextcloud = new nextcloud();
+        $nextcloud->student_submits($tipncsubmission);
 
         return true;
     }
@@ -120,8 +146,14 @@ class assign_submission_tipnc extends assign_submission_plugin {
      *
      * @param stdClass $submission The submission
      * @return boolean
+     * @throws dml_exception
      */
     public function remove(stdClass $submission): bool {
+        global $DB;
+        $submissionid = $submission ? $submission->id : 0;
+        if ($submissionid) {
+            $DB->delete_records('assignsubmission_tipnc', ['submission' => $submission->id]);
+        }
         return true;
     }
 
@@ -144,11 +176,27 @@ class assign_submission_tipnc extends assign_submission_plugin {
      * @param bool $showviewlink Set this to true if the list of files is long
      * @return string
      * @throws dml_exception
+     * @throws coding_exception
      */
     public function view_summary(stdClass $submission, & $showviewlink): string {
+        global $PAGE;
         $tipnc = $this->get_tipnc_submission($submission->id);
-        return '<iframe src="https://nextcloud.montseny.digitaldemocratic.net/apps/onlyoffice/1077" width="100%" height="100%" align="top" frameborder="0" name="frameEditor" allowfullscreen="" onmousewheel="" allow="autoplay; camera; microphone; display-capture"></iframe>';
-        return 'TIPNC summary - ' . $tipnc->onlyoffice;
+        $url = $tipnc->url;
+        $pagesview = ['mod-assign-gradingpanel', 'mod-assign-view'];
+        $output = $PAGE->get_renderer('assignsubmission_tipnc');
+        if (!empty($url)) {
+            if (in_array($PAGE->pagetype, $pagesview)) {
+                $component = new view_submission_component($url);
+                $render = $output->render($component);
+            } else {
+                $component = new url_submission_component($url);
+                $render = $output->render($component);
+            }
+        } else {
+            $render = '-';
+        }
+
+        return $render;
     }
 
     /**
@@ -213,7 +261,6 @@ class assign_submission_tipnc extends assign_submission_plugin {
         // Will throw exception on failure.
         $DB->delete_records('assignsubmission_tipnc',
             array('assignment'=>$this->assignment->get_instance()->id));
-
         return true;
     }
 
@@ -245,7 +292,7 @@ class assign_submission_tipnc extends assign_submission_plugin {
      * @param stdClass $data The submission data
      * @return bool
      */
-    public function submission_is_empty(stdClass $data) {
+    public function submission_is_empty(stdClass $data): bool {
         return false;
     }
 
