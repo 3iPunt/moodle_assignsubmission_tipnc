@@ -24,7 +24,7 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use assignsubmission_tipnc\nextcloud;
+use assignsubmission_tipnc\api\nextcloud;
 use assignsubmission_tipnc\output\url_submission_component;
 use assignsubmission_tipnc\output\view_submission_component;
 
@@ -39,6 +39,8 @@ defined('MOODLE_INTERNAL') || die();
  */
 class assign_submission_tipnc extends assign_submission_plugin {
 
+    const NEXTCLOUD_URL = '/apps/files/?dir=/tasks&openfile=';
+
     /**
      * Get the name of the file submission plugin
      * @return string
@@ -46,6 +48,18 @@ class assign_submission_tipnc extends assign_submission_plugin {
      */
     public function get_name(): string {
         return get_string('pluginname', 'assignsubmission_tipnc');
+    }
+
+    /**
+     * Get tipnc enunciate information from the database
+     *
+     * @param int $assignment
+     * @return mixed
+     * @throws dml_exception
+     */
+    private function get_tipnc_enun(int $assignment) {
+        global $DB;
+        return $DB->get_record('assignsubmission_tipnc_enun', array('assignment'=> $assignment));
     }
 
     /**
@@ -59,6 +73,7 @@ class assign_submission_tipnc extends assign_submission_plugin {
         global $DB;
         return $DB->get_record('assignsubmission_tipnc', array('submission'=>$submissionid));
     }
+
     /**
      * Get tipnc submission information from the database by ID.
      *
@@ -101,13 +116,24 @@ class assign_submission_tipnc extends assign_submission_plugin {
      */
     public function get_form_elements($submission, MoodleQuickForm $mform, stdClass $data): bool {
         global $PAGE;
-        $tipnc = $this->get_tipnc_submission($submission->id);
-        $mform->addElement('hidden', 'url', $tipnc->url);
-        $output = $PAGE->get_renderer('assignsubmission_tipnc');
-        $component = new view_submission_component($tipnc->url);
-        $render = $output->render($component);
-        $mform->addElement('static', 'iframe', '', $render);
-        return true;
+        $enun = $this->get_tipnc_enun($submission->assignment);
+        if (!empty($enun->ncid)) {
+            $host = get_config('assignsubmission_tipnc', 'host');
+            $url = $host . self::NEXTCLOUD_URL . $enun->ncid;
+            $nextcloud = new nextcloud();
+            $response = $nextcloud->student_view($submission, $enun->ncid);
+            if ($response) {
+                $output = $PAGE->get_renderer('assignsubmission_tipnc');
+                $component = new view_submission_component($url);
+                $render = $output->render($component);
+                $mform->addElement('static', 'iframe', '', $render);
+                $mform->addElement('hidden', 'ncid', '', $enun->ncid);
+                return true;
+            }
+        }
+
+        return false;
+
     }
 
 
@@ -121,24 +147,17 @@ class assign_submission_tipnc extends assign_submission_plugin {
      * @throws dml_exception
      */
     public function save(stdClass $submission, stdClass $data): bool {
-        global $DB;
         $tipncsubmission = $this->get_tipnc_submission($submission->id);
-        if ($tipncsubmission) {
-            $tipncsubmission->url = $data->url;
-            $DB->update_record('assignsubmission_tipnc', $tipncsubmission);
-        } else {
-            $tipnc = new stdClass();
-            $tipnc->assignment = $submission->assignment;
-            $tipnc->submission = $submission->id;
-            $tipnc->url = $data->url;
-            $tipncid = $DB->insert_record('assignsubmission_tipnc', $tipnc);
-            $tipncsubmission = $this->get_tipnc_submission_by_id($tipncid);
+        $tipncenun = $this->get_tipnc_enun($submission->assignment);
+        if (!empty($tipncsubmission->shareid)) {
+            $nextcloud = new nextcloud();
+            $response = $nextcloud->student_submits(
+                $tipncsubmission->shareid, $submission->assignment, $tipncenun->userid);
+            if ($response) {
+                return true;
+            }
         }
-
-        $nextcloud = new nextcloud();
-        $nextcloud->student_submits($tipncsubmission);
-
-        return true;
+        return false;
     }
 
     /**

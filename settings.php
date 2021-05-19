@@ -24,7 +24,15 @@
 
 
 // Note: This is on by default.
-//$settings->add(new admin_setting_configcheckbox('assignsubmission_tipnc/default',
-//    new lang_string('default', 'assignsubmission_file'),
-//    new lang_string('default_help', 'assignsubmission_file'), 1));
+$settings->add(new admin_setting_configtext('assignsubmission_tipnc/host',
+    new lang_string('host', 'assignsubmission_tipnc'),
+    new lang_string('host_help', 'assignsubmission_tipnc'), ''));
+
+$settings->add(new admin_setting_configtext('assignsubmission_tipnc/user',
+    new lang_string('user', 'assignsubmission_tipnc'),
+    '', ''));
+
+$settings->add(new admin_setting_configpasswordunmask('assignsubmission_tipnc/password',
+    new lang_string('password', 'assignsubmission_tipnc'),
+    '', ''));
 

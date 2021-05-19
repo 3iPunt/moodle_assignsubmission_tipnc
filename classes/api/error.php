@@ -15,45 +15,41 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Class Observer assignsubmission_tipnc
- *
- * @package     assignsubmission_tipnc
- * @copyright   2021 Tresipunt
- */
-
-use assignsubmission_tipnc\api\nextcloud;
-use core\event\course_module_created;
-
-defined('MOODLE_INTERNAL') || die();
-
-global $CFG;
-
-/**
- * Class Event observer for assignsubmission_tipnc.
+ * Error Response
  *
  * @package     assignsubmission_tipnc
  * @copyright   2021 Tresipunt
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
  */
-class assignsubmission_tipnc_observer {
+
+namespace assignsubmission_tipnc\api;
+
+defined('MOODLE_INTERNAL') || die();
+
+
+/**
+ * Error Response
+ *
+ * @package     assignsubmission_tipnc
+ * @copyright   2021 Tresipunt
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class error {
+
+    /** @var int Error Code */
+    public $code;
+
+    /** @var string Error Message */
+    public $message;
 
     /**
-     * Evento que controla la creación del curso.
-     *
-     * @param course_module_created $event
-     * @return bool
-     * @throws moodle_exception
+     * Error constructor.
+     * @param int $code
+     * @param string $message
      */
-    public static function course_module_created(course_module_created $event): bool {
-        $cmid = $event->objectid;
-        list($course, $cm) = get_course_and_cm_from_cmid($cmid);
-        if ($cm->modname === 'assign') {
-            $nextcloud = new nextcloud();
-            return $nextcloud->teacher_create($cm);
-        } else {
-            return true;
-        }
+    public function __construct(int $code, string $message) {
+        $this->code = $code;
+        $this->message = $message;
     }
 
 }

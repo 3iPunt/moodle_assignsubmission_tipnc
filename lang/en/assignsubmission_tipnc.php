@@ -25,3 +25,7 @@
 
 $string['pluginname'] = 'NextCloud Submission';
 $string['urldoc'] = 'URL NextCloud document';
+$string['host'] = 'Host NextCloud';
+$string['user'] = 'User NextCloud';
+$string['password'] = 'Password';
+$string['host_help'] = 'Ex. https://nextcloud.montseny.digitaldemocratic.net';
