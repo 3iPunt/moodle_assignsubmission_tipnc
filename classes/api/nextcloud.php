@@ -25,7 +25,6 @@
 namespace assignsubmission_tipnc\api;
 
 use cm_info;
-use core_user;
 use curl;
 use dml_exception;
 use stdClass;
@@ -44,14 +43,14 @@ class nextcloud {
     const FOLDER_TASKS = 'tasks';
     const ORIGINAL_DOC = 'new.docx';
     const PREFIX_ENUN = 'enun_';
-    const PREFIX_TASK = 'task_';
-    const PREFIX_SUBMISSION = 'subm_';
+    const PREFIX_SUBMISSION = 'task_';
     const TIMEOUT = 30;
 
     const SHARE_TYPE_USER = 0;
     const PERMISSION_READ = 1;
     const PERMISSION_EDITION = 2;
     const PERMISSION_UPDATE = 4;
+    const PERMISSION_ALL = 31;
 
     /** @var string Host */
     protected $host;
@@ -228,19 +227,19 @@ class nextcloud {
     /**
      * Delete Permission.
      *
-     * @param int $shareid
+     * @param int $share_id
      * @return response
      */
-    protected function delete_permission(int $shareid): response {
+    protected function delete_permission(int $share_id): response {
 
         $curl = new curl();
-        $url = $this->host . '/ocs/v2.php/apps/files_sharing/api/v1/shares/' . $shareid . '?format=json';
+        $url = $this->host . '/ocs/v2.php/apps/files_sharing/api/v1/shares/' . $share_id . '?format=json';
         $headers = array();
         $headers[] = "Content-type: application/json";
         $headers[] = "OCS-APIRequest: true";
         $curl->setHeader($headers);
         $params = new stdClass();
-        $params->share_id = $shareid;
+        $params->share_id = $share_id;
 
         try {
             $res = $curl->post($url, json_encode($params), $this->get_options_curl('DELETE'));
@@ -271,17 +270,17 @@ class nextcloud {
     public function teacher_create(cm_info $cm): bool {
         global $USER, $DB;
         $instance = $cm->instance;
-        $newname = self::PREFIX_ENUN . $instance . '.docx';
-        $origin = self::FOLDER_TASKS . '/' . self::ORIGINAL_DOC;
-        $destiny = self::FOLDER_TASKS . '/' . $newname;
-        $response_copy = $this->copy_file($origin, $destiny);
+        $new = self::FOLDER_TASKS . '/' . self::ORIGINAL_DOC;
+        $enun = self::FOLDER_TASKS . '/' . self::PREFIX_ENUN . $instance . '.docx';
+        $response_copy = $this->copy_file($new, $enun);
         if ($response_copy->success) {
-            $username = $USER->username;
+            $teacherusername = $USER->username;
             // TODO. OVERRIDE!!!!
-            //$username = 'profesor1';
-            $response_share = $this->set_permission($username, self::PERMISSION_EDITION, $destiny);
+            //$teacherusername = 'profesor1';
+            $response_share = $this->set_permission($this->user, self::PERMISSION_ALL, $enun);
+            $response_share = $this->set_permission($teacherusername, self::PERMISSION_ALL, $enun);
             if ($response_share->success) {
-                $response_listing = $this->listing($destiny);
+                $response_listing = $this->listing($enun);
                 if ($response_listing->success) {
                     $data = new stdClass();
                     $data->assignment = $instance;
@@ -307,39 +306,65 @@ class nextcloud {
      * @return bool
      * @throws dml_exception
      */
-    public function student_view(stdClass $submission, int $ncid): bool {
-        global $USER, $DB;
-        $instance = $submission->assignment;
+    public function student_view_summary(stdClass $submission): bool {
+        global $USER;
         $username = $USER->username;
         // TODO. OVERRIDE!!!!
         //$username = 'alumno1';
-        $origin = self::FOLDER_TASKS . '/' . self::PREFIX_ENUN . $instance . '.docx';
-        $destiny = self::FOLDER_TASKS . '/' . self::PREFIX_TASK . $instance . '_' . $username . '.docx';
-        $response_copy = $this->copy_file($origin, $destiny);
+        $enun = self::FOLDER_TASKS . '/' . self::PREFIX_ENUN . $submission->assignment . '.docx';
+        $response = $this->set_permission($username, self::PERMISSION_READ, $enun);
+        if ($response->success) {
+            return true;
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Student Submit.
+     *
+     * @param stdClass $submission
+     * @return bool
+     * @throws dml_exception
+     */
+    public function student_open(stdClass $submission): bool {
+        global $USER, $DB;
+        $instance = $submission->assignment;
+        $studentusername = $USER->username;
+        // TODO. OVERRIDE!!!!
+        //$studentusername = 'alumno1';
+        $enun = self::FOLDER_TASKS . '/' . self::PREFIX_ENUN . $instance . '.docx';
+        $sub = self::FOLDER_TASKS . '/' . self::PREFIX_SUBMISSION . $instance . '_' . $studentusername . '.docx';
+        $response_copy = $this->copy_file($enun, $sub);
         if ($response_copy->success) {
-            $response_share = $this->set_permission($username, self::PERMISSION_EDITION, $destiny);
+            $response_share = $this->set_permission($this->user, self::PERMISSION_ALL, $sub);
+            $response_share = $this->set_permission($studentusername, self::PERMISSION_ALL, $sub);
             if ($response_share->success) {
-                $tipnc = $DB->get_record('assignsubmission_tipnc', array('submission'=>$submission->id));
-                if ($tipnc) {
-                    $tipnc->ncid = $ncid;
-                    $tipnc->shareid = $response_share->data;
-                    try {
-                        $DB->update_record('assignsubmission_tipnc', $tipnc);
-                        return true;
-                    } catch (\moodle_exception $e) {
-                        return false;
-                    }
-                } else {
-                    $tipnc = new stdClass();
-                    $tipnc->assignment = $submission->assignment;
-                    $tipnc->submission = $submission->id;
-                    $tipnc->ncid = $ncid;
-                    $tipnc->shareid = $response_share->data;
-                    try {
-                        $DB->insert_record('assignsubmission_tipnc', $tipnc);
-                        return true;
-                    } catch (\moodle_exception $e) {
-                        return false;
+                $response_listing = $this->listing($sub);
+                if ($response_listing->success) {
+                    $submissiontipnc = $DB->get_record('assignsubmission_tipnc', array('submission'=>$submission->id));
+                    if ($submissiontipnc) {
+                        $submissiontipnc->ncid = $response_listing->data;
+                        $submissiontipnc->shareid = $response_share->data;
+                        try {
+                            $DB->update_record('assignsubmission_tipnc', $submissiontipnc);
+                            return true;
+                        } catch (\moodle_exception $e) {
+                            return false;
+                        }
+                    } else {
+                        $submissiontipnc = new stdClass();
+                        $submissiontipnc->assignment = $submission->assignment;
+                        $submissiontipnc->submission = $submission->id;
+                        $submissiontipnc->ncid = $response_listing->data;
+                        $submissiontipnc->shareid = $response_share->data;
+                        try {
+                            $DB->insert_record('assignsubmission_tipnc', $submissiontipnc);
+                            return true;
+                        } catch (\moodle_exception $e) {
+                            return false;
+                        }
                     }
                 }
             }
@@ -352,30 +377,28 @@ class nextcloud {
      * Student Submit.
      *
      * @param int $shareid
-     * @param int $instance
-     * @param int $teacherid
+     * @param int $assignment
+     * @param int $userid
      * @return bool
      * @throws dml_exception
      */
-    public function student_submits(int $shareid, int $instance, int $teacherid): bool {
+    public function student_submits(int $shareid, int $assignment, int $userid): bool {
         global $USER;
-        $teacher = core_user::get_user($teacherid);
-        $usernameteacher = $teacher->username;
-        $usernamealumn = $USER->username;
+        $teacher = \core_user::get_user($userid);
+        $studentusername = $USER->username;
+        $teachername = $teacher->username;
         // TODO. OVERRIDE!!!!
-        //$usernameteacher = 'profesor1';
-        //$usernamealumn = 'alumno1';
-        $origin = self::FOLDER_TASKS . '/' . self::PREFIX_TASK . $instance . '_' . $usernamealumn . '.docx';
-        $destiny = self::FOLDER_TASKS . '/' . self::PREFIX_SUBMISSION . $instance . '_' . $usernamealumn . '.docx';
-        $response_copy = $this->copy_file($origin, $destiny);
-        if ($response_copy) {
-            $response_share = $this->set_permission($usernameteacher, self::PERMISSION_EDITION, $destiny);
-            $response_share = $this->set_permission($usernamealumn, self::PERMISSION_READ, $destiny);
-            if ($response_share->success) {
-                return true;
-            }
+        //$studentusername = 'alumno1';
+        //$teachername = 'profesor1';
+        $sub = self::FOLDER_TASKS . '/' . self::PREFIX_SUBMISSION . $assignment . '_' . $studentusername . '.docx';
+        $response_share = $this->set_permission($teachername, self::PERMISSION_ALL, $sub);
+        $response_share = $this->delete_permission($shareid);
+        $response_share = $this->set_permission($studentusername, self::PERMISSION_READ, $sub);
+        if ($response_share->success) {
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     /**
@@ -394,5 +417,6 @@ class nextcloud {
             'CURLOPT_USERPWD' => "{$this->user}:{$this->password}",
         ];
     }
+
 
 }

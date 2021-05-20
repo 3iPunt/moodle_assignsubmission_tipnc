@@ -47,12 +47,17 @@ class view_submission_component implements renderable, templatable {
     /** @var string URL */
     protected $url;
 
+    /** @var string Mode */
+    protected $mode;
+
     /**
      * constructor.
      * @param string $url
+     * @param string $mode
      */
-    public function __construct(string $url) {
+    public function __construct(string $url, string $mode) {
         $this->url = $url;
+        $this->mode = $mode;
     }
 
     /**
@@ -60,10 +65,22 @@ class view_submission_component implements renderable, templatable {
      *
      * @param renderer_base $output
      * @return stdClass
+     * @throws coding_exception
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
         $data->url = $this->url;
+        switch ($this->mode) {
+            case 'enun':
+                $strbutton = get_string('view_enun', 'assignsubmission_tipnc');
+                break;
+            case 'submission':
+                $strbutton = get_string('view_submission', 'assignsubmission_tipnc');
+                break;
+            default:
+                $strbutton = get_string('view', 'assignsubmission_tipnc');
+        }
+        $data->strbutton = $strbutton;
         return $data;
     }
 }

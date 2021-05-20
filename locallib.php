@@ -39,7 +39,7 @@ defined('MOODLE_INTERNAL') || die();
  */
 class assign_submission_tipnc extends assign_submission_plugin {
 
-    const NEXTCLOUD_URL = '/apps/files/?dir=/tasks&openfile=';
+    const NEXTCLOUD_URL = '/apps/onlyoffice/';
 
     /**
      * Get the name of the file submission plugin
@@ -118,13 +118,14 @@ class assign_submission_tipnc extends assign_submission_plugin {
         global $PAGE;
         $enun = $this->get_tipnc_enun($submission->assignment);
         if (!empty($enun->ncid)) {
-            $host = get_config('assignsubmission_tipnc', 'host');
-            $url = $host . self::NEXTCLOUD_URL . $enun->ncid;
             $nextcloud = new nextcloud();
-            $response = $nextcloud->student_view($submission, $enun->ncid);
+            $response = $nextcloud->student_open($submission);
             if ($response) {
+                $host = get_config('assignsubmission_tipnc', 'host');
+                $tipncsub = $this->get_tipnc_submission($submission->id);
+                $url = $host . self::NEXTCLOUD_URL . $tipncsub->ncid;
                 $output = $PAGE->get_renderer('assignsubmission_tipnc');
-                $component = new view_submission_component($url);
+                $component = new view_submission_component($url, 'submission');
                 $render = $output->render($component);
                 $mform->addElement('static', 'iframe', '', $render);
                 $mform->addElement('hidden', 'ncid', '', $enun->ncid);
@@ -199,13 +200,27 @@ class assign_submission_tipnc extends assign_submission_plugin {
      */
     public function view_summary(stdClass $submission, & $showviewlink): string {
         global $PAGE;
+        $host = get_config('assignsubmission_tipnc', 'host');
         $tipnc = $this->get_tipnc_submission($submission->id);
-        $url = $tipnc->url;
+        if (!$tipnc) {
+            // Enunciate
+            $enun = $this->get_tipnc_enun($submission->assignment);
+            $ncid = $enun->ncid;
+            $mode = 'enun';
+            $nextcloud = new nextcloud();
+            $nextcloud->student_view_summary($submission);
+        } else {
+            // Submission
+            $ncid = $tipnc->ncid;
+            $mode = 'submission';
+        }
+
+        $url = $host . self::NEXTCLOUD_URL . $ncid;
         $pagesview = ['mod-assign-gradingpanel', 'mod-assign-view'];
         $output = $PAGE->get_renderer('assignsubmission_tipnc');
         if (!empty($url)) {
             if (in_array($PAGE->pagetype, $pagesview)) {
-                $component = new view_submission_component($url);
+                $component = new view_submission_component($url, $mode);
                 $render = $output->render($component);
             } else {
                 $component = new url_submission_component($url);

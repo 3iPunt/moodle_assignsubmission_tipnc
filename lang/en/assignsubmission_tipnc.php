@@ -29,3 +29,6 @@ $string['host'] = 'Host NextCloud';
 $string['user'] = 'User NextCloud';
 $string['password'] = 'Password';
 $string['host_help'] = 'Ex. https://nextcloud.montseny.digitaldemocratic.net';
+$string['view'] = 'View';
+$string['view_enun'] = 'View Enunciate';
+$string['view_submission'] = 'View Submission';
