@@ -24,9 +24,12 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use assignsubmission_tipnc\api\document;
 use assignsubmission_tipnc\api\nextcloud;
 use assignsubmission_tipnc\output\url_submission_component;
 use assignsubmission_tipnc\output\view_submission_component;
+use assignsubmission_tipnc\tipnc;
+use assignsubmission_tipnc\tipnc_enun;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -39,8 +42,6 @@ defined('MOODLE_INTERNAL') || die();
  */
 class assign_submission_tipnc extends assign_submission_plugin {
 
-    const NEXTCLOUD_URL = '/apps/onlyoffice/';
-
     /**
      * Get the name of the file submission plugin
      * @return string
@@ -51,49 +52,11 @@ class assign_submission_tipnc extends assign_submission_plugin {
     }
 
     /**
-     * Get tipnc enunciate information from the database
-     *
-     * @param int $assignment
-     * @return mixed
-     * @throws dml_exception
-     */
-    private function get_tipnc_enun(int $assignment) {
-        global $DB;
-        return $DB->get_record('assignsubmission_tipnc_enun', array('assignment'=> $assignment));
-    }
-
-    /**
-     * Get tipnc submission information from the database
-     *
-     * @param int $submissionid
-     * @return mixed
-     * @throws dml_exception
-     */
-    private function get_tipnc_submission(int $submissionid) {
-        global $DB;
-        return $DB->get_record('assignsubmission_tipnc', array('submission'=>$submissionid));
-    }
-
-    /**
-     * Get tipnc submission information from the database by ID.
-     *
-     * @param int $tipncid
-     * @return mixed
-     * @throws dml_exception
-     */
-    private function get_tipnc_submission_by_id(int $tipncid) {
-        global $DB;
-        return $DB->get_record('assignsubmission_tipnc', array('id'=>$tipncid));
-    }
-
-    /**
      * Get the default setting for file submission plugin
      *
      * @param MoodleQuickForm $mform
      */
-    public function get_settings(MoodleQuickForm $mform) {
-
-    }
+    public function get_settings(MoodleQuickForm $mform) {}
 
     /**
      * Save the settings for file submission plugin
@@ -113,30 +76,32 @@ class assign_submission_tipnc extends assign_submission_plugin {
      * @param stdClass $data
      * @return bool
      * @throws coding_exception|dml_exception
+     * @throws moodle_exception
      */
     public function get_form_elements($submission, MoodleQuickForm $mform, stdClass $data): bool {
         global $PAGE;
-        $enun = $this->get_tipnc_enun($submission->assignment);
-        if (!empty($enun->ncid)) {
-            $nextcloud = new nextcloud();
+        // [Agregar entrega]
+        $tipnc_enun = tipnc_enun::get($submission->assignment);
+        $tipnc_sub = tipnc::get($submission->id);
+        if (!empty($tipnc_enun->ncid)) {
+            $nextcloud = new nextcloud($submission->assignment);
             $response = $nextcloud->student_open($submission);
-            if ($response) {
-                $host = get_config('assignsubmission_tipnc', 'host');
-                $tipncsub = $this->get_tipnc_submission($submission->id);
-                $url = $host . self::NEXTCLOUD_URL . $tipncsub->ncid;
+            if ($response->success) {
+                $url = document::get_url($tipnc_sub->ncid);
                 $output = $PAGE->get_renderer('assignsubmission_tipnc');
                 $component = new view_submission_component($url, 'submission');
                 $render = $output->render($component);
                 $mform->addElement('static', 'iframe', '', $render);
-                $mform->addElement('hidden', 'ncid', '', $enun->ncid);
                 return true;
+            } else {
+                print_error($response->error->message);
+                return false;
             }
+        } else {
+            print_error('No existe el enunciado');
+            return false;
         }
-
-        return false;
-
     }
-
 
     /**
      * Save the files and trigger plagiarism plugin, if enabled,
@@ -146,19 +111,34 @@ class assign_submission_tipnc extends assign_submission_plugin {
      * @param stdClass $data
      * @return bool
      * @throws dml_exception
+     * @throws moodle_exception
      */
     public function save(stdClass $submission, stdClass $data): bool {
-        $tipncsubmission = $this->get_tipnc_submission($submission->id);
-        $tipncenun = $this->get_tipnc_enun($submission->assignment);
-        if (!empty($tipncsubmission->shareid)) {
-            $nextcloud = new nextcloud();
-            $response = $nextcloud->student_submits(
-                $tipncsubmission->shareid, $submission->assignment, $tipncenun->userid);
-            if ($response) {
-                return true;
-            }
+        die('save');
+        $tipnc_enun = tipnc_enun::get($submission->assignment);
+        if (!$tipnc_enun) {
+            print_error('No existe el enunciado');
+            return false;
         }
-        return false;
+        $tipnc_sub = tipnc::get($submission->id);
+        if (!$tipnc_sub) {
+            print_error('No existe la entrega');
+            return false;
+        }
+        if (!empty($tipnc_sub->shareid)) {
+            $nextcloud = new nextcloud($submission->assignment);
+            $response = $nextcloud->student_submit($tipnc_sub->shareid, $tipnc_enun->userid);
+            if ($response->success) {
+                return true;
+            } else {
+                print_error($response->error->message);
+                return false;
+            }
+        } else {
+            print_error('No existe el shareId de la entrega');
+            return false;
+        }
+
     }
 
     /**
@@ -169,10 +149,9 @@ class assign_submission_tipnc extends assign_submission_plugin {
      * @throws dml_exception
      */
     public function remove(stdClass $submission): bool {
-        global $DB;
         $submissionid = $submission ? $submission->id : 0;
         if ($submissionid) {
-            $DB->delete_records('assignsubmission_tipnc', ['submission' => $submission->id]);
+            tipnc::delete($submission->id);
         }
         return true;
     }
@@ -185,51 +164,58 @@ class assign_submission_tipnc extends assign_submission_plugin {
      * @return array - return an array of files indexed by filename
      */
     public function get_files(stdClass $submission, stdClass $user): array {
-        $result = array();
-        return $result;
+        return [];
     }
 
     /**
-     * Display the list of files  in the submission status table
+     * Display the list of files in the submission status table
      *
      * @param stdClass $submission
      * @param bool $showviewlink Set this to true if the list of files is long
      * @return string
      * @throws dml_exception
      * @throws coding_exception
+     * @throws moodle_exception
      */
     public function view_summary(stdClass $submission, & $showviewlink): string {
         global $PAGE;
-        $host = get_config('assignsubmission_tipnc', 'host');
-        $tipnc = $this->get_tipnc_submission($submission->id);
-        if (!$tipnc) {
-            // Enunciate
-            $enun = $this->get_tipnc_enun($submission->assignment);
-            $ncid = $enun->ncid;
-            $mode = 'enun';
-            $nextcloud = new nextcloud();
-            $nextcloud->student_view_summary($submission);
-        } else {
-            // Submission
-            $ncid = $tipnc->ncid;
-            $mode = 'submission';
-        }
-
-        $url = $host . self::NEXTCLOUD_URL . $ncid;
-        $pagesview = ['mod-assign-gradingpanel', 'mod-assign-view'];
-        $output = $PAGE->get_renderer('assignsubmission_tipnc');
-        if (!empty($url)) {
-            if (in_array($PAGE->pagetype, $pagesview)) {
-                $component = new view_submission_component($url, $mode);
-                $render = $output->render($component);
+        $is_teacher = \assignsubmission_tipnc\assign::is_teacher($submission->assignment);
+        $tipnc_sub = tipnc::get($submission->id);
+        if (!$tipnc_sub) {
+            $tipnc_enun = tipnc_enun::get($submission->assignment);
+            if ($tipnc_enun) {
+                $ncid = $tipnc_enun->ncid;
+                $mode = document::MODE_ENUM;
+                if (!$is_teacher) {
+                    $nextcloud = new nextcloud($submission->assignment);
+                    $response = $nextcloud->student_view_summary();
+                    if (!$response->success) {
+                        print_error($response->error->message);
+                        return '';
+                    }
+                }
             } else {
-                $component = new url_submission_component($url);
-                $render = $output->render($component);
+                print_error('No existe el enunciado');
+                return '';
             }
         } else {
-            $render = '-';
+            $ncid = $tipnc_sub->ncid;
+            $mode = document::MODE_SUBMISSION;
         }
-
+        if (empty($ncid)) {
+            print_error('No se ha encontrado el NextCloud ID');
+            return '';
+        }
+        $url = document::get_url($ncid);
+        $pagesview = ['mod-assign-gradingpanel', 'mod-assign-view'];
+        $output = $PAGE->get_renderer('assignsubmission_tipnc');
+        if (in_array($PAGE->pagetype, $pagesview)) {
+            $component = new view_submission_component($url, $mode);
+            $render = $output->render($component);
+        } else {
+            $component = new url_submission_component($url);
+            $render = $output->render($component);
+        }
         return $render;
     }
 
@@ -239,7 +225,8 @@ class assign_submission_tipnc extends assign_submission_plugin {
      * @param stdClass $submission
      * @return string
      */
-    public function view(stdClass $submission) {
+    public function view(stdClass $submission): string {
+        die('view');
         return 'TIPNC view';
     }
 
@@ -291,10 +278,7 @@ class assign_submission_tipnc extends assign_submission_plugin {
      * @throws dml_exception
      */
     public function delete_instance(): bool {
-        global $DB;
-        // Will throw exception on failure.
-        $DB->delete_records('assignsubmission_tipnc',
-            array('assignment'=>$this->assignment->get_instance()->id));
+        tipnc::delete($this->assignment->get_instance()->id);
         return true;
     }
 

@@ -36,3 +36,14 @@ $settings->add(new admin_setting_configpasswordunmask('assignsubmission_tipnc/pa
     new lang_string('password', 'assignsubmission_tipnc'),
     '', ''));
 
+$settings->add(new admin_setting_configtext('assignsubmission_tipnc/folder',
+    new lang_string('folder', 'assignsubmission_tipnc'),
+    new lang_string('folder_help', 'assignsubmission_tipnc'), 'tasks'));
+
+$settings->add(new admin_setting_configtext('assignsubmission_tipnc/template',
+    new lang_string('template', 'assignsubmission_tipnc'),
+    new lang_string('template_help', 'assignsubmission_tipnc'), 'template.docx'));
+
+$settings->add(new admin_setting_configtext('assignsubmission_tipnc/location',
+    new lang_string('location', 'assignsubmission_tipnc'),
+    new lang_string('location_help', 'assignsubmission_tipnc'), '/apps/onlyoffice/'));

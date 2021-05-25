@@ -15,45 +15,54 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Class Observer assignsubmission_tipnc
- *
- * @package     assignsubmission_tipnc
- * @copyright   2021 Tresipunt
- */
-
-use assignsubmission_tipnc\api\nextcloud;
-use core\event\course_module_created;
-
-defined('MOODLE_INTERNAL') || die();
-
-global $CFG;
-
-/**
- * Class Event observer for assignsubmission_tipnc.
+ * tipnc_enun
  *
  * @package     assignsubmission_tipnc
  * @copyright   2021 Tresipunt
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- *
  */
-class assignsubmission_tipnc_observer {
+
+namespace assignsubmission_tipnc;
+
+use dml_exception;
+use stdClass;
+
+defined('MOODLE_INTERNAL') || die();
+
+/**
+ * tipnc_enun
+ *
+ * @package     assignsubmission_tipnc
+ * @copyright   2021 Tresipunt
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class tipnc_enun {
+
+    const TABLE_TIPNC_ENUN = 'assignsubmission_tipnc_enun';
 
     /**
-     * Evento que controla la creación del curso.
+     * Get tipnc enunciate information from the database
      *
-     * @param course_module_created $event
-     * @return bool
-     * @throws moodle_exception
+     * @param int $assignment
+     * @return mixed
+     * @throws dml_exception
      */
-    public static function course_module_created(course_module_created $event): bool {
-        $cmid = $event->objectid;
-        list($course, $cm) = get_course_and_cm_from_cmid($cmid);
-        if ($cm->modname === 'assign' && \assignsubmission_tipnc\assign::is_submission_nextcloud($cm)) {
-            $nextcloud = new nextcloud($cm->instance);
-            return $nextcloud->teacher_create();
-        } else {
-            return true;
-        }
+    static public function get(int $assignment) {
+        global $DB;
+        return $DB->get_record(self::TABLE_TIPNC_ENUN, array('assignment'=> $assignment));
     }
+
+    /**
+     * Set tipnc enunciate
+     *
+     * @param stdClass $data
+     * @return mixed
+     * @throws dml_exception
+     */
+    static public function set(stdClass $data) {
+        global $DB;
+        return $DB->insert_record(self::TABLE_TIPNC_ENUN, $data);
+    }
+
 
 }

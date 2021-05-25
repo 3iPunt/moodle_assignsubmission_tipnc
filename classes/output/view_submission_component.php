@@ -24,6 +24,7 @@
 
 namespace assignsubmission_tipnc\output;
 
+use assignsubmission_tipnc\api\document;
 use coding_exception;
 use core_user;
 use dml_exception;
@@ -71,10 +72,10 @@ class view_submission_component implements renderable, templatable {
         $data = new stdClass();
         $data->url = $this->url;
         switch ($this->mode) {
-            case 'enun':
+            case document::MODE_ENUM:
                 $strbutton = get_string('view_enun', 'assignsubmission_tipnc');
                 break;
-            case 'submission':
+            case document::MODE_SUBMISSION:
                 $strbutton = get_string('view_submission', 'assignsubmission_tipnc');
                 break;
             default:
