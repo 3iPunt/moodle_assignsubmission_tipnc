@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * tipnc
+ * tipnc_open
  *
  * @package     assignsubmission_tipnc
  * @copyright   2021 Tresipunt
@@ -30,18 +30,18 @@ use stdClass;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * tipnc
+ * tipnc_open
  *
  * @package     assignsubmission_tipnc
  * @copyright   2021 Tresipunt
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class tipnc {
+class tipnc_open {
 
-    const TABLE_TIPNC = 'assignsubmission_tipnc';
+    const TABLE_TIPNC_OPEN = 'assignsubmission_tipnc_open';
 
     /**
-     * Get tipnc submission information from the database
+     * Get tipnc submission open
      *
      * @param int $submissionid
      * @return mixed
@@ -49,11 +49,11 @@ class tipnc {
      */
     static public function get(int $submissionid) {
         global $DB;
-        return $DB->get_record(self::TABLE_TIPNC, array('submission'=>$submissionid));
+        return $DB->get_record(self::TABLE_TIPNC_OPEN, array('submission'=> $submissionid));
     }
 
     /**
-     * Update tipnc submission
+     * Update tipnc submission open
      *
      * @param stdClass $data
      * @return mixed
@@ -61,11 +61,11 @@ class tipnc {
      */
     static public function update(stdClass $data) {
         global $DB;
-        return $DB->update_record(self::TABLE_TIPNC, $data);
+        return $DB->update_record(self::TABLE_TIPNC_OPEN, $data);
     }
 
     /**
-     * Insert tipnc submission
+     * Set tipnc submission open
      *
      * @param stdClass $data
      * @return mixed
@@ -73,11 +73,11 @@ class tipnc {
      */
     static public function set(stdClass $data) {
         global $DB;
-        return $DB->insert_record(self::TABLE_TIPNC, $data);
+        return $DB->insert_record(self::TABLE_TIPNC_OPEN, $data);
     }
 
     /**
-     * Delete by submission_id
+     * Delete by submission
      *
      * @param int $submissionid
      * @return mixed
@@ -85,11 +85,11 @@ class tipnc {
      */
     static public function delete_by_submissionid(int $submissionid) {
         global $DB;
-        return $DB->delete_records(self::TABLE_TIPNC, ['submission' => $submissionid]);
+        return $DB->delete_records(self::TABLE_TIPNC_OPEN, ['submission' => $submissionid]);
     }
 
     /**
-     * Delete by Instance (Alls submission)
+     * Delete by Instance (All Opens)
      *
      * @param int $instance
      * @return mixed
@@ -97,7 +97,6 @@ class tipnc {
      */
     static public function delete(int $instance) {
         global $DB;
-        return $DB->delete_records(self::TABLE_TIPNC, ['assignment' => $instance]);
+        return $DB->delete_records(self::TABLE_TIPNC_OPEN, ['assignment' => $instance]);
     }
-
 }

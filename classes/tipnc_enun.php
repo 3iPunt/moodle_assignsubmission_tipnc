@@ -64,5 +64,17 @@ class tipnc_enun {
         return $DB->insert_record(self::TABLE_TIPNC_ENUN, $data);
     }
 
+    /**
+     * Delete
+     *
+     * @param int $instance
+     * @return mixed
+     * @throws dml_exception
+     */
+    static public function delete(int $instance) {
+        global $DB;
+        return $DB->delete_records(self::TABLE_TIPNC_ENUN, ['assignment' => $instance]);
+    }
+
 
 }

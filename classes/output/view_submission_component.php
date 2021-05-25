@@ -78,6 +78,9 @@ class view_submission_component implements renderable, templatable {
             case document::MODE_SUBMISSION:
                 $strbutton = get_string('view_submission', 'assignsubmission_tipnc');
                 break;
+            case document::MODE_OPEN:
+                $strbutton = get_string('view_open', 'assignsubmission_tipnc');
+                break;
             default:
                 $strbutton = get_string('view', 'assignsubmission_tipnc');
         }

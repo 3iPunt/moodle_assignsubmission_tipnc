@@ -32,6 +32,7 @@ $string['host_help'] = 'Ex. https://nextcloud.montseny.digitaldemocratic.net';
 $string['view'] = 'View';
 $string['view_enun'] = 'View Enunciate';
 $string['view_submission'] = 'View Submission';
+$string['view_open'] = 'View Open Submission';
 $string['folder'] = 'Folder name';
 $string['folder_help'] = 'Name of the folder where the tasks are in NextClou';
 $string['template'] = 'Template name';

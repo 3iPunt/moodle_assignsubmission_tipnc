@@ -38,9 +38,11 @@ defined('MOODLE_INTERNAL') || die();
 class document {
 
     const PREFIX_ENUN = 'enun_';
+    const PREFIX_OPEN = 'open_';
     const PREFIX_SUBMISSION = 'subm_';
 
     const MODE_ENUM = 'enun';
+    const MODE_OPEN = 'open';
     const MODE_SUBMISSION = 'submission';
 
     /** @var int Instance */
@@ -84,6 +86,17 @@ class document {
      */
     public function get_enunciate(): string {
         return $this->folder . '/' . self::PREFIX_ENUN . $this->instance . $this->extension;
+    }
+
+    /**
+     * Get Open.
+     *
+     * @param string $student
+     * @return string
+     */
+    public function get_open(string $student): string {
+        return $this->folder . '/' .
+            self::PREFIX_OPEN . $this->instance  . '_' . $student . $this->extension;
     }
 
     /**

@@ -26,6 +26,7 @@ namespace assignsubmission_tipnc\api;
 
 use assignsubmission_tipnc\tipnc;
 use assignsubmission_tipnc\tipnc_enun;
+use assignsubmission_tipnc\tipnc_open;
 use core_user;
 use curl;
 use dml_exception;
@@ -130,30 +131,26 @@ class nextcloud {
     public function student_open(stdClass $submission): response {
         global $USER;
         $student = $USER->username;
-        $admin = $this->user;
         $enun = $this->document->get_enunciate();
-        $sub = $this->document->get_submission($student);
-        $res_copy = $this->copy_file($enun, $sub);
+        $open = $this->document->get_open($student);
+        $res_copy = $this->copy_file($enun, $open);
         if ($res_copy->success) {
-            $res_share_admin = $this->set_permission($sub, $admin, self::PERMISSION_ALL);
-            $res_share_student = $this->set_permission($sub, $student, self::PERMISSION_ALL);
+            $res_share_student = $this->set_permission($open, $student, self::PERMISSION_ALL);
             if ($res_share_student->success) {
-                $res_listing = $this->listing($sub);
+                $res_listing = $this->listing($open);
                 if ($res_listing->success) {
-                    $tipnc_sub = tipnc::get($submission->id);
-                    if ($tipnc_sub) {
-                        $tipnc_sub->ncid = $res_listing->data;
-                        $tipnc_sub->shareid = $res_share_student->data;
-                        tipnc::update($tipnc_sub);
-                        return new response(true, '');
+                    $tipnc_open = tipnc_open::get($submission->id);
+                    if ($tipnc_open) {
+                        $tipnc_open->ncid = $res_listing->data;
+                        tipnc_open::update($tipnc_open);
+                        return new response(true, $tipnc_open->ncid);
                     } else {
-                        $tipnc_sub = new stdClass();
-                        $tipnc_sub->assignment = $submission->assignment;
-                        $tipnc_sub->submission = $submission->id;
-                        $tipnc_sub->ncid = $res_listing->data;
-                        $tipnc_sub->shareid = $res_share_student->data;
-                        tipnc::set($tipnc_sub);
-                        return new response(true, '');
+                        $tipnc_open = new stdClass();
+                        $tipnc_open->assignment = $submission->assignment;
+                        $tipnc_open->submission = $submission->id;
+                        $tipnc_open->ncid = $res_listing->data;
+                        tipnc_open::set($tipnc_open);
+                        return new response(true, $tipnc_open->ncid);
                     }
                 } else {
                     return $res_listing;
@@ -169,21 +166,51 @@ class nextcloud {
     /**
      * Student Submit.
      *
-     * @param int $shareid
-     * @param int $userid
+     * @param stdClass $submission
+     * @param int $teacherid
      * @return response
      * @throws dml_exception
      */
-    public function student_submit(int $shareid, int $userid): response {
+    public function student_submit(stdClass $submission, int $teacherid): response {
         global $USER;
-        $teacheruser = core_user::get_user($userid);
+        $teacheruser = core_user::get_user($teacherid);
         $student = $USER->username;
         $teacher = $teacheruser->username;
+        $open = $this->document->get_open($student);
         $sub = $this->document->get_submission($student);
-        $res_share_teacher_edit = $this->set_permission($sub, $teacher, self::PERMISSION_ALL);
-        //$res_share_student_read = $this->set_permission($sub, $student, self::PERMISSION_READ);
-        //$res_share_student_edit_del = $this->delete_permission($shareid);
-        return $res_share_teacher_edit;
+        $res_copy = $this->copy_file($open, $sub);
+        if ($res_copy->success) {
+            $res_share_teacher_edit = $this->set_permission($sub, $teacher, self::PERMISSION_ALL);
+            if ($res_share_teacher_edit->success) {
+                $res_share_student_read = $this->set_permission($sub, $student, self::PERMISSION_READ);
+                if ($res_share_student_read->success) {
+                    $res_listing = $this->listing($sub);
+                    if ($res_listing->success) {
+                        $tipnc = tipnc::get($submission->id);
+                        if ($tipnc) {
+                            $tipnc->ncid = $res_listing->data;
+                            tipnc::update($tipnc);
+                            return new response(true, $tipnc->ncid);
+                        } else {
+                            $tipnc = new stdClass();
+                            $tipnc->assignment = $submission->assignment;
+                            $tipnc->submission = $submission->id;
+                            $tipnc->ncid = $res_listing->data;
+                            tipnc::set($tipnc);
+                            return new response(true, $tipnc->ncid);
+                        }
+                    } else {
+                        return $res_listing;
+                    }
+                } else {
+                    return $res_share_student_read;
+                }
+            } else {
+                return $res_share_teacher_edit;
+            }
+        } else {
+            return $res_copy;
+        }
     }
 
     /**
