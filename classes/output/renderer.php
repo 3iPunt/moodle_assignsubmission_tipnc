@@ -49,6 +49,7 @@ class renderer extends plugin_renderer_base {
         $data = $component->export_for_template($this);
         return parent::render_from_template('assignsubmission_tipnc/view_submission_component', $data);
     }
+
     /**
      * Defer to template.
      *
@@ -60,6 +61,19 @@ class renderer extends plugin_renderer_base {
     public function render_url_submission_component(url_submission_component $component): string {
         $data = $component->export_for_template($this);
         return parent::render_from_template('assignsubmission_tipnc/url_submission_component', $data);
+    }
+
+    /**
+     * Defer to template.
+     *
+     * @param view_errors_page $page
+     *
+     * @return string html for the page
+     * @throws moodle_exception
+     */
+    public function render_view_errors_page(view_errors_page $page): string {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template('assignsubmission_tipnc/view_errors_page', $data);
     }
 
 }

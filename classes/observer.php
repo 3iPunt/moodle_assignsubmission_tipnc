@@ -50,10 +50,12 @@ class assignsubmission_tipnc_observer {
         list($course, $cm) = get_course_and_cm_from_cmid($cmid);
         if ($cm->modname === 'assign' && \assignsubmission_tipnc\assign::is_submission_nextcloud($cm)) {
             $nextcloud = new nextcloud($cm->instance);
-            return $nextcloud->teacher_create();
-        } else {
-            return true;
+            $res = $nextcloud->teacher_create();
+            if (!$res->success) {
+                return false;
+            }
         }
+        return true;
     }
 
 }

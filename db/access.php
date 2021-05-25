@@ -24,6 +24,18 @@
 
 $capabilities = array(
 
-
+    // View upload charge page.
+    'assignsubmission/tipnc:view_errors' => array(
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => array(
+            'student' => CAP_PROHIBIT,
+            'coursecreator' => CAP_PROHIBIT,
+            'guest' => CAP_PROHIBIT,
+            'teacher' => CAP_PROHIBIT,
+            'editingteacher' => CAP_PROHIBIT,
+            'manager' => CAP_ALLOW,
+        ),
+    ),
 
 );

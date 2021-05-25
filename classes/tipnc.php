@@ -24,7 +24,9 @@
 
 namespace assignsubmission_tipnc;
 
+use assignsubmission_tipnc\api\error;
 use dml_exception;
+use moodle_exception;
 use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
@@ -56,48 +58,66 @@ class tipnc {
      * Update tipnc submission
      *
      * @param stdClass $data
-     * @return mixed
      * @throws dml_exception
      */
     static public function update(stdClass $data) {
         global $DB;
-        return $DB->update_record(self::TABLE_TIPNC, $data);
+        try {
+            $DB->update_record(self::TABLE_TIPNC, $data);
+        } catch (moodle_exception $e) {
+            $assignment = empty($data->assignment) ? 0 : $data->assignment;
+            $submission = empty($data->submission) ? null : $data->submission;
+            tipnc_error::log('tipnc:update', new error(2000, $e->getMessage()), $assignment, $submission);
+        }
     }
 
     /**
      * Insert tipnc submission
      *
      * @param stdClass $data
-     * @return mixed
      * @throws dml_exception
      */
     static public function set(stdClass $data) {
         global $DB;
-        return $DB->insert_record(self::TABLE_TIPNC, $data);
+        try {
+            $DB->insert_record(self::TABLE_TIPNC, $data);
+        } catch (moodle_exception $e) {
+            $assignment = empty($data->assignment) ? 0 : $data->assignment;
+            $submission = empty($data->submission) ? null : $data->submission;
+            tipnc_error::log('tipnc:set', new error(2001, $e->getMessage()), $assignment, $submission);
+        }
     }
 
     /**
      * Delete by submission_id
      *
      * @param int $submissionid
-     * @return mixed
+     * @param int $assignment
      * @throws dml_exception
      */
-    static public function delete_by_submissionid(int $submissionid) {
+    static public function delete_by_submissionid(int $submissionid, int $assignment) {
         global $DB;
-        return $DB->delete_records(self::TABLE_TIPNC, ['submission' => $submissionid]);
+        try {
+            $DB->delete_records(self::TABLE_TIPNC, ['submission' => $submissionid]);
+        } catch (moodle_exception $e) {
+            tipnc_error::log('tipnc:delete_by_submissionid',
+                new error(2002, $e->getMessage()), $assignment, $submissionid);
+        }
     }
 
     /**
      * Delete by Instance (Alls submission)
      *
      * @param int $instance
-     * @return mixed
      * @throws dml_exception
      */
     static public function delete(int $instance) {
         global $DB;
-        return $DB->delete_records(self::TABLE_TIPNC, ['assignment' => $instance]);
+        try {
+            $DB->delete_records(self::TABLE_TIPNC, ['assignment' => $instance]);
+        } catch (moodle_exception $e) {
+            tipnc_error::log('tipnc:delete', new error(2003, $e->getMessage()), $instance);
+        }
     }
 
 }

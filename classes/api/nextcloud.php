@@ -26,6 +26,7 @@ namespace assignsubmission_tipnc\api;
 
 use assignsubmission_tipnc\tipnc;
 use assignsubmission_tipnc\tipnc_enun;
+use assignsubmission_tipnc\tipnc_error;
 use assignsubmission_tipnc\tipnc_open;
 use core_user;
 use curl;
@@ -83,10 +84,10 @@ class nextcloud {
     /**
      * Teacher create Assign with NextCloud Submission.
      *
-     * @return bool
+     * @return response
      * @throws dml_exception
      */
-    public function teacher_create(): bool {
+    public function teacher_create(): response {
         global $USER;
         $template = $this->document->get_template();
         $enun = $this->document->get_enunciate();
@@ -102,23 +103,36 @@ class nextcloud {
                     $data->ncid = $res_listing->data;
                     $data->userid = $USER->id;
                     tipnc_enun::set($data);
-                    return true;
+                    return new response(true, $data->ncid);
+                } else {
+                    tipnc_error::log('teacher_create', $res_listing->error, $this->instance);
+                    return $res_listing;
                 }
+            } else {
+                tipnc_error::log('teacher_create', $res_share_teacher->error, $this->instance);
+                return $res_share_teacher;
             }
+        } else {
+            tipnc_error::log('teacher_create', $res_copy->error, $this->instance);
+            return $res_copy;
         }
-        return false;
     }
 
     /**
      * Student View in Summary.
      *
      * @return response
+     * @throws dml_exception
      */
     public function student_view_summary(): response {
         global $USER;
         $student = $USER->username;
         $enun = $this->document->get_enunciate();
-        return $this->set_permission($enun, $student, self::PERMISSION_READ);
+        $res = $this->set_permission($enun, $student, self::PERMISSION_READ);
+        if (!$res->success) {
+            tipnc_error::log('student_view_summary', $res->error, $this->instance);
+        }
+        return $res;
     }
 
     /**
@@ -153,12 +167,15 @@ class nextcloud {
                         return new response(true, $tipnc_open->ncid);
                     }
                 } else {
+                    tipnc_error::log('student_open', $res_listing->error, $this->instance, $submission->id);
                     return $res_listing;
                 }
             } else {
+                tipnc_error::log('student_open', $res_share_student->error, $this->instance, $submission->id);
                 return $res_share_student;
             }
         } else {
+            tipnc_error::log('student_open', $res_copy->error, $this->instance, $submission->id);
             return $res_copy;
         }
     }
@@ -200,15 +217,19 @@ class nextcloud {
                             return new response(true, $tipnc->ncid);
                         }
                     } else {
+                        tipnc_error::log('student_submit', $res_listing->error, $this->instance, $submission->id);
                         return $res_listing;
                     }
                 } else {
+                    tipnc_error::log('student_submit', $res_share_student_read->error, $this->instance, $submission->id);
                     return $res_share_student_read;
                 }
             } else {
+                tipnc_error::log('student_submit', $res_share_teacher_edit->error, $this->instance, $submission->id);
                 return $res_share_teacher_edit;
             }
         } else {
+            tipnc_error::log('student_submit', $res_copy->error, $this->instance, $submission->id);
             return $res_copy;
         }
     }
@@ -237,11 +258,11 @@ class nextcloud {
             if ($response['HTTP/1.1'] === '201 Created' || $response['HTTP/1.1'] === '204 No Content') {
                 $response = new response(true, '');
             } else {
-                $response = new response(false, null, new error(1001, $response['HTTP/1.1']));
+                $response = new response(false, null, new error(0101, $response['HTTP/1.1']));
             }
         } catch (\Exception $e) {
             $response = new response(false, null,
-                new error(1000, $e->getMessage()));
+                new error(0100, $e->getMessage()));
         }
         return $response;
     }
@@ -300,11 +321,11 @@ class nextcloud {
                 $response = new response(true, $fileid);
             } else {
                 $response = new response(
-                    false, null, new error(2001, 'The FileID could not be retrieved'));
+                    false, null, new error(0201, 'The FileID could not be retrieved'));
             }
         } catch (\Exception $e) {
             $response = new response(false, null,
-                new error(2000, $e->getMessage()));
+                new error(0200, $e->getMessage()));
         }
         return $response;
     }
@@ -337,14 +358,14 @@ class nextcloud {
                 if (isset($res['ocs']['data']['id'])) {
                     $response = new response(true, $res['ocs']['data']['id']);
                 } else {
-                    $response = new response(false, null, new error(3002, 'Respuesta no esperada'));
+                    $response = new response(false, null, new error(0302, 'Respuesta no esperada'));
                 }
             } else {
-                $response = new response(false, null, new error(3001, $response['HTTP/1.1']));
+                $response = new response(false, null, new error(0301, $response['HTTP/1.1']));
             }
         } catch (\Exception $e) {
             $response = new response(false, null,
-                new error(3000, $e->getMessage()));
+                new error(0300, $e->getMessage()));
         }
         return $response;
     }
@@ -371,11 +392,11 @@ class nextcloud {
             if ($response['HTTP/1.1'] === '200 OK') {
                 $response = new response(true, '');
             } else {
-                $response = new response(false, null, new error(4001, $response['HTTP/1.1']));
+                $response = new response(false, null, new error(0401, $response['HTTP/1.1']));
             }
         } catch (\Exception $e) {
             $response = new response(false, null,
-                new error(4000, $e->getMessage()));
+                new error(0400, $e->getMessage()));
         }
         return $response;
     }

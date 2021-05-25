@@ -26,10 +26,12 @@
 
 use assignsubmission_tipnc\api\document;
 use assignsubmission_tipnc\api\nextcloud;
+use assignsubmission_tipnc\api\error as error_log;
 use assignsubmission_tipnc\output\url_submission_component;
 use assignsubmission_tipnc\output\view_submission_component;
 use assignsubmission_tipnc\tipnc;
 use assignsubmission_tipnc\tipnc_enun;
+use assignsubmission_tipnc\tipnc_error;
 use assignsubmission_tipnc\tipnc_open;
 
 defined('MOODLE_INTERNAL') || die();
@@ -86,7 +88,10 @@ class assign_submission_tipnc extends assign_submission_plugin {
             $tipnc_open = tipnc_open::get($submission->id);
             if ($tipnc_open) {
                 if (empty($tipnc_open->ncid)) {
-                    print_error('No se ha podido recuperar el NextCloud ID');
+                    tipnc_error::log(
+                        'get_form_elements',
+                        new error_log(1000, 'The NextCloud ID could not be retrieved'),
+                        $submission->assignment, $submission->id);
                     return false;
                 } else {
                     $ncid = $tipnc_open->ncid;
@@ -97,7 +102,6 @@ class assign_submission_tipnc extends assign_submission_plugin {
                 if ($response->success) {
                     $ncid = $response->data;
                 } else {
-                    print_error($response->error->message);
                     return false;
                 }
             }
@@ -108,7 +112,10 @@ class assign_submission_tipnc extends assign_submission_plugin {
             $mform->addElement('static', 'iframe', '', $render);
             return true;
         } else {
-            print_error('No existe el enunciado');
+            tipnc_error::log(
+                'get_form_elements',
+                new error_log(1001, 'The Enunciate does not exist'),
+                $submission->assignment, $submission->id);
             return false;
         }
     }
@@ -126,12 +133,18 @@ class assign_submission_tipnc extends assign_submission_plugin {
     public function save(stdClass $submission, stdClass $data): bool {
         $tipnc_enun = tipnc_enun::get($submission->assignment);
         if (!$tipnc_enun) {
-            print_error('No existe el enunciado');
+            tipnc_error::log(
+                'save',
+                new error_log(1100, 'The Enunciate does not exist'),
+                $submission->assignment, $submission->id);
             return false;
         }
         $tipnc_open = tipnc_open::get($submission->id);
         if (!$tipnc_open) {
-            print_error('No existe el documento abierto del alumno');
+            tipnc_error::log(
+                'save',
+                new error_log(1101, 'The Open Submission does not exist'),
+                $submission->assignment, $submission->id);
             return false;
         }
         switch ($submission->status) {
@@ -149,7 +162,10 @@ class assign_submission_tipnc extends assign_submission_plugin {
                     return false;
                 }
             default:
-                print_error('Assign status unknown');
+                tipnc_error::log(
+                    'save',
+                    new error_log(1102, 'Assign status unknown'),
+                    $submission->assignment, $submission->id);
                 return false;
         }
     }
@@ -165,10 +181,13 @@ class assign_submission_tipnc extends assign_submission_plugin {
         $submissionid = $submission ? $submission->id : 0;
         if ($submissionid) {
             try {
-                tipnc::delete_by_submissionid($submission->id);
-                tipnc_open::delete_by_submissionid($submission->id);
+                tipnc::delete_by_submissionid($submission->id, $submission->assignment);
+                tipnc_open::delete_by_submissionid($submission->id, $submission->assignment);
             } catch (moodle_exception $e) {
-                print_error($e->getMessage());
+                tipnc_error::log(
+                    'remove',
+                    new error_log(1200, $e->getMessage()),
+                    $submission->assignment, $submission->id);
                 return false;
             }
         }
@@ -200,7 +219,10 @@ class assign_submission_tipnc extends assign_submission_plugin {
         global $PAGE;
         $tipnc_enun = tipnc_enun::get($submission->assignment);
         if (!$tipnc_enun) {
-            print_error('No existe el enunciado');
+            tipnc_error::log(
+                'view_summary',
+                new error_log(1300, 'The Enunciate does not exist'),
+                $submission->assignment, $submission->id);
             return '';
         }
         $is_teacher = \assignsubmission_tipnc\assign::is_teacher($submission->assignment);
@@ -210,7 +232,7 @@ class assign_submission_tipnc extends assign_submission_plugin {
                 case ASSIGN_SUBMISSION_STATUS_DRAFT:
                 case ASSIGN_SUBMISSION_STATUS_REOPENED:
                 case ASSIGN_SUBMISSION_STATUS_NEW:
-                    $mode = document::MODE_ENUM;
+                    $mode = document::MODE_ENUN;
                     $ncid = $tipnc_enun->ncid;
                     break;
                 case ASSIGN_SUBMISSION_STATUS_SUBMITTED:
@@ -219,8 +241,23 @@ class assign_submission_tipnc extends assign_submission_plugin {
                     $ncid = $tipnc_sub->ncid;
                     break;
                 default:
-                    print_error('Assign status unknown');
-                    return '';
+                    if (is_null($submission->status)) {
+                        $sub = \assignsubmission_tipnc\assign::get_submission($submission->id);
+                        if ($sub->status === ASSIGN_SUBMISSION_STATUS_SUBMITTED) {
+                            $mode = document::MODE_SUBMISSION;
+                            $tipnc_sub = tipnc::get($submission->id);
+                            $ncid = $tipnc_sub->ncid;
+                        } else {
+                            $mode = document::MODE_ENUN;
+                            $ncid = $tipnc_enun->ncid;
+                        }
+                    } else {
+                        tipnc_error::log(
+                            'view_summary',
+                            new error_log(1301, 'Assign status unknown'),
+                            $submission->assignment, $submission->id);
+                        return '';
+                    }
             }
         } else {
             $nextcloud = new nextcloud($submission->assignment);
@@ -242,7 +279,7 @@ class assign_submission_tipnc extends assign_submission_plugin {
                     }
                     break;
                 case ASSIGN_SUBMISSION_STATUS_NEW:
-                    $mode = document::MODE_ENUM;
+                    $mode = document::MODE_ENUN;
                     $ncid = $tipnc_enun->ncid;
                     $response = $nextcloud->student_view_summary();
                     if (!$response->success) {
@@ -256,13 +293,19 @@ class assign_submission_tipnc extends assign_submission_plugin {
                     $ncid = $tipnc_sub->ncid;
                     break;
                 default:
-                    print_error('Assign status unknown');
+                    tipnc_error::log(
+                        'view_summary',
+                        new error_log(1302, 'Assign status unknown'),
+                        $submission->assignment, $submission->id);
                     return '';
             }
         }
 
         if (empty($ncid)) {
-            print_error('No se ha encontrado el NextCloud ID');
+            tipnc_error::log(
+                'view_summary',
+                new error_log(1303, 'The NextCloud ID could not be retrieved'),
+                $submission->assignment, $submission->id);
             return '';
         }
 
@@ -274,7 +317,7 @@ class assign_submission_tipnc extends assign_submission_plugin {
             $component = new view_submission_component($url, $mode);
             $render = $output->render($component);
         } else {
-            $component = new url_submission_component($url);
+            $component = new url_submission_component($url, $mode);
             $render = $output->render($component);
         }
         return $render;
@@ -344,6 +387,10 @@ class assign_submission_tipnc extends assign_submission_plugin {
             tipnc_open::delete($this->assignment->get_instance()->id);
             return true;
         } catch (moodle_exception $e) {
+            tipnc_error::log(
+                'delete_instance',
+                new error_log(1400, $e->getMessage()),
+                $this->assignment->get_instance()->id);
             print_error($e->getMessage());
             return false;
         }

@@ -72,7 +72,7 @@ class view_submission_component implements renderable, templatable {
         $data = new stdClass();
         $data->url = $this->url;
         switch ($this->mode) {
-            case document::MODE_ENUM:
+            case document::MODE_ENUN:
                 $strbutton = get_string('view_enun', 'assignsubmission_tipnc');
                 break;
             case document::MODE_SUBMISSION:

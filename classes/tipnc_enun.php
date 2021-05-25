@@ -24,7 +24,9 @@
 
 namespace assignsubmission_tipnc;
 
+use assignsubmission_tipnc\api\error;
 use dml_exception;
+use moodle_exception;
 use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
@@ -56,24 +58,32 @@ class tipnc_enun {
      * Set tipnc enunciate
      *
      * @param stdClass $data
-     * @return mixed
      * @throws dml_exception
      */
     static public function set(stdClass $data) {
         global $DB;
-        return $DB->insert_record(self::TABLE_TIPNC_ENUN, $data);
+        try {
+            $DB->insert_record(self::TABLE_TIPNC_ENUN, $data);
+        } catch (moodle_exception $e) {
+            $assignment = empty($data->assignment) ? 0 : $data->assignment;
+            $submission = empty($data->submission) ? null : $data->submission;
+            tipnc_error::log('tipnc_enun:set', new error(2100, $e->getMessage()), $assignment, $submission);
+        }
     }
 
     /**
      * Delete
      *
      * @param int $instance
-     * @return mixed
      * @throws dml_exception
      */
     static public function delete(int $instance) {
         global $DB;
-        return $DB->delete_records(self::TABLE_TIPNC_ENUN, ['assignment' => $instance]);
+        try {
+            $DB->delete_records(self::TABLE_TIPNC_ENUN, ['assignment' => $instance]);
+        } catch (moodle_exception $e) {
+            tipnc_error::log('tipnc_enun:delete', new error(2101, $e->getMessage()), $instance);
+        }
     }
 
 

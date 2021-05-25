@@ -68,6 +68,18 @@ class assign {
     }
 
     /**
+     * Get submission
+     *
+     * @param int $submissionid
+     * @return mixed
+     * @throws dml_exception
+     */
+    static public function get_submission(int $submissionid) {
+        global $DB;
+        return $DB->get_record('assign_submission', array('id'=>$submissionid));
+    }
+
+    /**
      * Is Teacher?
      *
      * @param int $instance

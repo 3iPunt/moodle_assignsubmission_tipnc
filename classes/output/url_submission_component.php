@@ -24,6 +24,8 @@
 
 namespace assignsubmission_tipnc\output;
 
+use assignsubmission_tipnc\api\document;
+use coding_exception;
 use renderable;
 use renderer_base;
 use stdClass;
@@ -43,12 +45,17 @@ class url_submission_component implements renderable, templatable {
     /** @var string URL */
     protected $url;
 
+    /** @var string Mode */
+    protected $mode;
+
     /**
      * constructor.
      * @param string $url
+     * @param string $mode
      */
-    public function __construct(string $url) {
+    public function __construct(string $url, string $mode) {
         $this->url = $url;
+        $this->mode = $mode;
     }
 
     /**
@@ -56,9 +63,24 @@ class url_submission_component implements renderable, templatable {
      *
      * @param renderer_base $output
      * @return stdClass
+     * @throws coding_exception
      */
     public function export_for_template(renderer_base $output): stdClass {
         $data = new stdClass();
+        switch ($this->mode) {
+            case document::MODE_ENUN:
+                $strbutton = get_string('view_enun', 'assignsubmission_tipnc');
+                break;
+            case document::MODE_SUBMISSION:
+                $strbutton = get_string('view_submission', 'assignsubmission_tipnc');
+                break;
+            case document::MODE_OPEN:
+                $strbutton = get_string('view_open', 'assignsubmission_tipnc');
+                break;
+            default:
+                $strbutton = get_string('view', 'assignsubmission_tipnc');
+        }
+        $data->strbutton = $strbutton;
         $data->url = $this->url;
         return $data;
     }

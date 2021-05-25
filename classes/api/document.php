@@ -41,7 +41,7 @@ class document {
     const PREFIX_OPEN = 'open_';
     const PREFIX_SUBMISSION = 'subm_';
 
-    const MODE_ENUM = 'enun';
+    const MODE_ENUN = 'enun';
     const MODE_OPEN = 'open';
     const MODE_SUBMISSION = 'submission';
 
