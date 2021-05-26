@@ -49,3 +49,5 @@ $string['tableerrors_error_code'] = 'Error Code';
 $string['tableerrors_error_message'] = 'Error Message';
 $string['tableerrors_timecreated'] = 'Timecreated';
 $string['tipnc:view_errors_permission'] = 'You do not have permission to view this page';
+$string['enabled'] = 'NextCloud Submission';
+$string['enabled_help'] = 'If enabled, students can write their deliverable directly to an embedded NextCloud document.';

@@ -250,9 +250,9 @@ class nextcloud {
         $headers[] = "OCS-APIRequest: true";
         $headers[] = "Destination: " . $destiny_url;
         $curl->setHeader($headers);
-        $params = new stdClass();
+        $params = [];
         try {
-            $curl->get($url, json_encode($params), $this->get_options_curl('COPY'));
+            $curl->get($url, $params, $this->get_options_curl('COPY'));
             $response = $curl->getResponse();
 
             if ($response['HTTP/1.1'] === '201 Created' || $response['HTTP/1.1'] === '204 No Content') {
