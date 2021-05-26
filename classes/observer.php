@@ -48,7 +48,7 @@ class assignsubmission_tipnc_observer {
     public static function course_module_created(course_module_created $event): bool {
         $cmid = $event->objectid;
         list($course, $cm) = get_course_and_cm_from_cmid($cmid);
-        if ($cm->modname === 'assign' && \assignsubmission_tipnc\assign::is_submission_nextcloud($cm)) {
+        if ($cm->modname === 'assign') {
             $nextcloud = new nextcloud($cm->instance);
             $res = $nextcloud->teacher_create();
             if (!$res->success) {
