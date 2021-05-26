@@ -22,6 +22,7 @@
  */
 
 use assignsubmission_tipnc\api\nextcloud;
+use assignsubmission_tipnc\tipnc_error;
 use core\event\course_module_created;
 
 defined('MOODLE_INTERNAL') || die();
@@ -47,14 +48,23 @@ class assignsubmission_tipnc_observer {
      */
     public static function course_module_created(course_module_created $event): bool {
         $cmid = $event->objectid;
-        list($course, $cm) = get_course_and_cm_from_cmid($cmid);
-        if ($cm->modname === 'assign') {
-            $nextcloud = new nextcloud($cm->instance);
-            $res = $nextcloud->teacher_create();
-            if (!$res->success) {
-                return false;
+        try {
+            list($course, $cm) = get_course_and_cm_from_cmid($cmid);
+            if ($cm->modname === 'assign') {
+                $nextcloud = new nextcloud($cm->instance);
+                $res = $nextcloud->teacher_create();
+                if (!$res->success) {
+                    tipnc_error::log('course_module_created', $res->error, $cm->instance);
+                    return false;
+                }
             }
+        } catch (moodle_exception $e) {
+            $assignment = isset($event->other->instanceid) ? $event->other->instanceid : 0;
+            tipnc_error::log('course_module_created',
+                new \assignsubmission_tipnc\api\error(3000, $e->getMessage()), $assignment);
+            return false;
         }
+
         return true;
     }
 
