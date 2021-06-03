@@ -54,7 +54,7 @@ class response {
         if (isset($error)) {
             $this->error = $error;
         } else {
-            $this->error = new error(0, '');
+            $this->error = new error('0', '');
         }
 
     }

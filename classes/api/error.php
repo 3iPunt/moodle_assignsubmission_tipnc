@@ -44,10 +44,10 @@ class error {
 
     /**
      * Error constructor.
-     * @param int $code
+     * @param string $code
      * @param string $message
      */
-    public function __construct(int $code, string $message) {
+    public function __construct(string $code, string $message) {
         $this->code = $code;
         $this->message = $message;
     }

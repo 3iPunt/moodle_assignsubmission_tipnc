@@ -24,7 +24,11 @@
 
 global $CFG, $ADMIN;
 
-// Note: This is on by default.
+$settings->add(new admin_setting_description('assignsubmission_tipnc/desc',
+    new lang_string('error_log_desc', 'assignsubmission_tipnc'),
+    '<a class="btn btn-primary" href="'. $CFG->wwwroot . '/mod/assign/submission/tipnc/view_errors.php' .
+    '" target="_blank">' . get_string('tipnc:view_errors', 'assignsubmission_tipnc') . '</a></br><hr>'));
+
 $settings->add(new admin_setting_configtext('assignsubmission_tipnc/host',
     new lang_string('host', 'assignsubmission_tipnc'),
     new lang_string('host_help', 'assignsubmission_tipnc'), ''));
@@ -45,14 +49,8 @@ $settings->add(new admin_setting_configtext('assignsubmission_tipnc/template',
     new lang_string('template', 'assignsubmission_tipnc'),
     new lang_string('template_help', 'assignsubmission_tipnc'), 'template.docx'));
 
-
 $settings->add(new admin_setting_configtext('assignsubmission_tipnc/location',
     new lang_string('location', 'assignsubmission_tipnc'),
     new lang_string('location_help', 'assignsubmission_tipnc'), '/apps/onlyoffice/'));
 
-
-$settings->add(new admin_setting_configempty(
-    'assignsubmission_tipnc/viewerrors', get_string('tipnc:view_errors', 'assignsubmission_tipnc'),
-    '<a href="'. $CFG->wwwroot . '/mod/assign/submission/tipnc/view_errors.php' . '" target="_blank">' .
-    get_string('tipnc:view_errors', 'assignsubmission_tipnc') . '</a>'));
 

@@ -67,7 +67,7 @@ class tipnc_enun {
         } catch (moodle_exception $e) {
             $assignment = empty($data->assignment) ? 0 : $data->assignment;
             $submission = empty($data->submission) ? null : $data->submission;
-            tipnc_error::log('tipnc_enun:set', new error(2100, $e->getMessage()), $assignment, $submission);
+            tipnc_error::log('tipnc_enun:set', new error('2100', $e->getMessage()), $assignment, $submission);
         }
     }
 
@@ -82,7 +82,7 @@ class tipnc_enun {
         try {
             $DB->delete_records(self::TABLE_TIPNC_ENUN, ['assignment' => $instance]);
         } catch (moodle_exception $e) {
-            tipnc_error::log('tipnc_enun:delete', new error(2101, $e->getMessage()), $instance);
+            tipnc_error::log('tipnc_enun:delete', new error('2101', $e->getMessage()), $instance);
         }
     }
 

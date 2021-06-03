@@ -26,6 +26,8 @@ namespace assignsubmission_tipnc\tables;
 
 use coding_exception;
 use dml_exception;
+use moodle_exception;
+use moodle_url;
 use stdClass;
 use table_sql;
 
@@ -54,6 +56,7 @@ class errors_table extends table_sql {
         parent::__construct($uniqueid);
         $this->define_columns([
             'id',
+            'coursemodule',
             'assignment',
             'submission',
             'userid',
@@ -64,6 +67,7 @@ class errors_table extends table_sql {
         ]);
         $this->define_headers([
             get_string('tableerrors_id', 'assignsubmission_tipnc'),
+            get_string('tableerrors_coursemodule', 'assignsubmission_tipnc'),
             get_string('tableerrors_assignment', 'assignsubmission_tipnc'),
             get_string('tableerrors_submission', 'assignsubmission_tipnc'),
             get_string('tableerrors_userid', 'assignsubmission_tipnc'),
@@ -73,8 +77,14 @@ class errors_table extends table_sql {
             get_string('tableerrors_timecreated', 'assignsubmission_tipnc')
         ]);
 
+        // Allow pagination.
+        $this->pageable(true);
+
+        $this->no_sorting('coursemodule');
+
         $this->sortable(true);
         $this->column_style('id', 'text-align', 'center');
+        $this->column_style('coursemodule', 'text-align', 'left');
         $this->column_style('assignment', 'text-align', 'left');
         $this->column_style('submission', 'text-align', 'center');
         $this->column_style('userid', 'text-align', 'center');
@@ -92,6 +102,29 @@ class errors_table extends table_sql {
      */
     public function col_id(stdClass $row): string {
         return $row->id;
+    }
+
+    /**
+     * Col coursemodule
+     *
+     * @param stdClass $row Full data of the current row.
+     * @return string
+     * @throws moodle_exception
+     */
+    public function col_coursemodule(stdClass $row): string {
+        try {
+            list($course, $assigncm) = get_course_and_cm_from_instance($row->assignment, 'assign');
+            $cmid = $assigncm->id;
+            $urlcmid = new moodle_url('/mod/assign/view.php', array('id' => $cmid));
+            $cmid = '<a href="' . $urlcmid . '" target="_blank" class="btn btn-primary btn-sm">' . $cmid . '</a>';
+        } catch (moodle_exception $e) {
+            if ($e->errorcode === 'invalidrecordunknown') {
+                $cmid = get_string('tableerrors_coursemodule_delete', 'assignsubmission_tipnc');
+            } else {
+                $cmid = $e->errorcode;
+            }
+        }
+        return $cmid;
     }
 
     /**

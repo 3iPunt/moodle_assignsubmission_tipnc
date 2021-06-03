@@ -67,7 +67,7 @@ class tipnc_open {
         } catch (moodle_exception $e) {
             $assignment = empty($data->assignment) ? 0 : $data->assignment;
             $submission = empty($data->submission) ? null : $data->submission;
-            tipnc_error::log('tipnc_open:update', new error(2200, $e->getMessage()), $assignment, $submission);
+            tipnc_error::log('tipnc_open:update', new error('2200', $e->getMessage()), $assignment, $submission);
         }
     }
 
@@ -84,7 +84,7 @@ class tipnc_open {
         } catch (moodle_exception $e) {
             $assignment = empty($data->assignment) ? 0 : $data->assignment;
             $submission = empty($data->submission) ? null : $data->submission;
-            tipnc_error::log('tipnc_open:set', new error(2201, $e->getMessage()), $assignment, $submission);
+            tipnc_error::log('tipnc_open:set', new error('2201', $e->getMessage()), $assignment, $submission);
         }
     }
 
@@ -101,7 +101,7 @@ class tipnc_open {
             $DB->delete_records(self::TABLE_TIPNC_OPEN, ['submission' => $submissionid]);
         } catch (moodle_exception $e) {
             tipnc_error::log('tipnc:delete_by_submissionid',
-                new error(2202, $e->getMessage()), $assignment, $submissionid);
+                new error('2202', $e->getMessage()), $assignment, $submissionid);
         }
     }
 
@@ -116,7 +116,7 @@ class tipnc_open {
         try {
             $DB->delete_records(self::TABLE_TIPNC_OPEN, ['assignment' => $instance]);
         } catch (moodle_exception $e) {
-            tipnc_error::log('tipnc:delete', new error(2203, $e->getMessage()), $instance);
+            tipnc_error::log('tipnc:delete', new error('2203', $e->getMessage()), $instance);
         }
     }
 }
