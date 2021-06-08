@@ -87,7 +87,7 @@ class view_errors_page implements renderable, templatable {
         $table->collapsible(false);
         $table->define_baseurl('/mod/assign/submission/tipnc/view_errors.php');
         ob_start();
-        $table->out(0, true, false);
+        $table->out(15, true, false);
         $tablecontent = ob_get_contents();
         ob_end_clean();
         return $tablecontent;
