@@ -112,11 +112,16 @@ class assign_submission_tipnc extends assign_submission_plugin {
             $mform->addElement('static', 'iframe', '', $render);
             return true;
         } else {
-            tipnc_error::log(
-                'get_form_elements',
-                new error_log('1001', 'The Enunciate does not exist'),
-                $submission->assignment, $submission->id);
-            return false;
+            if (isset($data->files_filemanager)) {
+                return true;
+            } else {
+                tipnc_error::log(
+                    'get_form_elements',
+                    new error_log('1001', 'The Enunciate does not exist'),
+                    $submission->assignment, $submission->id);
+                return false;
+            }
+
         }
     }
 
@@ -133,11 +138,15 @@ class assign_submission_tipnc extends assign_submission_plugin {
     public function save(stdClass $submission, stdClass $data): bool {
         $tipnc_enun = tipnc_enun::get($submission->assignment);
         if (!$tipnc_enun) {
-            tipnc_error::log(
-                'save',
-                new error_log('1100', 'The Enunciate does not exist'),
-                $submission->assignment, $submission->id);
-            return false;
+            if (isset($data->files_filemanager)) {
+                return true;
+            } else {
+                tipnc_error::log(
+                    'save',
+                    new error_log('1100', 'The Enunciate does not exist'),
+                    $submission->assignment, $submission->id);
+                return false;
+            }
         }
         $tipnc_open = tipnc_open::get($submission->id);
         if (!$tipnc_open) {
@@ -222,7 +231,7 @@ class assign_submission_tipnc extends assign_submission_plugin {
         if (!$tipnc_enun) {
             tipnc_error::log(
                 'view_summary',
-                new error_log('1300', 'The Enunciate does not exist'),
+                new error_log('1300', 'The Enunciate does not exist. Check if the task also has the delivery as a file activated'),
                 $submission->assignment, $submission->id);
             return '';
         }
