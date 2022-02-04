@@ -329,7 +329,12 @@ class nextcloud {
             $xml = str_replace('d:', '', $response);
             $xml = str_replace('oc:', '', $xml);
             $xml = str_replace('nc:', '', $xml);
-            $xml = simplexml_load_string($xml) or die("Something is wrong");
+            $xml = simplexml_load_string($xml);
+            if ($xml === false) {
+                $response = new response(
+                    false, null, new error('0202', 'XML has errors'));
+                return $response;
+            }
             if (isset($xml->response->propstat->prop->fileid)) {
                 $fileid = current($xml->response->propstat->prop->fileid);
                 $response = new response(true, $fileid);
