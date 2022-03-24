@@ -112,11 +112,15 @@ class assign_submission_tipnc extends assign_submission_plugin {
             $mform->addElement('static', 'iframe', '', $render);
             return true;
         } else {
-            tipnc_error::log(
-                'get_form_elements',
-                new error_log('1001', 'The Enunciate does not exist'),
-                $submission->assignment, $submission->id);
-            return false;
+            if (isset($data->files_filemanager)) {
+                return true;
+            } else {
+                tipnc_error::log(
+                    'get_form_elements',
+                    new error_log('1001', 'The Enunciate does not exist'),
+                    $submission->assignment, $submission->id);
+                return false;
+            }
 
         }
     }
@@ -134,19 +138,27 @@ class assign_submission_tipnc extends assign_submission_plugin {
     public function save(stdClass $submission, stdClass $data): bool {
         $tipnc_enun = tipnc_enun::get($submission->assignment);
         if (!$tipnc_enun) {
-            tipnc_error::log(
-                'save',
-                new error_log('1100', 'The Enunciate does not exist'),
-                $submission->assignment, $submission->id);
-            return false;
+            if (isset($data->files_filemanager)) {
+                return true;
+            } else {
+                tipnc_error::log(
+                    'save',
+                    new error_log('1100', 'The Enunciate does not exist'),
+                    $submission->assignment, $submission->id);
+                return false;
+            }
         }
         $tipnc_open = tipnc_open::get($submission->id);
         if (!$tipnc_open) {
-            tipnc_error::log(
-                'save',
-                new error_log('1101', 'The Open Submission does not exist'),
-                $submission->assignment, $submission->id);
-            return false;
+            if (isset($data->files_filemanager)) {
+                return true;
+            } else {
+                tipnc_error::log(
+                    'save',
+                    new error_log('1101', 'The Open Submission does not exist'),
+                    $submission->assignment, $submission->id);
+                return false;
+            }
         }
         switch ($submission->status) {
             case ASSIGN_SUBMISSION_STATUS_DRAFT:
@@ -223,7 +235,8 @@ class assign_submission_tipnc extends assign_submission_plugin {
         if (!$tipnc_enun) {
             tipnc_error::log(
                 'view_summary',
-                new error_log('1300', 'The Enunciate does not exist. Check if the task also has the delivery as a file activated'),
+                new error_log('1300', 'The Enunciate does not exist. ' .
+                    'Check if the task also has the delivery as a file activated'),
                 $submission->assignment, $submission->id);
             return '';
         }
@@ -297,7 +310,9 @@ class assign_submission_tipnc extends assign_submission_plugin {
                     case ASSIGN_SUBMISSION_STATUS_SUBMITTED:
                         $mode = document::MODE_SUBMISSION;
                         $tipnc_sub = tipnc::get($submission->id);
-                        $ncid = $tipnc_sub->ncid;
+                        if (isset($tipnc_sub->ncid)) {
+                            $ncid = $tipnc_sub->ncid;
+                        }
                         break;
                     default:
                         tipnc_error::log(
