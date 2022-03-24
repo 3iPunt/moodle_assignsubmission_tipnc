@@ -1,4 +1,7 @@
 <div data-region="assignsubmission_tipnc">
+    {{# has_enun }}
+    <a class="btn btn-primary mb-4" href="{{ url_enun }}" target="_blank">{{ strbutton_enun }}</a>
+    {{/ has_enun }}
     <a class="btn btn-primary mb-4" href="{{ url }}" target="_blank">{{ strbutton }}</a>
     <div class="hide_header"></div>
     <iframe class='tipnc-iframe' src="{{ url }}" width="100%" height="100%" align="top" frameborder="0"></iframe>
