@@ -272,7 +272,12 @@ class nextcloud {
             if ($response['HTTP/1.1'] === '201 Created' || $response['HTTP/1.1'] === '204 No Content') {
                 $response = new response(true, '');
             } else {
-                $response = new response(false, null, new error('0101', $response['HTTP/1.1']));
+                if (!empty($response['HTTP/1.1'])) {
+                    $response = new response(false, null, new error('0101', $response['HTTP/1.1']));
+                } else {
+                    $response = new response(false, null, new error('0102',
+                        json_encode($response, JSON_PRETTY_PRINT)));
+                }
             }
         } catch (\Exception $e) {
             $response = new response(false, null,
@@ -383,7 +388,8 @@ class nextcloud {
                 if (!empty($response['HTTP/1.1'])) {
                     $response = new response(false, null, new error('0301', $response['HTTP/1.1']));
                 } else {
-                    $response = new response(false, null, new error('0301', json_encode($response, JSON_PRETTY_PRINT)));
+                    $response = new response(false, null, new error('0303',
+                        json_encode($response, JSON_PRETTY_PRINT)));
                 }
             }
         } catch (\Exception $e) {
@@ -415,7 +421,12 @@ class nextcloud {
             if ($response['HTTP/1.1'] === '200 OK') {
                 $response = new response(true, '');
             } else {
-                $response = new response(false, null, new error('0401', $response['HTTP/1.1']));
+                if (!empty($response['HTTP/1.1'])) {
+                    $response = new response(false, null, new error('0401', $response['HTTP/1.1']));
+                } else {
+                    $response = new response(false, null, new error('0402',
+                        json_encode($response, JSON_PRETTY_PRINT)));
+                }
             }
         } catch (\Exception $e) {
             $response = new response(false, null,
