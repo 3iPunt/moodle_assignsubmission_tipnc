@@ -380,7 +380,11 @@ class nextcloud {
                     $response = new response(false, null, new error('0302', 'Respuesta no esperada'));
                 }
             } else {
-                $response = new response(false, null, new error('0301', $response['HTTP/1.1']));
+                if (!empty($response['HTTP/1.1'])) {
+                    $response = new response(false, null, new error('0301', $response['HTTP/1.1']));
+                } else {
+                    $response = new response(false, null, new error('0301', json_encode($response, JSON_PRETTY_PRINT)));
+                }
             }
         } catch (\Exception $e) {
             $response = new response(false, null,
