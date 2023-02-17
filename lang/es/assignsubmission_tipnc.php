@@ -21,14 +21,14 @@
  * @copyright   2021 Tresipunt
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-
 $string['pluginname'] = 'NextCloud Submission';
 $string['urldoc'] = 'URL NextCloud document';
-$string['host'] = 'Host NextCloud';
+$string['host'] = 'Dominio NextCloud';
+$string['host_help'] = 'Dominio del NextCloud, recomendado el contenedor. Ej: dd-apps-nextcloud-nginx';
+$string['url'] = 'URL NextCloud';
+$string['url_help'] = 'URL del NextCloud permitido en la URL. Ej: https://nextcloud.dd.3ip.eu';
 $string['user'] = 'Usuario NextCloud';
 $string['password'] = 'Contraseña';
-$string['host_help'] = 'Ej. https://nextcloud.montseny.digitaldemocratic.net';
 $string['view'] = 'Ver';
 $string['view_enun'] = 'Ver Enunciado';
 $string['view_submission'] = 'Ver Entrega';

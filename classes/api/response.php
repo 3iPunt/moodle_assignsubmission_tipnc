@@ -24,8 +24,6 @@
 
 namespace assignsubmission_tipnc\api;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Response
  *
@@ -38,6 +36,8 @@ class response {
     /** @var bool Success */
     public $success;
 
+    /** @var string DATA */
+    public $data;
 
     /** @var error Error object */
     public $error;

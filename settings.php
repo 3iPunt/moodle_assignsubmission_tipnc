@@ -22,6 +22,8 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
+
 global $CFG, $ADMIN;
 
 $settings->add(new admin_setting_description('assignsubmission_tipnc/desc',
@@ -31,7 +33,11 @@ $settings->add(new admin_setting_description('assignsubmission_tipnc/desc',
 
 $settings->add(new admin_setting_configtext('assignsubmission_tipnc/host',
     new lang_string('host', 'assignsubmission_tipnc'),
-    new lang_string('host_help', 'assignsubmission_tipnc'), ''));
+    new lang_string('host_help', 'assignsubmission_tipnc'), 'dd-apps-nextcloud-nginx'));
+
+$settings->add(new admin_setting_configtext('assignsubmission_tipnc/url',
+    get_string('url', 'assignsubmission_tipnc'),
+    get_string('url_help', 'assignsubmission_tipnc'), 'https://nextcloud.dd.3ip.eu'));
 
 $settings->add(new admin_setting_configtext('assignsubmission_tipnc/user',
     new lang_string('user', 'assignsubmission_tipnc'),

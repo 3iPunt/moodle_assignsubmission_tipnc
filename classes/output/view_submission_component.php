@@ -26,15 +26,10 @@ namespace assignsubmission_tipnc\output;
 
 use assignsubmission_tipnc\api\document;
 use coding_exception;
-use core_user;
-use dml_exception;
 use renderable;
 use renderer_base;
 use stdClass;
 use templatable;
-use theme_cbe\user;
-
-defined('MOODLE_INTERNAL') || die;
 
 /**
  * Class view_submission_component

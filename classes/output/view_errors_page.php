@@ -33,8 +33,6 @@ use renderer_base;
 use stdClass;
 use templatable;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Class view_errors_page
  *
@@ -76,7 +74,7 @@ class view_errors_page implements renderable, templatable {
         $uniqid = uniqid('', true);
         $table = new errors_table($uniqid);
         $table->is_downloadable(false);
-        $select = 'te.id AS id, te.assignment AS assignment, te.submission AS submission, te.userid AS userid, 
+        $select = 'te.id AS id, te.assignment AS assignment, te.submission AS submission, te.userid AS userid,
          te.method AS method, te.error_code AS error_code, te.error_message AS error_message, te.timecreated AS timecreated';
         $from = '{' . tipnc_error::TABLE_TIPNC_ERROR .'} te';
         $where = '1=1';

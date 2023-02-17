@@ -29,8 +29,6 @@ use dml_exception;
 use moodle_exception;
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * tipnc_enun
  *
@@ -49,9 +47,9 @@ class tipnc_enun {
      * @return mixed
      * @throws dml_exception
      */
-    static public function get(int $assignment) {
+    public static function get(int $assignment) {
         global $DB;
-        return $DB->get_record(self::TABLE_TIPNC_ENUN, array('assignment'=> $assignment));
+        return $DB->get_record(self::TABLE_TIPNC_ENUN, array('assignment' => $assignment));
     }
 
     /**
@@ -60,7 +58,7 @@ class tipnc_enun {
      * @param stdClass $data
      * @throws dml_exception
      */
-    static public function set(stdClass $data) {
+    public static function set(stdClass $data) {
         global $DB;
         try {
             $DB->insert_record(self::TABLE_TIPNC_ENUN, $data);
@@ -77,7 +75,7 @@ class tipnc_enun {
      * @param int $instance
      * @throws dml_exception
      */
-    static public function delete(int $instance) {
+    public static function delete(int $instance) {
         global $DB;
         try {
             $DB->delete_records(self::TABLE_TIPNC_ENUN, ['assignment' => $instance]);
@@ -85,6 +83,5 @@ class tipnc_enun {
             tipnc_error::log('tipnc_enun:delete', new error('2101', $e->getMessage()), $instance);
         }
     }
-
 
 }

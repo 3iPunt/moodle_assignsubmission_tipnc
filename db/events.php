@@ -20,6 +20,7 @@
  * @package     assignsubmission_tipnc
  * @copyright   2021 Tresipunt
  */
+
 defined('MOODLE_INTERNAL') || die();
 
 $observers = array(

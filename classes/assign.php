@@ -30,8 +30,6 @@ use context_course;
 use dml_exception;
 use moodle_exception;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * assign
  *
@@ -48,7 +46,7 @@ class assign {
      * @return mixed
      * @throws dml_exception
      */
-    static public function is_submission_nextcloud(cm_info $cm): bool {
+    public static function is_submission_nextcloud(cm_info $cm): bool {
         global $DB;
         $is = false;
         $sql = "SELECT apc.value 'is_active'
@@ -74,9 +72,9 @@ class assign {
      * @return mixed
      * @throws dml_exception
      */
-    static public function get_submission(int $submissionid) {
+    public static function get_submission(int $submissionid) {
         global $DB;
-        return $DB->get_record('assign_submission', array('id'=>$submissionid));
+        return $DB->get_record('assign_submission', array('id' => $submissionid));
     }
 
     /**
@@ -87,9 +85,10 @@ class assign {
      * @throws coding_exception
      * @throws moodle_exception
      */
-    static public function is_teacher(int $instance): bool {
+    public static function is_teacher(int $instance): bool {
         list($course, $cm) = get_course_and_cm_from_instance($instance, 'assign');
         $coursecontext = context_course::instance($course->id);
         return has_capability('moodle/course:update', $coursecontext);
     }
+
 }

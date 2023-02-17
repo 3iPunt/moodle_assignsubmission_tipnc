@@ -28,8 +28,6 @@ use assignsubmission_tipnc\api\error;
 use dml_exception;
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * tipnc_error
  *
@@ -51,7 +49,7 @@ class tipnc_error {
      * @return mixed
      * @throws dml_exception
      */
-    static public function log(string $method, error $error, int $instance, int $submissionid = null) {
+    public static function log(string $method, error $error, int $instance, int $submissionid = null) {
         global $DB, $USER;
         $data = new stdClass();
         $data->method = $method;

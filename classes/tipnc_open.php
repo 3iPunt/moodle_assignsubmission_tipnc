@@ -29,8 +29,6 @@ use dml_exception;
 use moodle_exception;
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * tipnc_open
  *
@@ -49,9 +47,9 @@ class tipnc_open {
      * @return mixed
      * @throws dml_exception
      */
-    static public function get(int $submissionid) {
+    public static function get(int $submissionid) {
         global $DB;
-        return $DB->get_record(self::TABLE_TIPNC_OPEN, array('submission'=> $submissionid));
+        return $DB->get_record(self::TABLE_TIPNC_OPEN, array('submission' => $submissionid));
     }
 
     /**
@@ -60,7 +58,7 @@ class tipnc_open {
      * @param stdClass $data
      * @throws dml_exception
      */
-    static public function update(stdClass $data) {
+    public static function update(stdClass $data) {
         global $DB;
         try {
             $DB->update_record(self::TABLE_TIPNC_OPEN, $data);
@@ -77,7 +75,7 @@ class tipnc_open {
      * @param stdClass $data
      * @throws dml_exception
      */
-    static public function set(stdClass $data) {
+    public static function set(stdClass $data) {
         global $DB;
         try {
             $DB->insert_record(self::TABLE_TIPNC_OPEN, $data);
@@ -95,7 +93,7 @@ class tipnc_open {
      * @param int $assignment
      * @throws dml_exception
      */
-    static public function delete_by_submissionid(int $submissionid, int $assignment) {
+    public static function delete_by_submissionid(int $submissionid, int $assignment) {
         global $DB;
         try {
             $DB->delete_records(self::TABLE_TIPNC_OPEN, ['submission' => $submissionid]);
@@ -111,7 +109,7 @@ class tipnc_open {
      * @param int $instance
      * @throws dml_exception
      */
-    static public function delete(int $instance) {
+    public static function delete(int $instance) {
         global $DB;
         try {
             $DB->delete_records(self::TABLE_TIPNC_OPEN, ['assignment' => $instance]);
@@ -119,4 +117,5 @@ class tipnc_open {
             tipnc_error::log('tipnc:delete', new error('2203', $e->getMessage()), $instance);
         }
     }
+
 }
