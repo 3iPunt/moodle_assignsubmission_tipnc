@@ -330,15 +330,15 @@ class nextcloud {
             ));
             $response = curl_exec($curl);
 
-            $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
             $error = curl_error($curl);
 
-            if ( $httpCode >= 400 || !empty($error) ){
+            if ($httpcode >= 400 || !empty($error)) {
                 curl_close($curl);
                 $response = new response(
                     false,
                     null,
-                    new error('0203', 'Status Code: ' . $httpCode . ' - '. $error));
+                    new error('0203', 'Status Code: ' . $httpcode . ' - '. $error));
                 return $response;
             } else {
                 $xml = str_replace('d:', '', $response);

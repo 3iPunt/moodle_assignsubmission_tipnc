@@ -64,11 +64,6 @@ class view_submission_component implements renderable, templatable {
      * @throws coding_exception
      */
     public function export_for_template(renderer_base $output): stdClass {
-
-        $has_enun = false;
-        $url_enun = '';
-        $strbutton_enun = '';
-
         $data = new stdClass();
         $data->url = $this->url;
         switch ($this->mode) {
@@ -77,19 +72,14 @@ class view_submission_component implements renderable, templatable {
                 break;
             case document::MODE_SUBMISSION:
                 $strbutton = get_string('view_submission', 'assignsubmission_tipnc');
-                $has_enun = true;
                 break;
             case document::MODE_OPEN:
                 $strbutton = get_string('view_open', 'assignsubmission_tipnc');
                 break;
             default:
-                $has_enun = true;
                 $strbutton = get_string('view', 'assignsubmission_tipnc');
         }
         $data->strbutton = $strbutton;
-        $data->has_enun = $has_enun;
-        $data->url_enun = $url_enun;
-        $data->strbutton_enun = $strbutton_enun;
         return $data;
     }
 }
