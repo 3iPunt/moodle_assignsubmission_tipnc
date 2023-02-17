@@ -26,8 +26,6 @@ namespace assignsubmission_tipnc\api;
 
 use dml_exception;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Document
  *
@@ -116,9 +114,9 @@ class document {
      */
     protected function set_extension() {
         $extension = '';
-        $pos_point = strpos($this->template, '.');
-        if ($pos_point !== false) {
-            $extension = substr($this->template, $pos_point);
+        $pospoint = strpos($this->template, '.');
+        if ($pospoint !== false) {
+            $extension = substr($this->template, $pospoint);
         }
         $this->extension = $extension;
     }
@@ -130,8 +128,8 @@ class document {
      * @return string
      * @throws dml_exception
      */
-    static public function get_url(int $ncid): string {
-        $host = get_config('assignsubmission_tipnc', 'host');
+    public static function get_url(int $ncid): string {
+        $host = get_config('assignsubmission_tipnc', 'url');
         $location = get_config('assignsubmission_tipnc', 'location');
         return $host . $location . $ncid;
     }

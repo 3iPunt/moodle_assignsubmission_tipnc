@@ -33,8 +33,6 @@ use curl;
 use dml_exception;
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Class nextcloud
  *
@@ -91,33 +89,33 @@ class nextcloud {
         global $USER;
         $template = $this->document->get_template();
         $enun = $this->document->get_enunciate();
-        $res_copy = $this->copy_file($template, $enun);
-        if ($res_copy->success) {
+        $rescopy = $this->copy_file($template, $enun);
+        if ($rescopy->success) {
             $teacher = $USER->username;
-            $res_share_teacher = $this->set_permission($enun, $teacher, self::PERMISSION_ALL);
-            if ($res_share_teacher->success) {
-                $res_listing = $this->listing($enun);
-                if ($res_listing->success) {
+            $resshareteacher = $this->set_permission($enun, $teacher, self::PERMISSION_ALL);
+            if ($resshareteacher->success) {
+                $reslisting = $this->listing($enun);
+                if ($reslisting->success) {
                     $data = new stdClass();
                     $data->assignment = $this->instance;
-                    $data->ncid = $res_listing->data;
+                    $data->ncid = $reslisting->data;
                     $data->userid = $USER->id;
                     tipnc_enun::set($data);
                     return new response(true, $data->ncid);
                 } else {
                     tipnc_error::log(
-                        'teacher_create:listing', $res_listing->error, $this->instance);
-                    return $res_listing;
+                        'teacher_create:listing', $reslisting->error, $this->instance);
+                    return $reslisting;
                 }
             } else {
                 tipnc_error::log(
-                    'teacher_create:set_permission', $res_share_teacher->error, $this->instance);
-                return $res_share_teacher;
+                    'teacher_create:set_permission', $resshareteacher->error, $this->instance);
+                return $resshareteacher;
             }
         } else {
             tipnc_error::log(
-                'teacher_create:copy_file', $res_copy->error, $this->instance);
-            return $res_copy;
+                'teacher_create:copy_file', $rescopy->error, $this->instance);
+            return $rescopy;
         }
     }
 
@@ -150,39 +148,39 @@ class nextcloud {
         $student = $USER->username;
         $enun = $this->document->get_enunciate();
         $open = $this->document->get_open($student);
-        $res_copy = $this->copy_file($enun, $open);
-        if ($res_copy->success) {
-            $res_share_student = $this->set_permission($open, $student, self::PERMISSION_ALL);
-            if ($res_share_student->success) {
-                $res_listing = $this->listing($open);
-                if ($res_listing->success) {
-                    $tipnc_open = tipnc_open::get($submission->id);
-                    if ($tipnc_open) {
-                        $tipnc_open->ncid = $res_listing->data;
-                        tipnc_open::update($tipnc_open);
-                        return new response(true, $tipnc_open->ncid);
+        $rescopy = $this->copy_file($enun, $open);
+        if ($rescopy->success) {
+            $ressharestudent = $this->set_permission($open, $student, self::PERMISSION_ALL);
+            if ($ressharestudent->success) {
+                $reslisting = $this->listing($open);
+                if ($reslisting->success) {
+                    $tipncopen = tipnc_open::get($submission->id);
+                    if ($tipncopen) {
+                        $tipncopen->ncid = $reslisting->data;
+                        tipnc_open::update($tipncopen);
+                        return new response(true, $tipncopen->ncid);
                     } else {
-                        $tipnc_open = new stdClass();
-                        $tipnc_open->assignment = $submission->assignment;
-                        $tipnc_open->submission = $submission->id;
-                        $tipnc_open->ncid = $res_listing->data;
-                        tipnc_open::set($tipnc_open);
-                        return new response(true, $tipnc_open->ncid);
+                        $tipncopen = new stdClass();
+                        $tipncopen->assignment = $submission->assignment;
+                        $tipncopen->submission = $submission->id;
+                        $tipncopen->ncid = $reslisting->data;
+                        tipnc_open::set($tipncopen);
+                        return new response(true, $tipncopen->ncid);
                     }
                 } else {
                     tipnc_error::log(
-                        'student_open:listing', $res_listing->error, $this->instance, $submission->id);
-                    return $res_listing;
+                        'student_open:listing', $reslisting->error, $this->instance, $submission->id);
+                    return $reslisting;
                 }
             } else {
                 tipnc_error::log(
-                    'student_open:set_permission', $res_share_student->error, $this->instance, $submission->id);
-                return $res_share_student;
+                    'student_open:set_permission', $ressharestudent->error, $this->instance, $submission->id);
+                return $ressharestudent;
             }
         } else {
             tipnc_error::log(
-                'student_open:copy_file', $res_copy->error, $this->instance, $submission->id);
-            return $res_copy;
+                'student_open:copy_file', $rescopy->error, $this->instance, $submission->id);
+            return $rescopy;
         }
     }
 
@@ -201,50 +199,49 @@ class nextcloud {
         $teacher = $teacheruser->username;
         $open = $this->document->get_open($student);
         $sub = $this->document->get_submission($student);
-        $res_copy = $this->copy_file($open, $sub);
-        if ($res_copy->success) {
-            $res_share_teacher_edit = $this->set_permission($sub, $teacher, self::PERMISSION_ALL);
-            if ($res_share_teacher_edit->success) {
-                $res_share_student_read = $this->set_permission($sub, $student, self::PERMISSION_READ);
-                if ($res_share_student_read->success) {
-                    $res_listing = $this->listing($sub);
-                    if ($res_listing->success) {
+        $rescopy = $this->copy_file($open, $sub);
+        if ($rescopy->success) {
+            $resshareteacheredit = $this->set_permission($sub, $teacher, self::PERMISSION_ALL);
+            if ($resshareteacheredit->success) {
+                $ressharestudentread = $this->set_permission($sub, $student, self::PERMISSION_READ);
+                if ($ressharestudentread->success) {
+                    $reslisting = $this->listing($sub);
+                    if ($reslisting->success) {
                         $tipnc = tipnc::get($submission->id);
                         if ($tipnc) {
-                            $tipnc->ncid = $res_listing->data;
+                            $tipnc->ncid = $reslisting->data;
                             tipnc::update($tipnc);
                             return new response(true, $tipnc->ncid);
                         } else {
                             $tipnc = new stdClass();
                             $tipnc->assignment = $submission->assignment;
                             $tipnc->submission = $submission->id;
-                            $tipnc->ncid = $res_listing->data;
+                            $tipnc->ncid = $reslisting->data;
                             tipnc::set($tipnc);
                             return new response(true, $tipnc->ncid);
                         }
                     } else {
                         tipnc_error::log(
                             'student_submit:listing',
-                            $res_listing->error, $this->instance, $submission->id);
-                        return $res_listing;
+                            $reslisting->error, $this->instance, $submission->id);
+                        return $reslisting;
                     }
                 } else {
                     tipnc_error::log(
                         'student_submit:set_permission',
-                        $res_share_student_read->error, $this->instance, $submission->id);
-                    return $res_share_student_read;
+                        $ressharestudentread->error, $this->instance, $submission->id);
+                    return $ressharestudentread;
                 }
             } else {
                 tipnc_error::log(
                     'student_submit:set_permission',
-                    $res_share_teacher_edit->error, $this->instance, $submission->id);
-                return $res_share_teacher_edit;
+                    $resshareteacheredit->error, $this->instance, $submission->id);
+                return $resshareteacheredit;
             }
         } else {
             tipnc_error::log(
-                'student_submit:copy_file',
-                $res_copy->error, $this->instance, $submission->id);
-            return $res_copy;
+                'student_submit:copy_file', $rescopy->error, $this->instance, $submission->id);
+            return $rescopy;
         }
     }
 
@@ -258,11 +255,11 @@ class nextcloud {
     protected function copy_file(string $origin, string $destiny): response {
         $curl = new curl();
         $url = $this->host . '/remote.php/dav/files/' . $this->user . '/' . $origin . '?format=json';
-        $destiny_url = $this->host . '/remote.php/dav/files/' . $this->user . '/' . $destiny;
+        $destinyurl = $this->host . '/remote.php/dav/files/' . $this->user . '/' . $destiny;
         $headers = array();
         $headers[] = "Content-type: application/json";
         $headers[] = "OCS-APIRequest: true";
-        $headers[] = "Destination: " . $destiny_url;
+        $headers[] = "Destination: " . $destinyurl;
         $curl->setHeader($headers);
         $params = [];
         try {
@@ -272,7 +269,12 @@ class nextcloud {
             if ($response['HTTP/1.1'] === '201 Created' || $response['HTTP/1.1'] === '204 No Content') {
                 $response = new response(true, '');
             } else {
-                $response = new response(false, null, new error('0101', $response['HTTP/1.1']));
+                if (!empty($response['HTTP/1.1'])) {
+                    $response = new response(false, null, new error('0101', $response['HTTP/1.1']));
+                } else {
+                    $response = new response(false, null, new error('0102',
+                        json_encode($response, JSON_PRETTY_PRINT)));
+                }
             }
         } catch (\Exception $e) {
             $response = new response(false, null,
@@ -398,7 +400,12 @@ class nextcloud {
                     $response = new response(false, null, new error('0302', 'Respuesta no esperada'));
                 }
             } else {
-                $response = new response(false, null, new error('0301', $response['HTTP/1.1']));
+                if (!empty($response['HTTP/1.1'])) {
+                    $response = new response(false, null, new error('0301', $response['HTTP/1.1']));
+                } else {
+                    $response = new response(false, null, new error('0303',
+                        json_encode($response, JSON_PRETTY_PRINT)));
+                }
             }
         } catch (\Exception $e) {
             $response = new response(false, null,
@@ -411,25 +418,30 @@ class nextcloud {
     /**
      * Delete Permission.
      *
-     * @param int $share_id
+     * @param int $shareid
      * @return response
      */
-    protected function delete_permission(int $share_id): response {
+    protected function delete_permission(int $shareid): response {
         $curl = new curl();
-        $url = $this->host . '/ocs/v2.php/apps/files_sharing/api/v1/shares/' . $share_id . '?format=json';
+        $url = $this->host . '/ocs/v2.php/apps/files_sharing/api/v1/shares/' . $shareid . '?format=json';
         $headers = array();
         $headers[] = "Content-type: application/json";
         $headers[] = "OCS-APIRequest: true";
         $curl->setHeader($headers);
         $params = new stdClass();
-        $params->share_id = $share_id;
+        $params->share_id = $shareid;
         try {
             $curl->post($url, json_encode($params), $this->get_options_curl('DELETE'));
             $response = $curl->getResponse();
             if ($response['HTTP/1.1'] === '200 OK') {
                 $response = new response(true, '');
             } else {
-                $response = new response(false, null, new error('0401', $response['HTTP/1.1']));
+                if (!empty($response['HTTP/1.1'])) {
+                    $response = new response(false, null, new error('0401', $response['HTTP/1.1']));
+                } else {
+                    $response = new response(false, null, new error('0402',
+                        json_encode($response, JSON_PRETTY_PRINT)));
+                }
             }
         } catch (\Exception $e) {
             $response = new response(false, null,

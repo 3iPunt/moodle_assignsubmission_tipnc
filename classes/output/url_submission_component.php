@@ -31,8 +31,6 @@ use renderer_base;
 use stdClass;
 use templatable;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Class url_submission_component
  *

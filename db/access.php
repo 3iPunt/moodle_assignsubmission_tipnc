@@ -22,8 +22,9 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$capabilities = array(
+defined('MOODLE_INTERNAL') || die;
 
+$capabilities = array(
     // View upload charge page.
     'assignsubmission/tipnc:view_errors' => array(
         'captype' => 'read',
@@ -37,5 +38,4 @@ $capabilities = array(
             'manager' => CAP_ALLOW,
         ),
     ),
-
 );

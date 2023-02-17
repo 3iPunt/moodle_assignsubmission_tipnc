@@ -23,7 +23,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use assignsubmission_tipnc\output\registry_page;
 use assignsubmission_tipnc\output\view_errors_page;
 
 require_once('../../../../config.php');
@@ -32,7 +31,7 @@ global $PAGE, $OUTPUT;
 
 require_login();
 
-$has_capability = has_capability('assignsubmission/tipnc:view_errors',  context_system::instance());
+$hascapability = has_capability('assignsubmission/tipnc:view_errors',  context_system::instance());
 
 $title = get_string('tipnc:view_errors', 'assignsubmission_tipnc');
 
@@ -42,7 +41,7 @@ $PAGE->set_title($title);
 $PAGE->set_heading($title);
 
 echo $OUTPUT->header();
-if ($has_capability) {
+if ($hascapability) {
     $page = new view_errors_page();
     $output = $PAGE->get_renderer('assignsubmission_tipnc');
     echo $output->render($page);
@@ -52,4 +51,3 @@ if ($has_capability) {
     );
 }
 echo $OUTPUT->footer();
-

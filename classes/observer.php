@@ -24,13 +24,6 @@
 use assignsubmission_tipnc\api\nextcloud;
 use assignsubmission_tipnc\tipnc_error;
 use core\event\course_module_created;
-use mod_assign\event\assessable_submitted;
-use mod_assign\event\submission_confirmation_form_viewed;
-use mod_assign\event\submission_updated;
-
-defined('MOODLE_INTERNAL') || die();
-
-global $CFG;
 
 /**
  * Class Event observer for assignsubmission_tipnc.

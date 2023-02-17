@@ -24,9 +24,6 @@
 
 namespace assignsubmission_tipnc\api;
 
-defined('MOODLE_INTERNAL') || die();
-
-
 /**
  * Error Response
  *
