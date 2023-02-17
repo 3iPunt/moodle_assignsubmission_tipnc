@@ -56,6 +56,9 @@ class nextcloud {
     /** @var string Host */
     protected $host;
 
+    /** @var string URL */
+    protected $url;
+
     /** @var string User */
     protected $user;
 
@@ -73,6 +76,7 @@ class nextcloud {
      */
     public function __construct(int $instance) {
         $this->host = get_config('assignsubmission_tipnc', 'host');
+        $this->url = get_config('assignsubmission_tipnc', 'url');
         $this->user = get_config('assignsubmission_tipnc', 'user');
         $this->password = get_config('assignsubmission_tipnc', 'password');
         $this->instance = $instance;
@@ -255,7 +259,7 @@ class nextcloud {
     protected function copy_file(string $origin, string $destiny): response {
         $curl = new curl();
         $url = $this->host . '/remote.php/dav/files/' . $this->user . '/' . $origin . '?format=json';
-        $destinyurl = $this->host . '/remote.php/dav/files/' . $this->user . '/' . $destiny;
+        $destinyurl = $this->url . '/remote.php/dav/files/' . $this->user . '/' . $destiny;
         $headers = array();
         $headers[] = "Content-type: application/json";
         $headers[] = "OCS-APIRequest: true";
@@ -330,15 +334,15 @@ class nextcloud {
             ));
             $response = curl_exec($curl);
 
-            $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
             $error = curl_error($curl);
 
-            if ( $httpCode >= 400 || !empty($error) ){
+            if ($httpcode >= 400 || !empty($error)) {
                 curl_close($curl);
                 $response = new response(
                     false,
                     null,
-                    new error('0203', 'Status Code: ' . $httpCode . ' - '. $error));
+                    new error('0203', 'Status Code: ' . $httpcode . ' - '. $error));
                 return $response;
             } else {
                 $xml = str_replace('d:', '', $response);

@@ -24,6 +24,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2021060300;
+$plugin->version   = 2023021701;
 $plugin->requires  = 2020110300;
 $plugin->component = 'assignsubmission_tipnc';
