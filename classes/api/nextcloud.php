@@ -290,7 +290,7 @@ class nextcloud {
      * @return response
      */
     protected function listing(string $file): response {
-        $url = $this->host . '/remote.php/dav/files/' . $this->user . '/' . $file;
+        $url = $this->host . '/remote.php/dav/files/' . $this->user . '/' . $file . '?format=xml';
         $headers = array();
         $headers[] = "Content-type: application/xml";
         $headers[] = "OCS-APIRequest: true";
@@ -325,25 +325,43 @@ class nextcloud {
                 CURLOPT_CUSTOMREQUEST => 'PROPFIND',
                 CURLOPT_POSTFIELDS => $params,
                 CURLOPT_HTTPHEADER => $headers,
+                CURLOPT_SSL_VERIFYHOST => 0,
+                CURLOPT_SSL_VERIFYPEER => 0
             ));
             $response = curl_exec($curl);
-            curl_close($curl);
-            $xml = str_replace('d:', '', $response);
-            $xml = str_replace('oc:', '', $xml);
-            $xml = str_replace('nc:', '', $xml);
-            $xml = simplexml_load_string($xml);
-            if ($xml === false) {
+
+            $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            $error = curl_error($curl);
+
+            if ( $httpCode >= 400 || !empty($error) ){
+                curl_close($curl);
                 $response = new response(
-                    false, null, new error('0202', 'XML has errors'));
+                    false,
+                    null,
+                    new error('0203', 'Status Code: ' . $httpCode . ' - '. $error));
                 return $response;
-            }
-            if (isset($xml->response->propstat->prop->fileid)) {
-                $fileid = current($xml->response->propstat->prop->fileid);
-                $response = new response(true, $fileid);
             } else {
-                $response = new response(
-                    false, null, new error('0201', 'The FileID could not be retrieved'));
+                $xml = str_replace('d:', '', $response);
+                $xml = str_replace('oc:', '', $xml);
+                $xml = str_replace('nc:', '', $xml);
+                $xml = simplexml_load_string($xml);
+
+                curl_close($curl);
+
+                if ($xml === false) {
+                    $response = new response(
+                        false, null, new error('0202', 'XML has errors'));
+                    return $response;
+                }
+                if (isset($xml->response->propstat->prop->fileid)) {
+                    $fileid = current($xml->response->propstat->prop->fileid);
+                    $response = new response(true, $fileid);
+                } else {
+                    $response = new response(
+                        false, null, new error('0201', 'The FileID could not be retrieved'));
+                }
             }
+
         } catch (\Exception $e) {
             $response = new response(false, null,
                 new error('0200', $e->getMessage()));
