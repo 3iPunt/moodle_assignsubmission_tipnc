@@ -629,7 +629,6 @@ class assign_submission_tipnc extends assign_submission_plugin {
         return false;
     }
 
-
     /**
      * Upgrade the settings from the old assignment
      * to the new plugin based one
@@ -688,15 +687,6 @@ class assign_submission_tipnc extends assign_submission_plugin {
         }
     }
 
-    /**
-     * Formatting for log info
-     *
-     * @param stdClass $submission The submission
-     * @return string
-     */
-    public function format_for_log(stdClass $submission): string {
-        return 'format_log';
-    }
 
     /**
      * Stops the submission while the documents cannot be reached.
