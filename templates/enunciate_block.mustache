@@ -1,0 +1,163 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template assignsubmission_tipnc/enunciate_block
+
+    The brief of the assignment, on the assignment page.
+
+    Shown whole to whoever has no document of their own yet; to everybody else it
+    is a reference, so only the link is kept.
+
+    Context variables required for this template:
+    * ready - whether the document exists
+    * embed - whether the document is shown, or only linked
+    * viewurl - address of the document
+    * filename - its name in NextCloud
+
+    Example context (json):
+    {
+        "ready": true,
+        "embed": true,
+        "viewurl": "https://nextcloud.example.org/apps/onlyoffice/633",
+        "filename": "enun_36.docx",
+        "hasfolder": true,
+        "folderurl": "#",
+        "frametitle": "Enunciado de la tarea"
+    }
+}}
+<section class="tipnc-enunciate {{^embed}}tipnc-enunciate--compact{{/embed}}"
+         data-region="tipnc-enunciate" aria-labelledby="tipnc-enunciate-title">
+
+    <div class="tipnc-enunciate__header">
+        <div class="tipnc-enunciate__identity">
+            <span class="tipnc-enunciate__eyebrow">{{#str}} pluginname, assignsubmission_tipnc {{/str}}</span>
+            <h3 class="tipnc-enunciate__title" id="tipnc-enunciate-title">
+                {{#str}} enunciate_title, assignsubmission_tipnc {{/str}}
+            </h3>
+            {{#embed}}
+                <p class="tipnc-enunciate__lead">{{#str}} enunciate_intro, assignsubmission_tipnc {{/str}}</p>
+            {{/embed}}
+            {{^embed}}
+                {{#ready}}
+                    <p class="tipnc-enunciate__lead">{{#str}} enunciate_reference, assignsubmission_tipnc {{/str}}</p>
+                {{/ready}}
+            {{/embed}}
+        </div>
+
+        <div class="tipnc-enunciate__actions">
+            {{#ready}}
+                {{#embed}}
+                    <span class="tipnc-enunciate__badge tipnc-enunciate__badge--ready">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M20 6 9 17l-5-5"></path>
+                        </svg>
+                        {{#str}} enunciate_ready, assignsubmission_tipnc {{/str}}
+                    </span>
+                {{/embed}}
+                <a class="tipnc-enunciate__open" href="{{viewurl}}" target="_blank" rel="noopener">
+                    {{#str}} enunciate_open, assignsubmission_tipnc {{/str}}
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M7 17 17 7"></path>
+                        <path d="M9 7h8v8"></path>
+                    </svg>
+                </a>
+            {{/ready}}
+            {{^ready}}
+                <span class="tipnc-enunciate__badge tipnc-enunciate__badge--pending">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 9v4"></path>
+                        <path d="M12 17h.01"></path>
+                        <path d="M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path>
+                    </svg>
+                    {{#str}} enunciate_pending, assignsubmission_tipnc {{/str}}
+                </span>
+            {{/ready}}
+        </div>
+    </div>
+
+    {{#embed}}
+        {{! El marco lleva title: es requisito de accesibilidad y el visor no lo trae. }}
+        <div class="tipnc-viewer" data-region="tipnc-viewer">
+            <div class="tipnc-frame__bar">
+                {{! El motivo lo decide el visor; aquí solo se pinta. }}
+                {{#viewer.isreadonly}}
+                    <p class="tipnc-frame__readonly">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        {{viewer.readonlytext}}
+                    </p>
+                {{/viewer.isreadonly}}
+                <button type="button" class="tipnc-frame__full" data-action="tipnc-fullscreen">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3"></path>
+                    <path d="M16 3h3a2 2 0 0 1 2 2v3"></path>
+                    <path d="M8 21H5a2 2 0 0 1-2-2v-3"></path>
+                    <path d="M16 21h3a2 2 0 0 0 2-2v-3"></path>
+                </svg>
+                {{#str}} fullscreen, assignsubmission_tipnc {{/str}}
+                </button>
+            </div>
+            {{#viewer}}
+                {{> assignsubmission_tipnc/document_viewer }}
+            {{/viewer}}
+        </div>
+        <p class="tipnc-enunciate__file">{{filename}}</p>
+    {{/embed}}
+
+    {{^ready}}
+        <div class="tipnc-enunciate__notready">
+            <p class="tipnc-enunciate__notready-title">
+                {{#str}} enunciate_notready, assignsubmission_tipnc {{/str}}
+            </p>
+            {{! El diagnóstico y el botón son de quien puede hacer algo con ellos.
+                A quien no, decirle qué pasa y a quién avisar. }}
+            {{#canprepare}}
+                <p class="tipnc-enunciate__notready-hint">
+                    {{#str}} enunciate_notready_hint, assignsubmission_tipnc {{/str}}
+                </p>
+                <a class="btn btn-primary tipnc-enunciate__prepare" href="{{prepareurl}}">
+                    {{#str}} enunciate_prepare, assignsubmission_tipnc {{/str}}
+                </a>
+                {{#hasfolder}}
+                    <a class="tipnc-enunciate__open" href="{{folderurl}}" target="_blank" rel="noopener">
+                        {{#str}} enunciate_openfolder, assignsubmission_tipnc {{/str}}
+                    </a>
+                {{/hasfolder}}
+            {{/canprepare}}
+            {{^canprepare}}
+                <p class="tipnc-enunciate__notready-hint">
+                    {{#str}} enunciate_notready_student, assignsubmission_tipnc {{/str}}
+                </p>
+            {{/canprepare}}
+        </div>
+    {{/ready}}
+
+</section>
+{{#embed}}
+    {{#js}}
+        require(['assignsubmission_tipnc/fullscreen'], function(fullscreen) {
+            fullscreen.init();
+        });
+    {{/js}}
+{{/embed}}

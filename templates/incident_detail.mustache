@@ -1,0 +1,126 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template assignsubmission_tipnc/incident_detail
+
+    Detail of one incident, shown in the side panel.
+
+    Context variables required for this template:
+    * severity, operation, meaning - what happened
+    * context - where it happened
+    * call - the call itself
+    * trace - every call of the same action
+
+    Example context (json):
+    {
+        "severity": "error",
+        "severitylabel": "Error",
+        "iserror": true,
+        "operation": "Crear el enunciado de la tarea",
+        "meaning": "Plantilla no encontrada",
+        "errorcode": "0602",
+        "when": "8/09/2026 09:55",
+        "call": {"method": "COPY", "httpcode": 404, "duration": "412 ms"},
+        "diagnosis": ""
+    }
+}}
+<div class="tipnc-detail">
+
+    <div class="tipnc-detail__head">
+        <span class="tipnc-badge tipnc-badge--{{severity}}">
+            {{#iserror}}
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+            {{/iserror}}
+            {{#iswarning}}
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+            {{/iswarning}}
+            {{#isinfo}}
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+            {{/isinfo}}
+            {{severitylabel}}
+        </span>
+        <button type="button" class="tipnc-detail__close" data-action="close"
+                aria-label="{{#str}} detail_close, assignsubmission_tipnc {{/str}}">&times;</button>
+    </div>
+
+    <h3 class="tipnc-detail__title" id="tipnc-detail-title">{{operation}}</h3>
+    <p class="tipnc-detail__when">{{when}}
+        {{#repeated}}
+            &middot; {{#str}} detail_occurrences, assignsubmission_tipnc {{/str}}: {{occurrences}} ({{firstseen}})
+        {{/repeated}}
+    </p>
+
+    {{! Qué significa: el administrador no tiene por qué saber leer un código. }}
+    <div class="tipnc-detail__meaning">
+        <span class="tipnc-detail__label">{{#str}} detail_whatitmeans, assignsubmission_tipnc {{/str}}</span>
+        <p>{{meaning}} <span class="tipnc-log__errorcode">{{errorcode}}</span></p>
+    </div>
+
+    {{#context.0}}
+        <div class="tipnc-detail__block">
+            <span class="tipnc-detail__label">{{#str}} detail_context, assignsubmission_tipnc {{/str}}</span>
+            <dl class="tipnc-detail__list">
+                {{#context}}
+                    <dt>{{label}}</dt>
+                    <dd>
+                        {{#url}}<a href="{{url}}"{{#external}} target="_blank" rel="noopener"{{/external}}>{{value}}</a>{{/url}}
+                        {{^url}}{{value}}{{/url}}
+                    </dd>
+                {{/context}}
+            </dl>
+        </div>
+    {{/context.0}}
+
+    <div class="tipnc-detail__block">
+        <span class="tipnc-detail__label">{{#str}} detail_call, assignsubmission_tipnc {{/str}}</span>
+        <p class="tipnc-detail__call">
+            <span class="tipnc-log__errorcode">{{call.method}}</span>
+            <span class="tipnc-log__http {{#call.httpok}}tipnc-log__http--ok{{/call.httpok}}{{^call.httpok}}tipnc-log__http--ko{{/call.httpok}}">{{call.httpcode}}</span>
+            {{#call.duration}}<span class="tipnc-log__meta">{{call.duration}}</span>{{/call.duration}}
+        </p>
+        {{#call.url}}<p class="tipnc-detail__url">{{call.url}}</p>{{/call.url}}
+        {{#call.hasbody}}
+            <pre class="tipnc-detail__body">{{call.body}}</pre>
+        {{/call.hasbody}}
+        {{^call.hasbody}}
+            <p class="tipnc-log__meta">{{#str}} detail_nobody, assignsubmission_tipnc {{/str}}</p>
+        {{/call.hasbody}}
+    </div>
+
+    {{#hastrace}}
+        <div class="tipnc-detail__block">
+            <span class="tipnc-detail__label">{{#str}} detail_trace, assignsubmission_tipnc {{/str}}</span>
+            <ol class="tipnc-detail__trace">
+                {{#trace}}
+                    <li class="{{#current}}tipnc-detail__step--current{{/current}}">
+                        <span class="tipnc-detail__dot tipnc-detail__dot--{{severity}}" aria-hidden="true"></span>
+                        <span class="tipnc-detail__step">{{operation}}</span>
+                        <span class="tipnc-log__http {{#httpok}}tipnc-log__http--ok{{/httpok}}{{^httpok}}tipnc-log__http--ko{{/httpok}}">{{httpcode}}</span>
+                        <span class="tipnc-log__meta">{{when}}</span>
+                    </li>
+                {{/trace}}
+            </ol>
+        </div>
+    {{/hastrace}}
+
+    <div class="tipnc-detail__actions">
+        <button type="button" class="tipnc-detail__copy" data-action="copy" data-diagnosis="{{diagnosis}}">
+            {{#str}} detail_copy, assignsubmission_tipnc {{/str}}
+        </button>
+    </div>
+
+</div>

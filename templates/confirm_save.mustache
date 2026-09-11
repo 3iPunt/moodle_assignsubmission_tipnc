@@ -1,0 +1,51 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template assignsubmission_tipnc/confirm_save
+
+    Confirmation that the document is saved, shown before submitting.
+
+    It is printed hidden and the module moves it next to the submit button: on
+    its own, at the top of the page, nobody would read it.
+
+    Example context (json):
+    {}
+}}
+<div class="tipnc-confirmsave" data-region="tipnc-confirmsave" hidden>
+    <p class="tipnc-confirmsave__title">{{#str}} confirmsaved_title, assignsubmission_tipnc {{/str}}</p>
+
+    {{! Sin borradores, el botón del formulario entrega: el nombre que trae el core
+        —«Guardar cambios»— no lo dice, así que se dice aquí. }}
+    {{#alsosubmits}}
+        <p class="tipnc-confirmsave__warning">
+            {{#str}} confirmsaved_alsosubmits, assignsubmission_tipnc {{/str}}
+        </p>
+    {{/alsosubmits}}
+
+    <p class="tipnc-confirmsave__hint">
+        {{#cansave}}{{#str}} confirmsaved_hint_save, assignsubmission_tipnc {{/str}}{{/cansave}}
+        {{^cansave}}{{#str}} confirmsaved_hint, assignsubmission_tipnc {{/str}}{{/cansave}}
+    </p>
+
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="tipnc-confirmsave"
+               data-action="tipnc-confirmsave">
+        <label class="form-check-label" for="tipnc-confirmsave">
+            {{#str}} confirmsaved_label, assignsubmission_tipnc {{/str}}
+        </label>
+    </div>
+</div>

@@ -1,0 +1,1899 @@
+/* Registro de incidencias — maquetación del sistema de diseño Tresipunt.
+   Los tokens se declaran en el ámbito del plugin, no en :root, para no
+   contaminar el tema del sitio. Tipografía y color primario del tema quedan
+   intactos: el naranja de marca solo vive en acentos e identidad. */
+
+.tipnc-log {
+    --tip-orange-50: #fff1ed;
+    --tip-orange-200: #ffbca6;
+    --tip-orange-400: #fb6840;
+    --tip-orange-500: #f84015;
+    --tip-orange-600: #da3208;
+    --tip-orange-700: #b12706;
+
+    --tip-neutral-25: #fafafa;
+    --tip-neutral-50: #f4f4f5;
+    --tip-neutral-100: #ececed;
+    --tip-neutral-200: #dddddf;
+    --tip-neutral-400: #9a9a9e;
+    --tip-neutral-500: #6f6f73;
+    --tip-neutral-800: #333;
+    --tip-neutral-900: #1e1e1f;
+
+    --tip-success-500: #1f9d57;
+    --tip-success-50: #e7f6ee;
+    --tip-warning-500: #e8a317;
+    --tip-warning-50: #fcf3df;
+    --tip-danger-500: #e23b2e;
+    --tip-danger-50: #fceae8;
+    --tip-info-500: #2d7ff9;
+    --tip-info-50: #e8f1fe;
+
+    --tip-radius-sm: 8px;
+    --tip-radius-md: 12px;
+    --tip-radius-lg: 20px;
+    --tip-radius-pill: 999px;
+
+    --tip-shadow-xs: 0 1px 3px rgba(30, 30, 31, .06);
+    --tip-shadow-kpi: 0 4px 14px rgba(248, 64, 21, .14);
+
+    background: #fff;
+    border-radius: var(--tip-radius-lg);
+    box-shadow: var(--tip-shadow-xs);
+    color: var(--tip-neutral-800);
+    margin: 0 auto;
+    max-width: 1038px;
+    padding: 50px;
+}
+
+/* La pantalla es una única tarjeta blanca sobre el fondo de la página: el
+   contenedor del tema se neutraliza para no dibujar un doble marco. */
+#page-mod-assign-submission-tipnc-view_errors #region-main {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+/* ---- Estados de interacción ---------------------------------------------
+   Reglas del sistema de diseño: hover oscurece un paso, press hunde 1px,
+   focus siempre visible con halo naranja al 45%, disabled al 45% sin sombra.
+   Movimiento rápido y calmado: 120 ms para color, 200 ms para elevación. */
+
+.tipnc-log {
+    --tip-focus-ring: color-mix(in srgb, var(--tip-orange-500) 45%, transparent);
+    --tip-shadow-md: 0 6px 18px rgba(30, 30, 31, .08);
+    --tip-transition: background-color 120ms cubic-bezier(.4, 0, .2, 1),
+        border-color 120ms cubic-bezier(.4, 0, .2, 1),
+        color 120ms cubic-bezier(.4, 0, .2, 1),
+        box-shadow 200ms cubic-bezier(.16, 1, .3, 1),
+        transform 120ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.tipnc-log button {
+    cursor: pointer;
+    transition: var(--tip-transition);
+}
+
+.tipnc-log button:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.tipnc-log button:disabled,
+.tipnc-log [aria-disabled="true"] {
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: .45;
+}
+
+.tipnc-log :focus-visible {
+    box-shadow: 0 0 0 3px var(--tip-focus-ring);
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+}
+
+/* Los enlaces son naranja de marca, no el azul del tema: es el `--text-link`
+   del sistema de diseño. */
+.tipnc-log a {
+    color: var(--tip-orange-600);
+    text-decoration: none;
+}
+
+.tipnc-log a:hover,
+.tipnc-log a:focus-visible {
+    color: var(--tip-orange-700);
+    text-decoration: underline;
+}
+
+.tipnc-log__hint a {
+    color: var(--tip-neutral-500);
+}
+
+.tipnc-log__hint a:hover {
+    color: var(--tip-neutral-800);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tipnc-log button,
+    .tipnc-log .tipnc-log__counter {
+        transition: none;
+    }
+
+    .tipnc-log button:active:not(:disabled) {
+        transform: none;
+    }
+}
+
+/* ---- Cabecera co-brandada ------------------------------------------------ */
+
+.tipnc-log__header {
+    align-items: flex-start;
+    border-bottom: 1px solid var(--tip-neutral-100);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: space-between;
+    padding-bottom: 22px;
+}
+
+.tipnc-log__identity {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.tipnc-log__eyebrow {
+    color: var(--tip-orange-500);
+    font-size: .69rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+.tipnc-log__title {
+    color: var(--tip-neutral-900);
+    font-size: 1.62rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.tipnc-log__lead {
+    color: var(--tip-neutral-500);
+    font-size: .84rem;
+    margin: 0;
+}
+
+/* Ocupa su propia línea y empuja su contenido al final, así el logo cierra la
+   cabecera por la derecha esté como esté el ancho. */
+.tipnc-log__brand {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.tipnc-log__logo {
+    height: 26px;
+    width: auto;
+}
+
+/* Estado de la conexión: responde «¿está pasando ahora?» sin leer una fila. */
+.tipnc-log__status {
+    align-items: center;
+    border-radius: var(--tip-radius-pill);
+    display: inline-flex;
+    font-size: .78rem;
+    font-weight: 500;
+    gap: 8px;
+    padding: 7px 14px;
+}
+
+.tipnc-log__status strong {
+    font-weight: 600;
+}
+
+.tipnc-log__status--ok {
+    background: var(--tip-success-50);
+    color: color-mix(in srgb, var(--tip-success-500) 70%, black);
+}
+
+.tipnc-log__status--down {
+    background: var(--tip-danger-50);
+    color: color-mix(in srgb, var(--tip-danger-500) 70%, black);
+}
+
+.tipnc-log__status--unset {
+    background: var(--tip-neutral-50);
+    color: var(--tip-neutral-500);
+}
+
+.tipnc-log__dot {
+    background: currentColor;
+    border-radius: 50%;
+    flex: none;
+    height: 8px;
+    width: 8px;
+}
+
+/* ---- Contadores ---------------------------------------------------------- */
+
+.tipnc-log__counters {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 24px;
+}
+
+/* Contador que además filtra: las tarjetas se elevan al pasar por encima. */
+.tipnc-log__counter {
+    background: #fff;
+    border: 1px solid var(--tip-neutral-200);
+    border-radius: var(--tip-radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 16px 18px;
+    text-align: left;
+}
+
+button.tipnc-log__counter:hover {
+    box-shadow: var(--tip-shadow-md);
+    transform: translateY(-2px);
+}
+
+button.tipnc-log__counter:active {
+    transform: translateY(0);
+}
+
+.tipnc-log__counter--active {
+    border: 1.5px solid var(--tip-orange-400);
+    box-shadow: var(--tip-shadow-kpi);
+}
+
+.tipnc-log__counter--active .tipnc-log__caption {
+    color: var(--tip-neutral-800);
+}
+
+.tipnc-log__counter-state {
+    color: var(--tip-orange-600);
+    font-size: .69rem;
+}
+
+/* ---- Filtros ------------------------------------------------------------- */
+
+/* Dos filas: arriba las entidades, que ocupan todo el ancho; abajo los filtros
+   de valor cerrado, que solo necesitan lo suyo. */
+.tipnc-log__filters {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.tipnc-log__filters-row {
+    align-items: flex-end;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tipnc-log__filters-row--entities {
+    width: 100%;
+}
+
+.tipnc-log__filters-row--entities .tipnc-log__field {
+    flex: 1 1 0;
+    min-width: 0;
+}
+
+.tipnc-log__field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+}
+
+.tipnc-log__filteractions {
+    margin-left: auto;
+}
+
+.tipnc-log__label {
+    color: var(--tip-neutral-500);
+    font-size: .6875rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.tipnc-log__segmented {
+    border: 1px solid var(--tip-neutral-200);
+    border-radius: var(--tip-radius-sm);
+    display: inline-flex;
+    height: 36px;
+    overflow: hidden;
+}
+
+.tipnc-log__segment {
+    background: transparent;
+    border: 0;
+    border-left: 1px solid var(--tip-neutral-100);
+    color: var(--tip-neutral-500);
+    font-size: .78rem;
+    font-weight: 500;
+    padding: 0 12px;
+}
+
+.tipnc-log__segment:first-child {
+    border-left: 0;
+}
+
+.tipnc-log__segment:hover {
+    background: var(--tip-neutral-25);
+    color: var(--tip-neutral-800);
+}
+
+.tipnc-log__segment--active {
+    background: var(--tip-orange-50);
+    color: var(--tip-orange-700);
+    font-weight: 600;
+}
+
+.tipnc-log__search {
+    background: #fff;
+    border: 1px solid var(--tip-neutral-200);
+    border-radius: var(--tip-radius-sm);
+    font-size: .8125rem;
+    height: 36px;
+    padding: 0 12px;
+    transition: var(--tip-transition);
+    width: 100%;
+}
+
+.tipnc-log__search:hover {
+    border-color: var(--tip-neutral-400);
+}
+
+/* Acción secundaria: sin marco ni subrayado, del alto de los demás controles. */
+.tipnc-log__clear {
+    background: transparent;
+    border: 0;
+    border-radius: var(--tip-radius-sm);
+    color: var(--tip-neutral-500);
+    font-size: .8125rem;
+    font-weight: 500;
+    height: 36px;
+    padding: 0 12px;
+}
+
+.tipnc-log__clear:hover {
+    background: var(--tip-neutral-50);
+    color: var(--tip-neutral-800);
+    text-decoration: none;
+}
+
+/* Acciones sobre el registro entero: exportar y vaciar. */
+.tipnc-log__action {
+    align-items: center;
+    background: #fff;
+    border: 1px solid var(--tip-neutral-200);
+    border-radius: var(--tip-radius-sm);
+    color: var(--tip-neutral-800);
+    display: inline-flex;
+    font-size: .8125rem;
+    font-weight: 500;
+    gap: 6px;
+    height: 36px;
+    padding: 0 12px;
+    text-decoration: none;
+}
+
+.tipnc-log__action:hover {
+    background: var(--tip-neutral-25);
+    color: var(--tip-neutral-900);
+    text-decoration: none;
+}
+
+.tipnc-log__action--danger:hover {
+    background: var(--tip-danger-50);
+    color: color-mix(in srgb, var(--tip-danger-500) 70%, black);
+}
+
+/* Mientras se recarga el listado, se atenúa en vez de vaciarse: la tabla no
+   debe saltar. */
+.tipnc-log__listing--busy {
+    opacity: .45;
+    pointer-events: none;
+    transition: opacity 200ms cubic-bezier(.16, 1, .3, 1);
+}
+
+.tipnc-log__figure {
+    color: var(--tip-neutral-900);
+    font-size: 1.62rem;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.tipnc-log__caption {
+    color: var(--tip-neutral-500);
+    font-size: .78rem;
+    font-weight: 500;
+}
+
+.tipnc-log__hint {
+    color: var(--tip-neutral-400);
+    display: block;
+    font-size: .7rem;
+    line-height: 1.35;
+}
+
+/* ---- Diagnóstico: la pared de incidencias en una frase accionable -------- */
+
+.tipnc-log__diagnosis {
+    align-items: center;
+    background: var(--tip-orange-50);
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: .81rem;
+    gap: 14px;
+    line-height: 1.5;
+    margin-top: 14px;
+    padding: 11px 16px;
+}
+
+.tipnc-log__diagnosis-action {
+    color: var(--tip-orange-700);
+    font-weight: 600;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+/* ---- Listado ------------------------------------------------------------- */
+
+.tipnc-log__summary {
+    color: var(--tip-neutral-400);
+    font-size: .75rem;
+    margin: 20px 0 6px;
+    text-align: right;
+}
+
+.tipnc-log__table {
+    border-collapse: collapse;
+    margin: 0;
+    width: 100%;
+}
+
+/* Solo líneas horizontales: los temas que dibujan rejilla completa en las
+   tablas sin clase se neutralizan aquí (además de la clase `table-reboot`). */
+.tipnc-log__table th,
+.tipnc-log__table td,
+.tipnc-log__table tr,
+.tipnc-log__table thead,
+.tipnc-log__table tbody {
+    border: 0;
+}
+
+.tipnc-log__table th {
+    border-bottom: 1px solid var(--tip-neutral-200);
+    color: var(--tip-neutral-500);
+    font-size: .625rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    padding: 8px 10px;
+    text-align: left;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+/* Densidad media: son pantallas de administración, información compacta antes
+   que espacio decorativo. */
+.tipnc-log__table td {
+    border-bottom: 1px solid var(--tip-neutral-100);
+    font-size: .6875rem;
+    line-height: 1.4;
+    padding: 10px 10px;
+    vertical-align: top;
+}
+
+.tipnc-log__table td a {
+    font-size: inherit;
+    font-weight: 500;
+}
+
+.tipnc-log__actions {
+    text-align: right;
+}
+
+/* Botón de fila: discreto, del ancho de su texto. */
+.tipnc-log__detail {
+    background: #fff;
+    border: 1px solid var(--tip-neutral-200);
+    border-radius: var(--tip-radius-sm);
+    color: var(--tip-neutral-800);
+    font-size: .6875rem;
+    font-weight: 500;
+    height: 30px;
+    padding: 0 12px;
+    transition: background-color 120ms ease, border-color 120ms ease;
+    white-space: nowrap;
+}
+
+.tipnc-log__detail:hover {
+    background: var(--tip-neutral-25);
+    border-color: var(--tip-neutral-300, #c6c6c9);
+}
+
+/* Una incidencia repetida es un problema sistémico: se distingue del resto. */
+.tipnc-log__row--repeated {
+    background: var(--tip-neutral-25);
+}
+
+.tipnc-log__th--sorted {
+    color: var(--tip-orange-700) !important;
+}
+
+.tipnc-log__nowrap {
+    white-space: nowrap;
+}
+
+.tipnc-log__when {
+    font-size: .6875rem;
+}
+
+/* Dos grises distintos, como en el diseño: `muted` para lo que se puede leer
+   (curso, significado del código) y `subtle` para lo accesorio. */
+.tipnc-log__sub {
+    color: var(--tip-neutral-500);
+    font-size: .625rem;
+    line-height: 1.35;
+    margin-top: 2px;
+}
+
+.tipnc-log__sub a {
+    color: var(--tip-neutral-500);
+}
+
+.tipnc-log__sub a:hover {
+    color: var(--tip-neutral-800);
+}
+
+.tipnc-log__meta {
+    color: var(--tip-neutral-400);
+    font-size: .625rem;
+    margin-top: 2px;
+}
+
+.tipnc-log__link {
+    font-size: .6875rem;
+    font-weight: 500;
+}
+
+/* El nombre de quien ejecutó la operación no compite con los enlaces de
+   navegación: va en color de texto. */
+.tipnc-log__person {
+    color: var(--tip-neutral-800) !important;
+    font-size: .6875rem;
+    font-weight: 500;
+}
+
+.tipnc-log__person:hover {
+    color: var(--tip-neutral-900) !important;
+}
+
+.tipnc-log__opline {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+}
+
+.tipnc-log__operation {
+    color: var(--tip-neutral-800);
+    font-size: .6875rem;
+    font-weight: 600;
+}
+
+.tipnc-log__code {
+    color: var(--tip-neutral-400);
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: .625rem;
+    margin-top: 2px;
+}
+
+.tipnc-log__count {
+    background: var(--tip-neutral-800);
+    border: 0;
+    border-radius: var(--tip-radius-pill);
+    color: #fff;
+    flex: none;
+    font-size: .6rem;
+    font-weight: 700;
+    line-height: 1.5;
+    padding: 1px 8px;
+}
+
+.tipnc-log__count:hover {
+    background: var(--tip-neutral-900);
+}
+
+.tipnc-log__http {
+    background: var(--tip-neutral-50);
+    border-radius: 6px;
+    color: var(--tip-neutral-500);
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: .625rem;
+    font-weight: 600;
+    padding: 2px 8px;
+}
+
+.tipnc-log__http--ok {
+    background: var(--tip-success-50);
+    color: color-mix(in srgb, var(--tip-success-500) 70%, black);
+}
+
+.tipnc-log__http--ko {
+    background: var(--tip-danger-50);
+    color: color-mix(in srgb, var(--tip-danger-500) 70%, black);
+}
+
+.tipnc-log__errorcode {
+    color: var(--tip-neutral-800);
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: .625rem;
+    font-weight: 600;
+}
+
+/* Severidad siempre con icono y texto, nunca solo color. */
+.tipnc-badge {
+    align-items: center;
+    border-radius: var(--tip-radius-pill);
+    display: inline-flex;
+    font-size: .625rem;
+    font-weight: 600;
+    gap: 5px;
+    padding: 3px 10px;
+    white-space: nowrap;
+}
+
+.tipnc-badge svg {
+    flex: none;
+}
+
+.tipnc-badge--error {
+    background: var(--tip-danger-50);
+    color: color-mix(in srgb, var(--tip-danger-500) 70%, black);
+}
+
+.tipnc-badge--warning {
+    background: var(--tip-warning-50);
+    color: color-mix(in srgb, var(--tip-warning-500) 55%, black);
+}
+
+.tipnc-badge--info {
+    background: var(--tip-info-50);
+    color: color-mix(in srgb, var(--tip-info-500) 70%, black);
+}
+
+/* ---- Paginación ---------------------------------------------------------- */
+
+.tipnc-log__pages {
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+
+.tipnc-log__page {
+    align-items: center;
+    border: 1px solid var(--tip-neutral-200);
+    border-radius: var(--tip-radius-sm);
+    color: var(--tip-neutral-500);
+    display: inline-flex;
+    font-size: .78rem;
+    font-weight: 500;
+    justify-content: center;
+    min-width: 32px;
+    padding: 4px 9px;
+}
+
+.tipnc-log__page--current {
+    background: var(--tip-orange-500);
+    border-color: var(--tip-orange-500);
+    color: #fff;
+    font-weight: 600;
+}
+
+/* ---- Estado vacío -------------------------------------------------------- */
+
+.tipnc-log__empty {
+    padding: 56px 0;
+    text-align: center;
+}
+
+.tipnc-log__empty-title {
+    color: var(--tip-neutral-900);
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.tipnc-log__empty-good {
+    color: color-mix(in srgb, var(--tip-success-500) 75%, black);
+    font-size: .84rem;
+    margin: 6px 0 0;
+}
+
+/* ---- Móvil: la tabla pasa a tarjetas y nada produce scroll horizontal ---- */
+
+@media (max-width: 767.98px) {
+    .tipnc-log {
+        border-radius: var(--tip-radius-md);
+        padding: 20px;
+    }
+
+    /* La marca sigue cerrando por la derecha también aquí: moverla de sitio
+       según el ancho la esconde. */
+    .tipnc-log__brand {
+        justify-content: flex-end;
+    }
+
+    .tipnc-log__counters {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tipnc-log__diagnosis-action {
+        margin-left: 0;
+    }
+
+    .tipnc-log__table thead {
+        display: none;
+    }
+
+    .tipnc-log__table,
+    .tipnc-log__table tbody,
+    .tipnc-log__table tr,
+    .tipnc-log__table td {
+        display: block;
+        width: 100%;
+    }
+
+    .tipnc-log__table tr {
+        border: 1px solid var(--tip-neutral-200);
+        border-radius: var(--tip-radius-md);
+        margin-bottom: 12px;
+        padding: 12px;
+    }
+
+    .tipnc-log__table td {
+        border: 0;
+        padding: 3px 0;
+    }
+
+    .tipnc-log__summary {
+        text-align: left;
+    }
+
+    .tipnc-log__pages {
+        justify-content: center;
+    }
+}
+
+/* ---- Panel de detalle ---------------------------------------------------- */
+
+.tipnc-log__drawer {
+    background: rgba(30, 30, 31, .32);
+    bottom: 0;
+    display: flex;
+    justify-content: flex-end;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1050;
+}
+
+.tipnc-log__drawer-panel {
+    background: #fff;
+    box-shadow: 0 28px 64px rgba(30, 30, 31, .14);
+    max-width: 520px;
+    overflow-y: auto;
+    padding: 28px;
+    width: 100%;
+}
+
+.tipnc-detail__head {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.tipnc-detail__close {
+    background: transparent;
+    border: 0;
+    color: var(--tip-neutral-500);
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: 0 4px;
+}
+
+.tipnc-detail__close:hover {
+    color: var(--tip-neutral-900);
+}
+
+.tipnc-detail__title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 14px 0 2px;
+}
+
+.tipnc-detail__when {
+    color: var(--tip-neutral-500);
+    font-size: .78rem;
+    margin: 0 0 18px;
+}
+
+.tipnc-detail__label {
+    color: var(--tip-neutral-500);
+    display: block;
+    font-size: .6875rem;
+    font-weight: 600;
+    letter-spacing: .05em;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+.tipnc-detail__meaning {
+    background: var(--tip-neutral-25);
+    border-radius: var(--tip-radius-md);
+    margin-bottom: 18px;
+    padding: 14px 16px;
+}
+
+.tipnc-detail__meaning p {
+    font-size: .85rem;
+    margin: 0;
+}
+
+.tipnc-detail__block {
+    border-top: 1px solid var(--tip-neutral-100);
+    margin-top: 18px;
+    padding-top: 16px;
+}
+
+.tipnc-detail__list {
+    display: grid;
+    gap: 6px 14px;
+    grid-template-columns: auto 1fr;
+    margin: 0;
+}
+
+.tipnc-detail__list dt {
+    color: var(--tip-neutral-500);
+    font-size: .78rem;
+    font-weight: 500;
+}
+
+.tipnc-detail__list dd {
+    font-size: .8125rem;
+    margin: 0;
+}
+
+.tipnc-detail__call {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    margin: 0 0 6px;
+}
+
+.tipnc-detail__url {
+    color: var(--tip-neutral-500);
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: .72rem;
+    margin: 0 0 10px;
+    overflow-wrap: anywhere;
+}
+
+/* El cuerpo de la respuesta puede ser largo: scroll propio, nunca desborda. */
+.tipnc-detail__body {
+    background: var(--tip-neutral-25);
+    border-radius: var(--tip-radius-sm);
+    font-size: .72rem;
+    margin: 0;
+    max-height: 220px;
+    overflow: auto;
+    padding: 12px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.tipnc-detail__trace {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tipnc-detail__trace li {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    padding: 6px 0;
+}
+
+.tipnc-detail__step {
+    flex: 1;
+    font-size: .8125rem;
+}
+
+.tipnc-detail__step--current {
+    font-weight: 600;
+}
+
+.tipnc-detail__dot {
+    border-radius: 50%;
+    flex: none;
+    height: 8px;
+    width: 8px;
+}
+
+.tipnc-detail__dot--error {
+    background: var(--tip-danger-500);
+}
+
+.tipnc-detail__dot--warning {
+    background: var(--tip-warning-500);
+}
+
+.tipnc-detail__dot--info {
+    background: var(--tip-success-500);
+}
+
+.tipnc-detail__actions {
+    border-top: 1px solid var(--tip-neutral-100);
+    margin-top: 18px;
+    padding-top: 16px;
+}
+
+.tipnc-detail__copy {
+    background: var(--tip-orange-500);
+    border: 0;
+    border-radius: var(--tip-radius-sm);
+    color: #fff;
+    font-size: .8125rem;
+    font-weight: 600;
+    height: 40px;
+    padding: 0 18px;
+}
+
+.tipnc-detail__copy:hover {
+    background: var(--tip-orange-600);
+    box-shadow: 0 8px 24px rgba(248, 64, 21, .28);
+}
+
+/* El autocompletado lo pinta el core: solo se ajusta su caja al resto. */
+.tipnc-log__filters .form-autocomplete-downarrow,
+.tipnc-log__filters .form-autocomplete-selection {
+    margin: 0;
+}
+
+.tipnc-log__filters .form-autocomplete-input,
+.tipnc-log__select {
+    background: var(--tip-neutral-50);
+    border: 0;
+    border-radius: var(--tip-radius-sm);
+    font-size: .8125rem;
+    height: 36px;
+        padding: 0 10px;
+}
+
+@media (max-width: 767.98px) {
+    .tipnc-log__drawer-panel {
+        max-width: none;
+        padding: 20px;
+    }
+
+    .tipnc-log__filters .form-autocomplete-input,
+    .tipnc-log__select {
+        min-width: 0;
+        width: 100%;
+    }
+}
+
+/* ---- Autocompletado del core dentro de la pantalla -----------------------
+   El componente lo pinta Moodle; aquí solo se ajusta a la escala y a los
+   colores de marca. El foco azul de Bootstrap se sustituye por el halo
+   naranja del sistema de diseño, que es el que usa el resto de la pantalla. */
+
+/* Se acota por el id de la página, no por `.tipnc-log`: el desplegable de
+   sugerencias lo inyecta el core y puede quedar fuera del contenedor. El id
+   basta para ganar al estilo del tema sin recurrir a !important. */
+#page-mod-assign-submission-tipnc-view_errors .form-autocomplete-suggestions li,
+#page-mod-assign-submission-tipnc-view_errors [role="listbox"] [role="option"] {
+    font-size: .75rem;
+    padding: 6px 10px;
+}
+
+#page-mod-assign-submission-tipnc-view_errors .form-autocomplete-suggestions li[aria-selected="true"],
+#page-mod-assign-submission-tipnc-view_errors .form-autocomplete-suggestions li:hover,
+#page-mod-assign-submission-tipnc-view_errors [role="listbox"] [role="option"][aria-selected="true"],
+#page-mod-assign-submission-tipnc-view_errors [role="listbox"] [role="option"]:hover {
+    background-color: #e9e9e9;
+    color: #1e1e1f;
+    font-weight: 500;
+}
+
+.tipnc-log .form-autocomplete-selection [data-active-selection="true"] {
+    box-shadow: 0 0 0 3px var(--tip-focus-ring);
+}
+
+.tipnc-log .form-autocomplete-selection [data-value] {
+    background: var(--tip-neutral-50);
+    border-radius: var(--tip-radius-pill);
+    font-size: .6875rem;
+    padding: 2px 10px;
+}
+
+.tipnc-log .form-autocomplete-suggestions {
+    border: 1px solid var(--tip-neutral-200);
+    border-radius: var(--tip-radius-sm);
+    box-shadow: var(--tip-shadow-md);
+    font-size: .6875rem;
+}
+
+.tipnc-log .form-autocomplete-downarrow {
+    color: var(--tip-neutral-400);
+}
+
+/* El campo del autocompletado usa `.form-control` de Bootstrap, que viene con
+   la escala de los formularios de Moodle. Se ajusta SOLO dentro de esta
+   pantalla: tocar `.form-control` a secas cambiaría todos los formularios del
+   sitio. */
+/* Campo sin marco, resuelto con fondo: los tres buscadores se leen como una
+   sola pieza y no compiten con los grupos segmentados de al lado. */
+.tipnc-log .form-control,
+.tipnc-log .form-autocomplete-input {
+    background: var(--tip-neutral-50);
+    border: 0;
+    border-radius: var(--tip-radius-sm);
+    font-size: .6875rem;
+    height: 36px;
+    line-height: 1.4;
+    padding: 0 10px;
+    width: 100%;
+}
+
+.tipnc-log .form-control:hover,
+.tipnc-log .form-autocomplete-input:hover {
+    background: var(--tip-neutral-100);
+}
+
+/* El foco se marca con el halo naranja del sistema, nunca con el azul de
+   Bootstrap ni quitándolo: sin indicador visible no se puede navegar con
+   teclado. El halo lo dibuja el contenedor, no el input interno: el
+   componente del core anida un campo más pequeño que la caja visible y el
+   recuadro quedaba descolocado. */
+.tipnc-log .form-control:focus,
+.tipnc-log .form-autocomplete-input:focus {
+    background: var(--tip-neutral-50);
+    border: 0;
+    box-shadow: none;
+    outline: 0;
+}
+
+.tipnc-log__filters-row--entities .tipnc-log__field:focus-within {
+    border-radius: var(--tip-radius-sm);
+    box-shadow: 0 0 0 3px var(--tip-focus-ring);
+}
+
+.tipnc-log .form-control::placeholder {
+    color: var(--tip-neutral-400);
+}
+
+/* La caja de selección del autocompletado no debe añadir su propio marco:
+   el campo ya lo tiene. */
+.tipnc-log .form-autocomplete-selection {
+    margin-bottom: 0;
+    min-height: 0;
+}
+
+/* El autocompletado del core clona la etiqueta del campo original y la pinta
+   sobre el input. Aquí sobra —el marcador de posición ya dice qué se busca—,
+   pero se oculta solo a la vista: quien use un lector de pantalla la sigue
+   necesitando para saber qué campo está rellenando. */
+.tipnc-log__filters-row--entities label {
+    border: 0;
+    clip-path: inset(50%);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+/* Reparto de las columnas: «Dónde» lleva tarea y curso, dos textos largos que
+   no deberían partirse; severidad, respuesta y código son de ancho fijo. */
+.tipnc-log__table th:nth-child(1) { width: 1%; }
+.tipnc-log__table th:nth-child(2) { width: 9%; }
+.tipnc-log__table th:nth-child(3) { width: 24%; }
+.tipnc-log__table th:nth-child(4) { width: 26%; }
+.tipnc-log__table th:nth-child(5) { width: 14%; }
+.tipnc-log__table th:nth-child(6) { width: 1%; }
+.tipnc-log__table th:nth-child(7) { width: 16%; }
+.tipnc-log__table th:nth-child(8) { width: 1%; }
+
+.tipnc-log__table td:nth-child(1),
+.tipnc-log__table td:nth-child(6),
+.tipnc-log__table td:nth-child(8) {
+    white-space: nowrap;
+}
+
+@media (max-width: 767.98px) {
+    .tipnc-log__table th,
+    .tipnc-log__table td {
+        width: auto !important;
+    }
+}
+
+.tipnc-log__diagnosis-icon {
+    color: var(--tip-orange-500);
+    flex: none;
+}
+
+/* ---- Confirmación (modal) ------------------------------------------------
+   Mismo lenguaje que la pantalla: icono en cuadrado redondeado, texto
+   principal y una segunda línea con el matiz que evita el arrepentimiento. */
+
+.tipnc-confirm {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.tipnc-confirm__icon {
+    align-items: center;
+    border-radius: var(--tip-radius-md, 12px);
+    display: flex;
+    height: 44px;
+    justify-content: center;
+    width: 44px;
+}
+
+.tipnc-confirm__icon--danger {
+    background: #fceae8;
+    color: color-mix(in srgb, #e23b2e 70%, black);
+}
+
+.tipnc-confirm__lead {
+    color: #333;
+    font-size: .84rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.tipnc-confirm__hint {
+    color: #6f6f73;
+    font-size: .78rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* La modal del core, con la geometría del sistema de diseño. */
+.modal .tipnc-confirm {
+    padding-top: 4px;
+}
+
+.tipnc-modal .modal-content {
+    border: 0;
+    border-radius: 16px;
+    box-shadow: 0 24px 64px rgba(30, 30, 31, .18);
+}
+
+.tipnc-modal .modal-header {
+    border-bottom: 0;
+    padding: 24px 28px 0;
+}
+
+.tipnc-modal .modal-title {
+    font-size: 1.18rem;
+    font-weight: 700;
+}
+
+.tipnc-modal .modal-body {
+    padding: 12px 28px;
+}
+
+.tipnc-modal .modal-footer {
+    border-top: 0;
+    gap: 10px;
+    padding: 8px 28px 24px;
+}
+
+.tipnc-modal .modal-footer .btn {
+    border-radius: 8px;
+    font-size: .84rem;
+    font-weight: 600;
+    height: 40px;
+    padding: 0 18px;
+}
+
+.tipnc-modal .modal-footer .btn-primary {
+    background: #f84015;
+    border-color: #f84015;
+}
+
+.tipnc-modal .modal-footer .btn-primary:hover {
+    background: #da3208;
+    border-color: #da3208;
+    box-shadow: 0 8px 24px rgba(248, 64, 21, .28);
+}
+
+.tipnc-modal .modal-footer .btn-secondary {
+    background: #fff;
+    border: 1px solid #dddddf;
+    color: #333;
+    font-weight: 500;
+}
+
+/* ---- El enunciado en la página de la tarea -------------------------------
+   Se inyecta al final de la región principal: es el único sitio donde un
+   subplugin puede pintar en esa página. Por eso necesita entidad propia y un
+   título que se explique solo. */
+
+.tipnc-enunciate {
+    --tip-orange-500: #f84015;
+    --tip-orange-600: #da3208;
+    --tip-neutral-25: #fafafa;
+    --tip-neutral-100: #ececed;
+    --tip-neutral-200: #dddddf;
+    --tip-neutral-500: #6f6f73;
+    --tip-neutral-900: #1e1e1f;
+    --tip-success-50: #e7f6ee;
+    --tip-success-500: #1f9d57;
+    --tip-warning-50: #fcf3df;
+    --tip-warning-500: #e8a317;
+
+    background: #fff;
+    border: 1px solid var(--tip-neutral-200);
+    border-radius: 16px;
+    margin: 24px 0;
+    padding: 24px;
+}
+
+.tipnc-enunciate__header {
+    align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: space-between;
+}
+
+.tipnc-enunciate__identity {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.tipnc-enunciate__eyebrow {
+    color: var(--tip-orange-500);
+    font-size: .69rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.tipnc-enunciate__title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.tipnc-enunciate__lead {
+    color: var(--tip-neutral-500);
+    font-size: .82rem;
+    margin: 0;
+    max-width: 62ch;
+}
+
+.tipnc-enunciate__actions {
+    align-items: center;
+    display: flex;
+    gap: 10px;
+}
+
+/* Estado del documento: siempre icono y texto, nunca solo color. */
+.tipnc-enunciate__badge {
+    align-items: center;
+    border-radius: 999px;
+    display: inline-flex;
+    font-size: .69rem;
+    font-weight: 600;
+    gap: 5px;
+    padding: 4px 10px;
+    white-space: nowrap;
+}
+
+.tipnc-enunciate__badge svg {
+    flex: none;
+}
+
+.tipnc-enunciate__badge--ready {
+    background: var(--tip-success-50);
+    color: color-mix(in srgb, var(--tip-success-500) 70%, black);
+}
+
+.tipnc-enunciate__badge--pending {
+    background: var(--tip-warning-50);
+    color: color-mix(in srgb, var(--tip-warning-500) 55%, black);
+}
+.tipnc-enunciate__open {
+    border: 1px solid var(--tip-neutral-200);
+    border-radius: 8px;
+    color: var(--tip-orange-600);
+    display: inline-flex;
+    font-size: .8125rem;
+    font-weight: 500;
+    padding: 8px 14px;
+    text-decoration: none;
+}
+
+.tipnc-enunciate__open:hover {
+    background: var(--tip-neutral-25);
+    text-decoration: none;
+}
+
+/* El visor no trae altura propia: sin esto el marco se colapsa a unos pocos
+   píxeles. La altura la elige el sitio, y para leerlo entero está el botón de
+   pantalla completa que tiene encima. */
+.tipnc-frame {
+    height: 560px;
+    border: 1px solid var(--tip-neutral-100);
+    border-radius: 12px;
+    margin-top: 18px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.tipnc-frame iframe {
+    border: 0;
+    display: block;
+    height: 100%;
+    width: 100%;
+}
+
+.tipnc-enunciate__file {
+    color: var(--tip-neutral-500);
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: .7rem;
+    margin: 8px 0 0;
+}
+
+.tipnc-enunciate__notready {
+    background: var(--tip-neutral-25);
+    border-radius: 12px;
+    margin-top: 16px;
+    padding: 20px;
+}
+
+.tipnc-enunciate__notready-title {
+    font-size: .95rem;
+    font-weight: 600;
+    margin: 0 0 4px;
+}
+
+.tipnc-enunciate__notready-hint {
+    color: var(--tip-neutral-500);
+    font-size: .82rem;
+    margin: 0 0 12px;
+    max-width: 70ch;
+}
+
+@media (max-width: 767.98px) {
+    .tipnc-enunciate {
+        padding: 16px;
+    }
+
+    .tipnc-enunciate__actions {
+        width: 100%;
+    }
+
+    .tipnc-frame {
+        height: 70vh;
+    }
+}
+
+/* ---- El documento en la caja de estado de la entrega ----------------------
+   Vive dentro de una celda de tabla, a veces una por alumno: dice qué
+   documento es, en qué estado está y cómo llegar a él, sin ocupar la pantalla. */
+
+.tipnc-subm {
+    --tip-orange-500: #f84015;
+    --tip-orange-600: #da3208;
+    --tip-neutral-25: #fafafa;
+    --tip-neutral-100: #ececed;
+    --tip-neutral-200: #dddddf;
+    --tip-neutral-500: #6f6f73;
+    --tip-neutral-900: #1e1e1f;
+    --tip-success-50: #e7f6ee;
+    --tip-success-500: #1f9d57;
+    --tip-info-50: #e8f1fe;
+    --tip-info-500: #2d7ff9;
+    --tip-warning-50: #fcf3df;
+    --tip-warning-500: #e8a317;
+
+    align-items: center;
+    background: #fff;
+    border: 1px solid var(--tip-neutral-200);
+    border-radius: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
+    padding: 14px 16px;
+}
+
+.tipnc-subm__body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.tipnc-subm__state {
+    align-items: center;
+    border-radius: 999px;
+    display: inline-flex;
+    font-size: .69rem;
+    font-weight: 600;
+    gap: 5px;
+    padding: 3px 9px;
+    white-space: nowrap;
+    width: fit-content;
+}
+
+.tipnc-subm__state svg {
+    flex: none;
+}
+
+.tipnc-subm--draft .tipnc-subm__state {
+    background: var(--tip-warning-50);
+    color: color-mix(in srgb, var(--tip-warning-500) 55%, black);
+}
+
+.tipnc-subm--submitted .tipnc-subm__state {
+    background: var(--tip-success-50);
+    color: color-mix(in srgb, var(--tip-success-500) 70%, black);
+}
+
+.tipnc-subm--enun .tipnc-subm__state {
+    background: var(--tip-info-50);
+    color: color-mix(in srgb, var(--tip-info-500) 70%, black);
+}
+
+.tipnc-subm__hint {
+    color: var(--tip-neutral-500);
+    font-size: .78rem;
+    margin: 4px 0 0;
+    max-width: 60ch;
+}
+
+.tipnc-subm__file {
+    color: var(--tip-neutral-500);
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: .69rem;
+    margin: 6px 0 0;
+    overflow-wrap: anywhere;
+}
+
+.tipnc-subm__modified {
+    color: var(--tip-neutral-500);
+    font-size: .69rem;
+    margin: 2px 0 0;
+}
+
+.tipnc-subm__action {
+    align-items: center;
+    border: 1px solid var(--tip-neutral-200);
+    border-radius: 8px;
+    color: var(--tip-orange-600);
+    display: inline-flex;
+    flex: none;
+    font-size: .8125rem;
+    font-weight: 500;
+    gap: 6px;
+    padding: 8px 14px;
+    text-decoration: none;
+    transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.tipnc-subm__action:hover,
+.tipnc-subm__action:focus-visible {
+    background: var(--tip-neutral-25);
+    border-color: var(--tip-orange-500);
+    color: var(--tip-orange-600);
+    text-decoration: none;
+}
+
+@media (max-width: 767.98px) {
+    .tipnc-subm__action {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ---- El marco del documento ----------------------------------------------
+   Pieza compartida por el enunciado y por la entrega. El botón de pantalla
+   completa flota sobre el visor: dentro del marco no hay sitio, y en pantalla
+   completa el propio contenedor es lo que se agranda. */
+
+/* Va en la fila de acciones, no sobre el visor: encima del marco tapaba la
+   barra de herramientas del editor. */
+.tipnc-frame__full {
+    align-items: center;
+    background: #fff;
+    border: 1px solid #dddddf;
+    border-radius: 8px;
+    color: #333;
+    cursor: pointer;
+    display: inline-flex;
+    flex: none;
+    font-size: .8125rem;
+    font-weight: 500;
+    gap: 6px;
+    padding: 8px 14px;
+    transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.tipnc-frame__full:hover,
+.tipnc-frame__full:focus-visible {
+    background: #fff;
+    border-color: #f84015;
+    color: #da3208;
+}
+
+/* La caja de la entrega: cabecera y marco apilados. */
+
+.tipnc-subm {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.tipnc-subm__head {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
+}
+
+.tipnc-subm__meta {
+    color: #6f6f73;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: .69rem;
+    gap: 4px 12px;
+    margin: 6px 0 0;
+}
+
+.tipnc-subm__file {
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.tipnc-subm__modified {
+    margin: 0;
+}
+
+.tipnc-subm .tipnc-frame {
+    margin-top: 14px;
+}
+
+/* El enunciado como referencia: sin marco, solo identidad y enlace. */
+
+.tipnc-enunciate--compact {
+    padding: 16px 20px;
+}
+
+.tipnc-enunciate--compact .tipnc-enunciate__title {
+    font-size: 1rem;
+}
+
+.tipnc-subm__title {
+    color: #1e1e1f;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 0 0 6px;
+}
+
+.tipnc-subm__actions {
+    align-items: center;
+    display: flex;
+    flex: none;
+    gap: 8px;
+}
+
+@media (max-width: 767.98px) {
+    .tipnc-subm__actions {
+        width: 100%;
+    }
+
+    .tipnc-subm__actions .tipnc-frame__full,
+    .tipnc-subm__actions .tipnc-subm__action {
+        flex: 1 1 0;
+        justify-content: center;
+    }
+}
+
+/* Barra de acciones del marco: encima del visor, no dentro. */
+/* Tres zonas: el aviso manda en el centro y el botón se queda a la derecha,
+   esté el aviso o no. */
+/* Todo lo que se dice sobre el documento va en una fila pegada a la derecha,
+   junto al botón: son etiquetas del documento, no encabezados de la caja. */
+.tipnc-frame__bar {
+    align-items: center;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin: 10px 0;
+}
+
+/* El visor, en pantalla completa, es barra arriba y documento debajo. */
+.tipnc-viewer:fullscreen {
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 12px 16px 16px;
+}
+
+.tipnc-viewer:fullscreen .tipnc-frame__bar {
+    margin-top: 0;
+}
+
+.tipnc-viewer:fullscreen .tipnc-frame {
+    aspect-ratio: auto;
+    flex: 1;
+    margin-top: 10px;
+}
+
+.tipnc-frame__bar + .tipnc-frame {
+    margin-top: 8px;
+}
+
+.tipnc-subm .tipnc-viewer,
+.tipnc-enunciate .tipnc-viewer {
+    margin-top: 0;
+}
+
+/* ---- Contención ----------------------------------------------------------
+   Los bloques se inyectan en la descripción de la cabecera de la actividad,
+   un sitio que no es suyo: se contienen para no desbordarse sobre lo que
+   mod_assign pinta debajo. */
+
+.tipnc-enunciate,
+.tipnc-subm {
+    clear: both;
+    margin-top: 20px;
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
+    z-index: 0;
+}
+
+.tipnc-viewer,
+.tipnc-frame {
+    max-width: 100%;
+}
+
+.tipnc-frame iframe {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+/* Alturas del visor, a elección del sitio. */
+.tipnc-frame--h420 {
+    height: 420px;
+}
+
+.tipnc-frame--h560 {
+    height: 560px;
+}
+
+.tipnc-frame--h700 {
+    height: 700px;
+}
+
+.tipnc-frame--h860 {
+    height: 860px;
+}
+
+/* En pantalla completa manda el alto de la ventana. */
+.tipnc-viewer:fullscreen .tipnc-frame,
+.tipnc-viewer:fullscreen .tipnc-frame--h420,
+.tipnc-viewer:fullscreen .tipnc-frame--h560,
+.tipnc-viewer:fullscreen .tipnc-frame--h700,
+.tipnc-viewer:fullscreen .tipnc-frame--h860 {
+    height: auto;
+}
+
+/* El documento no se pega al borde de la caja que lo contiene. */
+.tipnc-subm .tipnc-viewer,
+.tipnc-enunciate .tipnc-viewer {
+    padding-bottom: 4px;
+}
+
+.tipnc-subm {
+    padding-bottom: 20px;
+}
+
+.tipnc-enunciate {
+    padding-bottom: 24px;
+}
+
+/* ---- Confirmación antes de entregar --------------------------------------- */
+
+/* Va encima del grupo de botones y fuera de él: es un aviso, no otro control
+   del formulario, y lo último que se lee antes de decidir. */
+.tipnc-confirmsave {
+    background: #fcf3df;
+    border: 1px solid #f4dfab;
+    border-left: 4px solid #e8a317;
+    border-radius: 12px;
+    clear: both;
+    margin: 24px 0 20px;
+    max-width: 100%;
+    padding: 16px 18px;
+}
+
+.tipnc-confirmsave .form-check {
+    margin: 0;
+}
+
+.tipnc-confirmsave .form-check-label {
+    font-weight: 600;
+}
+
+.tipnc-confirmsave__title {
+    font-size: .95rem;
+    font-weight: 600;
+    margin: 0 0 4px;
+}
+
+.tipnc-confirmsave__hint {
+    color: #6f6f73;
+    font-size: .82rem;
+    margin: 0 0 10px;
+    max-width: 70ch;
+}
+
+.tipnc-confirmsave__warning {
+    color: #1e1e1f;
+    font-size: .88rem;
+    margin: 0 0 8px;
+    max-width: 70ch;
+}
+
+/* El grupo de botones que queda bajo el aviso: en columna y a la izquierda.
+   La clase la pone el módulo al insertar el aviso; .align-items-center es una
+   utilidad del core y tocarla suelta volcaría filas de toda la plataforma. */
+/* Es el propio contenedor flex de los botones —el que mform envuelve alrededor
+   de todos ellos—, marcado por el módulo al insertar el aviso. */
+.tipnc-buttons {
+    align-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.tipnc-buttons > .fitem {
+    margin-bottom: 8px;
+    margin-left: 0;
+}
+
+/* ---- El editor embebido --------------------------------------------------
+   Lo monta el Document Server dentro de este hueco, así que solo necesita
+   sitio. Si no llega a cargarse, el aviso ocupa su lugar: un hueco en blanco
+   es la peor respuesta para quien tiene que entregar. */
+
+.tipnc-frame__editor {
+    height: 100%;
+    width: 100%;
+}
+
+.tipnc-frame__fallback {
+    background: #fcf3df;
+    border-radius: 12px;
+    color: color-mix(in srgb, #e8a317 55%, black);
+    font-size: .85rem;
+    margin: 0;
+    padding: 16px 18px;
+}
+
+/* Cuando el servicio no responde: ocupa el sitio del documento, con el peso de
+   un aviso y no el de un error, porque casi siempre se arregla solo.
+   Los tokens se declaran aquí porque este bloque vive en la página de la tarea,
+   fuera del ámbito donde los declara la pantalla del registro. */
+.tipnc-unavailable {
+    --tip-neutral-500: #6f6f73;
+    --tip-neutral-900: #1e1e1f;
+    --tip-orange-600: #da3208;
+    --tip-warning-50: #fcf3df;
+    --tip-warning-200: #f3ddab;
+    --tip-warning-500: #e8a317;
+
+    align-items: flex-start;
+    background: var(--tip-warning-50);
+    border: 1px solid var(--tip-warning-200);
+    border-radius: 12px;
+    color: var(--tip-neutral-900);
+    display: flex;
+    gap: 12px;
+    margin: 24px 0;
+    padding: 16px 18px;
+}
+
+.tipnc-unavailable__icon {
+    color: var(--tip-warning-500);
+    flex: 0 0 auto;
+    margin-top: 1px;
+}
+
+.tipnc-unavailable__body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.tipnc-unavailable__title {
+    font-weight: 600;
+    margin: 0;
+}
+
+.tipnc-unavailable__message,
+.tipnc-unavailable__detail {
+    color: var(--tip-neutral-500);
+    font-size: .86rem;
+    margin: 0;
+}
+
+.tipnc-unavailable__detail {
+    border-top: 1px solid var(--tip-warning-200);
+    margin-top: 6px;
+    padding-top: 6px;
+}
+
+.tipnc-unavailable__log {
+    font-size: .82rem;
+    font-weight: 500;
+}
+
+/* Por qué un documento no se puede escribir. Es una etiqueta, no un aviso: lo
+   dice y se aparta, encima del documento al que se refiere. */
+.tipnc-frame__readonly {
+    --tip-neutral-100: #ececed;
+    --tip-neutral-200: #dddddf;
+    --tip-neutral-500: #6f6f73;
+
+    align-items: center;
+    background: var(--tip-neutral-100);
+    border: 1px solid var(--tip-neutral-200);
+    border-radius: 999px;
+    color: var(--tip-neutral-500);
+    display: inline-flex;
+    font-size: .72rem;
+    font-weight: 500;
+    gap: 6px;
+    line-height: 1.3;
+    margin: 0;
+    padding: 4px 10px;
+}
+
+.tipnc-frame__readonly svg {
+    flex: 0 0 auto;
+    height: 11px;
+    width: 11px;
+}

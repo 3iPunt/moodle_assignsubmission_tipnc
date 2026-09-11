@@ -1,0 +1,380 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Strings for component 'assignsubmission_tipnc', language 'en'
+ *
+ * @package     assignsubmission_tipnc
+ * @copyright   2021 Tresipunt
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+$string['pluginname'] = 'NextCloud Submission';
+$string['host'] = 'Domain NextCloud';
+$string['host_help'] = 'Address <strong>the Moodle server</strong> calls to talk to NextCloud. It is a server-to-server call: nobody\'s browser ever sees it, so it can be an internal name —a container or a private network address. If you have no internal network, put here the same address as in «NextCloud URL». Ex: https://nextcloud.example.org';
+$string['url'] = 'URL NextCloud';
+$string['url_help'] = 'Public address of NextCloud: the one <strong>every user\'s browser</strong> opens, in links and in the embedded document. It has to be reachable from outside the server. Ex: https://nextcloud.example.org';
+$string['user'] = 'User NextCloud';
+$string['user_help'] = 'Name of the NextCloud account the plugin works as. Every brief, draft and submission belongs to it, so it is the one account that can share them and take the sharing away. It has to be an account of its own, not a person\'s: whoever holds it can read every document of every assignment.';
+$string['password'] = 'Password';
+$string['password_help'] = 'Password of that account. Use an app password created in NextCloud rather than the login one: it can be revoked on its own, and it does not stop working when the account\'s password changes.';
+$string['view'] = 'View';
+$string['folder'] = 'Folder name';
+$string['folder_help'] = 'Name of the folder where the tasks are in NextClou';
+$string['template'] = 'Template name';
+$string['template_help'] = 'Name of the template to be used for NextCloud tasks';
+$string['location'] = 'Path to view a document';
+$string['location_help'] = 'What goes between the address of NextCloud and the identifier of a document, to build the link that opens it. It depends on the version and on the app that opens the documents, so it is left as a setting; the default suits a current NextCloud.';
+$string['operation_create_enunciate'] = 'Create the assignment brief';
+$string['operation_share_enunciate'] = 'Share the brief with whoever set it';
+$string['operation_grant_enunciate'] = 'Grant access to the brief';
+$string['operation_open_draft'] = 'Prepare the draft';
+$string['operation_share_draft'] = 'Share the draft with whoever writes it';
+$string['operation_submit_freeze'] = 'Freeze the submission';
+$string['operation_share_submission'] = 'Share the submission';
+$string['operation_lookup_document'] = 'Locate the document';
+$string['operation_serve_document'] = 'Serve the document to the editor';
+$string['operation_editor_save'] = 'Save what the editor wrote';
+$string['operation_forced_save'] = 'Save what the editor wrote, on request';
+$string['operation_revoke_draft'] = 'Withdraw access to the draft';
+$string['operation_revoke_submission'] = 'Withdraw access to the submission';
+$string['operation_revoke_assignment'] = 'Withdraw access to the assignment documents';
+$string['operation_delete_draft'] = 'Delete the draft';
+$string['operation_delete_submission'] = 'Delete the submission';
+$string['operation_delete_assignment'] = 'Delete the assignment documents';
+
+// Incident log: code catalogue.
+$string['logcode_0000'] = 'Operation completed';
+$string['logcode_0101'] = 'Source document not found';
+$string['logcode_0102'] = 'The document could not be copied';
+$string['logcode_0103'] = 'The folder of the assignment could not be created';
+$string['logcode_0104'] = 'The document could not be moved to its folder';
+$string['logcode_0105'] = 'The document could not be read from NextCloud';
+$string['logcode_0106'] = 'What the editor wrote could not be stored';
+$string['logcode_0201'] = 'The document could not be located';
+$string['logcode_0202'] = 'Unreadable answer from the server';
+$string['logcode_0301'] = 'The document could not be shared';
+$string['logcode_0302'] = 'The account does not exist in NextCloud';
+$string['logcode_0304'] = 'More access was granted than asked for';
+$string['logcode_0303'] = 'Granted permissions differ from the requested ones';
+$string['logcode_0401'] = 'Access could not be revoked';
+$string['logcode_0402'] = 'The document could not be deleted';
+$string['logcode_0501'] = 'The server is not answering';
+$string['logcode_0502'] = 'Credentials rejected';
+$string['logcode_0503'] = 'Internal server error';
+$string['logcode_0510'] = 'Retries paused';
+$string['logcode_0601'] = 'Connection details missing';
+$string['logcode_0602'] = 'Template not found';
+$string['logcode_0701'] = 'The assignment has no base document';
+$string['logcode_0702'] = 'The submission was frozen before the changes were saved';
+
+// Incident log: filters and detail.
+$string['log_col_actions'] = 'Actions';
+$string['log_detail'] = 'View detail';
+$string['log_filter_severity'] = 'Severity';
+$string['log_filter_all'] = 'All';
+$string['log_clearfilters'] = 'Clear filters';
+$string['log_empty_filtered'] = 'No incident matches the filters';
+$string['log_loaderror'] = 'The listing could not be loaded.';
+$string['detail_close'] = 'Close';
+$string['detail_whatitmeans'] = 'What it means';
+$string['detail_context'] = 'Context';
+$string['detail_call'] = 'The call';
+$string['detail_trace'] = 'Full trace';
+$string['detail_copy'] = 'Copy diagnosis';
+$string['detail_copied'] = 'Diagnosis copied';
+$string['detail_course'] = 'Course';
+$string['detail_assignment'] = 'Assignment';
+$string['detail_who'] = 'Ran by';
+$string['detail_affected'] = 'Affects';
+$string['detail_document'] = 'Document';
+$string['detail_when'] = 'When';
+$string['detail_occurrences'] = 'Repetitions';
+$string['detail_nobody'] = 'No response body was recorded.';
+
+// Incident log: entity and date filters.
+$string['log_filter_course'] = 'Course';
+$string['log_filter_assign'] = 'Assignment';
+$string['log_filter_user'] = 'User';
+$string['log_filter_dates'] = 'Dates';
+$string['log_filter_course_hint'] = 'Search course…';
+$string['log_filter_assign_hint'] = 'Search assignment…';
+$string['log_filter_user_hint'] = 'Search user…';
+$string['log_range_today'] = 'Today';
+$string['log_range_week'] = '7 days';
+$string['log_range_month'] = '30 days';
+$string['log_range_all'] = 'All';
+
+// Tiempo relativo abreviado.
+$string['log_minutes'] = '{$a}\'';
+$string['log_hours'] = '{$a} h';
+$string['log_dateformat'] = '%d %b';
+
+// Incident log: purge and export.
+$string['log_export'] = 'Export';
+$string['log_purge'] = 'Empty log';
+$string['purge_title'] = 'Empty the incident log';
+$string['purge_confirm'] = 'The {$a} recorded incidents will be deleted.';
+$string['task_purge_log'] = 'Purge of the NextCloud incident log';
+$string['logretention'] = 'Keep incidents for';
+$string['logretention_help'] = 'Days an incident is kept before the scheduled purge deletes it. Zero keeps everything, and the table then grows without end.';
+
+// Diagnosis written to be pasted into an assistant or a ticket.
+$string['diagnosis_intro'] = 'I need help solving an incident of the Moodle plugin assignsubmission_tipnc, which lets students submit assignments as documents stored in NextCloud and edited online.';
+$string['diagnosis_what'] = 'What failed';
+$string['diagnosis_environment'] = 'Environment';
+$string['diagnosis_ask'] = 'What I need';
+$string['diagnosis_question'] = 'Tell me the most likely cause and the concrete steps to fix it, saying clearly whether each step is done in Moodle, in NextCloud or in the web server. If the data above is not enough, say what else to look at.';
+$string['purge_hint'] = 'There is no way back. Export the log first if you need it for a ticket; the scheduled purge already deletes the old ones on its own.';
+
+// The brief on the assignment page.
+$string['enunciate_title'] = 'Assignment brief';
+$string['enunciate_intro'] = 'The document students start from. Write here what they have to do: every copy is made from this one.';
+$string['enunciate_open'] = 'Open the brief';
+$string['enunciate_openfolder'] = 'Open the working folder';
+$string['enunciate_frametitle'] = 'Assignment brief';
+$string['enunciate_notready'] = 'This assignment has no brief yet';
+$string['enunciate_notready_hint'] = 'Nobody can work on it until the document exists. Prepare it here; if it fails, check that the template is in the working folder and that NextCloud is answering.';
+$string['enunciate_ready'] = 'Brief ready';
+$string['enunciate_pending'] = 'Brief missing';
+
+// Where the brief is shown.
+$string['placement'] = 'Where the brief is shown';
+$string['placement_help'] = 'Place on the assignment page where the brief appears for everyone but the students, who already have it in their submission status box.';
+$string['placement_header'] = 'In the activity header';
+$string['placement_main'] = 'At the end of the page';
+$string['placement_selector'] = 'In a place of my own';
+$string['placementselector'] = 'Destination of the brief';
+$string['placementselector_help'] = 'CSS selector of the element the brief is moved into, used only with «In a place of my own». The browser does the moving: if nothing matches, the brief stays at the end of the page. Ex: <strong>.activity-description</strong>';
+
+// Width of the assignment page.
+$string['pagewidth'] = 'Maximum width of the assignment page';
+$string['pagewidth_help'] = 'How wide the assignment page is allowed to grow when the assignment uses this plugin. Documents are wide and the reading width of a theme leaves them cramped. It is a maximum: on small screens the theme still decides.';
+$string['pagewidth_theme'] = 'The width of the theme (no change)';
+$string['pagewidth_1200'] = '1200 px · a little more room';
+$string['pagewidth_1400'] = '1400 px · recommended for documents';
+$string['pagewidth_1600'] = '1600 px · large screens';
+$string['pagewidth_full'] = 'As wide as the window';
+
+// The document inside the submission status box.
+$string['subm_draft'] = 'Draft in progress';
+// Titles and explanations of the submission box.
+$string['subm_title_draft_own'] = 'Your draft';
+$string['subm_title_draft_other'] = 'Draft of the submission';
+$string['subm_title_submitted_own'] = 'Your submission';
+$string['subm_title_submitted_other'] = 'Submission';
+$string['subm_title_enun_own'] = 'Assignment brief';
+$string['subm_title_enun_other'] = 'Assignment brief';
+$string['subm_hint_draft_own'] = 'You do not need to submit now. What you write is saved on its own: you can close this, come back another day and carry on. Submit when it is finished — a copy is sent then, exactly as it stands at that moment.';
+$string['subm_hint_draft_other'] = 'Being written. It is not the submission yet: a copy is frozen at the moment of submitting.';
+$string['subm_hint_submitted_own'] = 'Submitted. This copy is the one your teacher marks, and it is closed: it can be read, not changed.';
+$string['subm_hint_submitted_other'] = 'The copy frozen on submitting. Whoever handed it in can no longer touch it; anything you write here while marking is saved into it.';
+$string['subm_hint_enun_own'] = 'You have not started yet. When you open the submission, your own copy is made from this document.';
+$string['subm_hint_enun_other'] = 'The student has not started: no copy has been made from the brief yet.';
+$string['subm_submitted'] = 'Submitted';
+$string['subm_enunciate'] = 'Assignment brief';
+$string['subm_open_draft'] = 'Open the draft';
+$string['subm_open_submitted'] = 'Open the submission';
+$string['subm_open_enunciate'] = 'Open the brief';
+$string['fullscreen'] = 'Full screen';
+$string['enunciate_reference'] = 'The document the work started from. It is here for reference: what you write goes in your own document.';
+$string['subm_modified'] = 'Last change: {$a}';
+
+// Sections of the settings page.
+$string['section_connection'] = 'Connection with NextCloud';
+$string['section_connection_desc'] = 'Where NextCloud is and which account the plugin uses. Nothing else works until this is right.';
+$string['section_documents'] = 'Documents';
+$string['section_documents_desc'] = 'Where the documents live inside NextCloud and which application opens them.';
+$string['section_assignments'] = 'In assignments';
+$string['section_assignments_desc'] = 'How this submission type behaves when someone creates an assignment.';
+$string['default'] = 'Enabled by default in new assignments';
+$string['default_help'] = 'Whether the NextCloud submission comes ticked when somebody creates an assignment. Teachers can always untick it. Leave it off unless every assignment on the site is handed in this way: each assignment that has it on creates its brief in NextCloud.';
+$string['section_display'] = 'How the brief is shown';
+$string['section_display_desc'] = 'Where the brief appears on the assignment page and how much room it gets.';
+$string['section_log'] = 'Incident log';
+$string['section_log_desc'] = 'Calls to NextCloud that did not complete, and how long they are kept.';
+
+// Height of the embedded document.
+$string['frameheight'] = 'Height of the embedded document';
+$string['frameheight_help'] = 'How tall the document is inside the page. It is a first look: to read or write at ease there is a full screen button on top of it.';
+$string['frameheight_420'] = 'Short · a glance';
+$string['frameheight_560'] = 'Medium · recommended';
+$string['frameheight_700'] = 'Tall · a page at a time';
+$string['frameheight_860'] = 'Very tall · for large screens';
+
+// Deleting in Moodle, and what that means in NextCloud.
+$string['section_delete'] = 'When something is deleted';
+$string['section_delete_desc'] = 'Deleting in Moodle and deleting in NextCloud are two different things. Documents go to the NextCloud trash, so a mistake can be undone for a while.';
+$string['ondeletesubmission'] = 'When a submission is deleted';
+$string['ondeletesubmission_help'] = 'What happens in NextCloud when a submission is deleted in Moodle. The draft is written by the student; the frozen copy is made by the plugin when submitting.';
+$string['ondelete_keep'] = 'Keep the documents, take back the access';
+$string['ondelete_frozen'] = 'Delete the submitted copy, keep the draft';
+$string['ondelete_all'] = 'Delete both documents';
+$string['ondeleteassign'] = 'When an assignment is deleted';
+$string['ondeleteassign_help'] = 'What happens to the brief, the drafts and the submissions of an assignment that is deleted in Moodle. All the documents live in one flat folder, so keeping them makes it grow with every deleted assignment.';
+$string['ondeleteassign_keep'] = 'Keep everything, take back the access';
+$string['ondeleteassign_delete'] = 'Delete the brief and every document of the assignment';
+$string['delete_warning_frozen'] = 'The submitted copy in NextCloud will be deleted. The draft is kept.';
+$string['delete_warning_all'] = 'The draft and the submitted copy in NextCloud will be deleted. They go to the NextCloud trash.';
+
+// Confirmation before submitting.
+$string['confirmsaved'] = 'Ask to confirm the document is saved';
+$string['confirmsaved_help'] = 'Adds a checkbox the student must tick before submitting, with the submit button disabled until then, so that nobody submits with unsaved changes. It is a promise, not a check: nothing on this side can tell whether the document was really saved.';
+$string['confirmsaved_title'] = 'Before submitting';
+$string['confirmsaved_label'] = 'I have closed the editor and my changes are in the document';
+$string['confirmsaved_hint'] = 'The editor keeps your changes in its own session and only writes them to the document when that session ends. Save with the editor button if it offers one; if it does not, close the editor, wait a few seconds and then submit.';
+
+// The editor.
+$string['section_editor'] = 'The editor';
+$string['section_editor_desc'] = 'How the document is opened. Each way asks something different of the infrastructure; the README explains what each one needs.';
+$string['viewmode'] = 'How the document is opened';
+$string['viewmode_help'] = 'What each one needs, and what it gives you:<ul><li><strong>Editor embedded by Moodle</strong>: needs the address and the secret below. In exchange, when a student submits, Moodle asks the editor to save first, so the submission holds what was written. Only the editor is shown, and Moodle serves that one document: there is no menu leading anywhere else.</li><li><strong>NextCloud page embedded</strong>: needs a reverse proxy in front of NextCloud, on the same domain as Moodle. Nothing else to configure here, but the whole NextCloud page goes inside the frame —menu included, so students can walk into their own files from there— and saving is left to whoever wrote last: a student who submits without saving hands in the previous version.</li><li><strong>Open in a new tab</strong>: needs nothing at all and works on any site. Nothing is embedded: the page just carries a link, and the document is opened and saved in NextCloud, away from Moodle.</li></ul>';
+$string['viewmode_editor'] = 'Editor embedded by Moodle';
+$string['viewmode_nextcloud'] = 'NextCloud page embedded (needs a reverse proxy on the same domain)';
+$string['viewmode_tab'] = 'Open in a new tab (a link, nothing embedded)';
+$string['docserverurl'] = 'Address of the Document Server';
+$string['docserverurl_help'] = 'Address of the editing service (ONLYOFFICE Document Server). Three parties use it and all three must reach it: each person\'s browser, the Moodle server, and the editor itself to answer Moodle back. It has to be <strong>https</strong> if Moodle is https, or the browser will block the editor. Ex: https://office.example.org/';
+$string['docserversecret'] = 'Signing secret';
+$string['docserversecret_help'] = 'The same password the Document Server has set for signing (its <em>JWT secret</em>). With it, Moodle and the editor recognise each other: without a signature, anyone who found the address could ask for a document. Left empty, the editor is not used even if it is chosen above.';
+$string['editor_nosecret'] = 'The signing secret of the editor is not set';
+$string['confirmsaved_alsosubmits'] = '<strong>Saving here submits.</strong> This assignment has no drafts: the «Save changes» button of the form sends your work to be marked, and a copy is frozen as it stands.';
+$string['confirmsaved_hint_save'] = 'Save the document with the editor button before submitting: that writes your changes into it. If you closed the editor already, they are in there too.';
+$string['editor_unavailable'] = 'The editor could not be loaded. Open the document in NextCloud with the link above; your work is there.';
+
+// What the editor answers when it is asked to save. They are recorded in the
+// incident log, which is read by whoever has to find out why a submission did
+// not carry what was written.
+$string['editor_answer_notasked'] = 'the editor could not be asked';
+$string['editor_answer_ok'] = 'saved';
+$string['editor_answer_key'] = 'the editor does not know that key: the session no longer exists';
+$string['editor_answer_callback'] = 'the editor could not use the address it answers to';
+$string['editor_answer_internal'] = 'internal error of the editor';
+$string['editor_answer_nochanges'] = 'there were no changes to save';
+$string['editor_answer_command'] = 'the order is not correct';
+$string['editor_answer_token'] = 'the editor rejected the signature';
+$string['editor_answer_unknown'] = 'unknown answer ({$a})';
+
+// The incident log of a submission.
+$string['log_submit_nodraft'] = 'No draft is recorded: whatever is there gets frozen.';
+$string['log_submit_asksave'] = 'The editor is asked to save before freezing.';
+$string['log_submit_refused'] = 'The editor did not accept saving before submitting: {$a}.';
+$string['log_submit_nochanges'] = 'There was nothing left to save on submitting.';
+$string['log_submit_late'] = 'The save did not arrive in time; whatever is there gets frozen.';
+$string['log_submit_saved'] = 'The editor saved before the submission was frozen.';
+$string['log_submit_nosession'] = 'The document was never opened in the editor: whatever is there gets frozen.';
+
+// La pantalla del registro de incidencias.
+$string['log_title'] = 'Incident log';
+$string['log_intro'] = 'Calls to NextCloud that did not complete. What is here has already affected somebody: a brief that was not created, a draft that did not open, a submission that was not frozen.';
+$string['log_open'] = 'Open the incident log';
+$string['log_lastday'] = 'In the last 24 hours';
+$string['log_assignments'] = 'Assignments affected';
+$string['log_users'] = 'People affected';
+$string['log_total'] = 'Incidents on record';
+$string['log_since'] = 'since {$a}';
+$string['log_reviewsettings'] = 'Review the settings';
+$string['log_commoncause'] = '{$a->occurrences} of the {$a->total} incidents are the same thing: {$a->reason}';
+$string['log_col_severity'] = 'Severity';
+$string['log_col_when'] = 'When';
+$string['log_col_operation'] = 'What was being done';
+$string['log_col_where'] = 'Where';
+$string['log_col_who'] = 'Who';
+$string['log_col_answer'] = 'Answer';
+$string['log_col_code'] = 'Code';
+$string['log_repetitions'] = 'Times it has happened';
+$string['log_pages'] = 'Pages of the log';
+$string['log_empty'] = 'No incidents on record';
+$string['log_empty_good'] = 'Nothing has failed. Briefs, drafts and submissions are reaching NextCloud.';
+$string['log_showing'] = 'Showing {$a->from} to {$a->to} of {$a->total}';
+$string['log_justnow'] = 'just now';
+$string['log_ago'] = '{$a} ago';
+$string['severity_error'] = 'Error';
+$string['severity_warning'] = 'Warning';
+$string['severity_info'] = 'Information';
+$string['conn_unset'] = 'NextCloud is not configured';
+$string['conn_unset_detail'] = 'The address, the account or the password are missing.';
+$string['conn_ok'] = 'NextCloud answers';
+$string['conn_ok_detail'] = 'It is answering right now.';
+$string['conn_down'] = 'NextCloud does not answer';
+$string['log_save_empty'] = 'The editor handed over an empty document.';
+$string['log_enunciate_failed'] = 'The brief of the assignment could not be prepared in NextCloud.';
+$string['operation_lock_draft'] = 'Close the draft when the submission is locked';
+$string['operation_unlock_draft'] = 'Open the draft again';
+$string['enunciate_notready_student'] = 'The assignment is not ready yet: it has no document to work on. Your teacher has to prepare it — let them know.';
+$string['enunciate_prepare'] = 'Prepare it now';
+$string['prepare_done'] = 'The brief is ready. Students can now work on the assignment.';
+$string['prepare_already'] = 'The brief was already there.';
+$string['prepare_failed'] = 'The brief could not be prepared. The incident log says why.';
+
+// Cuando NextCloud no responde.
+$string['unavailable_title'] = 'The document cannot be opened right now';
+$string['unavailable_student'] = 'It is not something you did. The service where the document lives is not answering; try again in a few minutes. Nothing you had already written is lost.';
+$string['unavailable_teacher'] = 'NextCloud is not answering. While that lasts, documents cannot be created or opened and nobody can submit.';
+$string['unavailable_since'] = 'NextCloud has not been answering since {$a}. While that lasts, documents cannot be created or opened and nobody can submit.';
+$string['unavailable_log'] = 'See the incident log';
+$string['unavailable_submit'] = 'You cannot submit right now: the service where your document lives is not answering. Try again in a few minutes — what you wrote is safe.';
+
+// Cuando la cuenta de la persona no existe en NextCloud.
+$string['noaccount_title'] = 'Your account cannot reach the documents';
+$string['noaccount_message'] = 'Working on the document needs an account in the document service, and yours is not there. It will not sort itself out: ask whoever administers the site to create it. Until then you cannot open or submit this assignment.';
+$string['noaccount_submit'] = 'You cannot submit: your account cannot reach the document service. Ask whoever administers the site to create it for you.';
+$string['prepare_noaccount'] = 'The brief is ready and students can work on it. You will not be able to edit it yourself: the account «{$a}» does not exist in NextCloud.';
+
+// Why a document opens read only.
+$string['readonly_frozen'] = 'Submitted: read only';
+$string['readonly_role'] = 'Read only';
+$string['readonly_noaccount'] = 'Read only: your account does not exist in the document service';
+
+// El acceso a los documentos y su caducidad.
+$string['section_access'] = 'Access to the documents';
+$string['section_access_desc'] = 'Who can open each document is decided by Moodle: whoever marks the assignment gets to write, everybody else gets to read. Access is handed out the moment somebody walks into the assignment, so nobody has to keep a list.';
+$string['shareexpiry'] = 'Access lapses after';
+$string['shareexpiry_never'] = 'It never lapses';
+$string['shareexpiry_help'] = 'Access to a document is given for this long and <strong>renews itself every time the person opens the assignment again</strong>. Somebody who stops teaching a course stops opening it, so their access to that student work switches off on its own.<br><br>This matters because Moodle does not tell the plugin when somebody stops teaching: an unenrolment can be missed, and a role can be taken away in ways nothing reports. With an end date, nobody has to notice.<br><br>If it lapses for somebody who still teaches there, they get it back by opening the assignment: they will not notice either. <strong>«It never lapses» means exactly that</strong>: whoever taught a course three years ago keeps access to those documents until somebody withdraws it by hand.';
+
+// Capabilities.
+$string['tipnc:view_errors'] = 'See the incident log of the NextCloud submission';
+
+// La entrega que Moodle da por hecha y en NextCloud no existe.
+$string['noaccount_detail'] = 'Their account does not exist in NextCloud, so nothing can be shared with them. It has to be created before they can work on anything.';
+$string['nodocument_title'] = 'This submission has no document';
+$string['nodocument_message'] = 'Moodle says the work was handed in, but no copy was frozen in the document service. Nothing was lost —the draft is still there— but there is nothing to mark yet.';
+$string['nodocument_detail'] = 'Send the submission back to draft and ask for it again: that freezes the copy. The incident log says why it failed the first time.';
+
+// Nobody has opened the document yet.
+$string['notstarted_title'] = 'Not started yet';
+$string['notstarted_message'] = 'This person has not opened the document, so there is no draft and nothing has been written. It is not that something failed: they have not begun.';
+$string['notstarted_detail'] = 'The draft is created the first time they open the assignment to work on it.';
+
+// Privacidad: qué se guarda y qué sale del sitio.
+$string['privacy:metadata:assignment'] = 'The assignment the document belongs to.';
+$string['privacy:metadata:submission'] = 'The submission the document belongs to.';
+$string['privacy:metadata:ncid'] = 'The identifier the document has in NextCloud.';
+$string['privacy:metadata:path'] = 'Where the document is in NextCloud. The name carries the account of whoever it belongs to.';
+$string['privacy:metadata:tipnc'] = 'The copy frozen when the work was handed in, which is what gets marked.';
+$string['privacy:metadata:tipnc_open'] = 'The draft each person writes in before handing the work in.';
+$string['privacy:metadata:enun_userid'] = 'Who prepared the brief of the assignment.';
+$string['privacy:metadata:tipnc_enun'] = 'The brief of the assignment, which everybody works from.';
+$string['privacy:metadata:log_userid'] = 'Who was using Moodle when the call was made.';
+$string['privacy:metadata:log_affecteduserid'] = 'Whose document the call was about.';
+$string['privacy:metadata:log_documentpath'] = 'Which document it was about.';
+$string['privacy:metadata:log_requesturl'] = 'The address that was called, which contains the path of the document.';
+$string['privacy:metadata:log_responsebody'] = 'What NextCloud answered, which may name the account involved.';
+$string['privacy:metadata:tipnc_log'] = 'Calls to NextCloud that did not complete, kept so that somebody can find out why a person could not hand their work in. They are deleted after the number of days the site sets.';
+$string['privacy:metadata:nextcloud:username'] = 'The account name of each person, sent so that the document can be shared with them.';
+$string['privacy:metadata:nextcloud:document'] = 'The document itself: the brief, each draft and each submission are stored in NextCloud, not in Moodle.';
+$string['privacy:metadata:nextcloud'] = 'This plugin keeps the documents in NextCloud, an external system. Everything written in an assignment lives there, and each person is identified to it by their account name.';
+$string['privacy:export:submitted'] = 'Submitted document';
+$string['privacy:export:draft'] = 'Draft document';

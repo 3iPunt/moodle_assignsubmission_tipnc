@@ -1,0 +1,66 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template assignsubmission_tipnc/document_viewer
+
+    A document on screen: the editor itself, or a frame with the NextCloud page.
+
+    Context variables required for this template:
+    * useeditor - whether Moodle embeds the editor
+    * elementid - where the editor is mounted
+    * configjson - the signed configuration of the editor
+    * serverurl - public address of the Document Server
+    * url - address of the NextCloud page, for the frame
+    * frametitle - name of the document, for accessibility
+    * isreadonly - whether it can only be read
+    * readonlytext - why it can only be read
+
+    Example context (json):
+    {
+        "useeditor": false,
+        "elementid": "tipnc-editor-1",
+        "configjson": "",
+        "serverurl": "",
+        "url": "https://nextcloud.example.org/apps/onlyoffice/633",
+        "frametitle": "Enunciado de la tarea",
+        "heightclass": "tipnc-frame--h560",
+        "isreadonly": true,
+        "readonlytext": "Solo lectura"
+    }
+}}
+{{!
+    El motivo por el que no se puede escribir se decide aquí, pero se pinta en la
+    barra de la caja que contiene el documento, que es donde está el resto de lo
+    que se dice sobre él. Las cajas lo leen como viewer.isreadonly.
+}}
+<div class="tipnc-frame {{heightclass}}">
+    {{#useeditor}}
+        <div id="{{elementid}}" class="tipnc-frame__editor"></div>
+        <p class="tipnc-frame__fallback" data-region="tipnc-editor-fallback" hidden></p>
+    {{/useeditor}}
+    {{^useeditor}}
+        <iframe src="{{url}}" title="{{frametitle}}"
+                allow="fullscreen; unload" loading="lazy"></iframe>
+    {{/useeditor}}
+</div>
+{{#useeditor}}
+    {{#js}}
+        require(['assignsubmission_tipnc/editor'], function(editor) {
+            editor.init('{{elementid}}', {{{configjson}}}, '{{serverurl}}');
+        });
+    {{/js}}
+{{/useeditor}}

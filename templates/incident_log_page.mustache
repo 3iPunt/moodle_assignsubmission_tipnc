@@ -1,0 +1,203 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template assignsubmission_tipnc/incident_log_page
+
+    Incident log of the calls made to NextCloud.
+
+    Context variables required for this template:
+    * connection - state, label and detail of the connection
+    * counters - lastday, assignments, users, total, oldest
+    * severities - options of the severity filter
+    * diagnosis - the dominant failure, when there is one
+    * list - the listing itself
+
+    Example context (json):
+    {
+        "logourl": "#",
+        "connection": {"state": "ok", "label": "NextCloud responde", "detail": "comprobado ahora"},
+        "counters": {"lastday": 4, "assignments": 3, "users": 2, "total": 12, "oldest": "17/07/26"},
+        "severities": [{"value": "", "label": "Todas", "active": true}],
+        "search": "",
+        "settingsurl": "#",
+        "list": {"hasincidents": false, "isempty": true, "emptyingood": true, "summary": ""}
+    }
+}}
+<div class="tipnc-log" data-region="tipnc-incident-log">
+
+    <div class="tipnc-log__header">
+        <div class="tipnc-log__identity">
+            <span class="tipnc-log__eyebrow">{{#str}} pluginname, assignsubmission_tipnc {{/str}}</span>
+            <h2 class="tipnc-log__title">{{#str}} log_title, assignsubmission_tipnc {{/str}}</h2>
+            <p class="tipnc-log__lead">{{#str}} log_intro, assignsubmission_tipnc {{/str}}</p>
+        </div>
+        {{! El estado primero y el logo al final, en el orden en que se leen: la
+            marca cierra la fila, no la abre. }}
+        <div class="tipnc-log__brand">
+            <div class="tipnc-log__status tipnc-log__status--{{connection.state}}">
+                <span class="tipnc-log__dot" aria-hidden="true"></span>
+                <span><strong>{{connection.label}}</strong> {{connection.detail}}</span>
+            </div>
+            <img src="{{logourl}}" alt="Tresipunt" class="tipnc-log__logo">
+        </div>
+    </div>
+
+    <div class="tipnc-log__counters">
+        <div class="tipnc-log__counter">
+            <span class="tipnc-log__figure">{{counters.lastday}}</span>
+            <span class="tipnc-log__caption">{{#str}} log_lastday, assignsubmission_tipnc {{/str}}</span>
+        </div>
+        <div class="tipnc-log__counter">
+            <span class="tipnc-log__figure">{{counters.assignments}}</span>
+            <span class="tipnc-log__caption">{{#str}} log_assignments, assignsubmission_tipnc {{/str}}</span>
+        </div>
+        <div class="tipnc-log__counter">
+            <span class="tipnc-log__figure">{{counters.users}}</span>
+            <span class="tipnc-log__caption">{{#str}} log_users, assignsubmission_tipnc {{/str}}</span>
+        </div>
+        <div class="tipnc-log__counter">
+            <span class="tipnc-log__figure">{{counters.total}}</span>
+            <span class="tipnc-log__caption">{{#str}} log_total, assignsubmission_tipnc {{/str}}</span>
+            {{#counters.oldest}}
+                <span class="tipnc-log__hint">{{#str}} log_since, assignsubmission_tipnc, {{counters.oldest}} {{/str}}</span>
+            {{/counters.oldest}}
+        </div>
+    </div>
+
+    {{#diagnosis}}
+        <div class="tipnc-log__diagnosis">
+            {{! Bombilla: esto no es un error más, es la pista que resuelve el resto. }}
+            <svg class="tipnc-log__diagnosis-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 aria-hidden="true">
+                <path d="M15 14c.2-1 .7-1.7 1.5-2.5A5.6 5.6 0 1 0 7.5 11.5c.8.8 1.3 1.5 1.5 2.5"></path>
+                <path d="M9 18h6"></path>
+                <path d="M10 22h4"></path>
+            </svg>
+            <span>{{{text}}}</span>
+            <a href="{{settingsurl}}" class="tipnc-log__diagnosis-action">
+                {{#str}} log_reviewsettings, assignsubmission_tipnc {{/str}}
+            </a>
+        </div>
+    {{/diagnosis}}
+
+    <div class="tipnc-log__filters">
+        {{! Fila superior: las entidades, que ocupan todo el ancho. Siempre con
+            autocompletado, nunca una lista cargada: no escala a miles de cursos. }}
+        <div class="tipnc-log__filters-row tipnc-log__filters-row--entities">
+            {{! Sin etiqueta visible: el marcador de posición ya dice qué se busca.
+                La etiqueta sigue existiendo para quien navega con lector de pantalla. }}
+            <div class="tipnc-log__field">
+                <label class="sr-only" for="tipnc-filter-course">
+                    {{#str}} log_filter_course, assignsubmission_tipnc {{/str}}
+                </label>
+                <select id="tipnc-filter-course" class="tipnc-log__select" data-filter="course">
+                    {{#course.id}}<option value="{{course.id}}" selected>{{course.name}}</option>{{/course.id}}
+                </select>
+            </div>
+            <div class="tipnc-log__field">
+                <label class="sr-only" for="tipnc-filter-assign">
+                    {{#str}} log_filter_assign, assignsubmission_tipnc {{/str}}
+                </label>
+                <select id="tipnc-filter-assign" class="tipnc-log__select" data-filter="assign">
+                    {{#assign.id}}<option value="{{assign.id}}" selected>{{assign.name}}</option>{{/assign.id}}
+                </select>
+            </div>
+            <div class="tipnc-log__field">
+                <label class="sr-only" for="tipnc-filter-user">
+                    {{#str}} log_filter_user, assignsubmission_tipnc {{/str}}
+                </label>
+                <select id="tipnc-filter-user" class="tipnc-log__select" data-filter="user">
+                    {{#user.id}}<option value="{{user.id}}" selected>{{user.name}}</option>{{/user.id}}
+                </select>
+            </div>
+        </div>
+
+        {{! Fila inferior: los filtros de valor cerrado y la acción de limpiar. }}
+        <div class="tipnc-log__filters-row">
+            <div class="tipnc-log__field">
+                <span class="tipnc-log__label">{{#str}} log_filter_severity, assignsubmission_tipnc {{/str}}</span>
+                <span class="tipnc-log__segmented" role="group"
+                      aria-label="{{#str}} log_filter_severity, assignsubmission_tipnc {{/str}}">
+                    {{#severities}}
+                        <button type="button" data-action="severity" data-value="{{value}}"
+                                class="tipnc-log__segment {{#active}}tipnc-log__segment--active{{/active}}"
+                                aria-pressed="{{#active}}true{{/active}}{{^active}}false{{/active}}">{{label}}</button>
+                    {{/severities}}
+                </span>
+            </div>
+            <div class="tipnc-log__field">
+                <span class="tipnc-log__label">{{#str}} log_filter_dates, assignsubmission_tipnc {{/str}}</span>
+                <span class="tipnc-log__segmented" role="group"
+                      aria-label="{{#str}} log_filter_dates, assignsubmission_tipnc {{/str}}">
+                    {{#ranges}}
+                        <button type="button" data-action="range" data-value="{{value}}"
+                                class="tipnc-log__segment {{#active}}tipnc-log__segment--active{{/active}}"
+                                aria-pressed="{{#active}}true{{/active}}{{^active}}false{{/active}}">{{label}}</button>
+                    {{/ranges}}
+                </span>
+            </div>
+            <div class="tipnc-log__filteractions">
+                <button type="button" class="tipnc-log__action" data-action="clear"
+                        {{^isfiltered}}hidden{{/isfiltered}}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 6 6 18"></path>
+                        <path d="m6 6 12 12"></path>
+                    </svg>
+                    {{#str}} log_clearfilters, assignsubmission_tipnc {{/str}}
+                </button>
+                <a class="tipnc-log__action" href="{{exporturl}}">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <path d="M7 10l5 5 5-5"></path>
+                        <path d="M12 15V3"></path>
+                    </svg>
+                    {{#str}} log_export, assignsubmission_tipnc {{/str}}
+                </a>
+                <button type="button" class="tipnc-log__action tipnc-log__action--danger"
+                        data-action="purge" data-total="{{counters.total}}">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M3 6h18"></path>
+                        <path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"></path>
+                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                    </svg>
+                    {{#str}} log_purge, assignsubmission_tipnc {{/str}}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div data-region="tipnc-incident-listing">
+        {{#list}}
+            {{> assignsubmission_tipnc/incident_list }}
+        {{/list}}
+    </div>
+
+    <div class="tipnc-log__drawer" data-region="tipnc-incident-detail" hidden
+         role="dialog" aria-modal="true" aria-labelledby="tipnc-detail-title">
+        <div class="tipnc-log__drawer-panel" data-region="tipnc-detail-body"></div>
+    </div>
+
+</div>
+{{#js}}
+    require(['assignsubmission_tipnc/incidentlog'], function(IncidentLog) {
+        IncidentLog.init(document.querySelector('[data-region="tipnc-incident-log"]'));
+    });
+{{/js}}

@@ -1,0 +1,192 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * The documents of an assignment.
+ *
+ * @package    assignsubmission_tipnc
+ * @copyright  2026 3iPunt (contacte@tresipunt.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+namespace assignsubmission_tipnc\models;
+
+use assignsubmission_tipnc\api\document;
+use dml_exception;
+use stdClass;
+
+/**
+ * The documents of an assignment: where they are and how to reach them.
+ *
+ * @package    assignsubmission_tipnc
+ * @copyright  2026 3iPunt (contacte@tresipunt.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class documents {
+
+    /**
+     * Heights the site can choose for the embedded document.
+     *
+     * They are classes and not a number because the rule then lives in
+     * styles.css, which is where a rule belongs.
+     */
+    private const HEIGHTS = ['420', '560', '700', '860'];
+
+    /**
+     * Class that gives the embedded document the height the site asked for.
+     *
+     * @return string A modifier class of the frame.
+     * @throws dml_exception If the configuration cannot be read.
+     */
+    public function frame_height_class(): string {
+        $height = (string) get_config('assignsubmission_tipnc', 'frameheight');
+
+        return 'tipnc-frame--h' . (in_array($height, self::HEIGHTS, true) ? $height : '560');
+    }
+
+    /**
+     * The brief of an assignment.
+     *
+     * @param  int $assignment Assignment instance.
+     * @return stdClass|false The record, or false when it has not been prepared.
+     * @throws dml_exception If the query fails.
+     */
+    public function get_enunciate(int $assignment) {
+        global $DB;
+
+        return $DB->get_record('assignsubmission_tipnc_enun', ['assignment' => $assignment]);
+    }
+
+    /**
+     * The document a person is working on in an assignment, if any.
+     *
+     * Their draft while they write, their submission once it is frozen: the one
+     * that belongs to them, not the brief everybody shares.
+     *
+     * @param  int $instance Assignment instance.
+     * @param  int $userid   Whose document.
+     * @return stdClass|null Mode, NextCloud id and time of the last change.
+     * @throws dml_exception If the query fails.
+     */
+    public function own_work(int $instance, int $userid): ?stdClass {
+        global $CFG, $DB;
+
+        // Las constantes de estado las define locallib.php de mod_assign, y este
+        // método se llama desde hooks que corren antes de que nadie la cargue.
+        require_once($CFG->dirroot . '/mod/assign/locallib.php');
+
+        $submission = $DB->get_record('assign_submission', [
+            'assignment' => $instance,
+            'userid' => $userid,
+            'latest' => 1,
+        ]);
+
+        if (!$submission) {
+            return null;
+        }
+
+        // Manda el documento que existe, no el estado del core: el borrador se crea
+        // al abrir el formulario, y hasta que la persona guarda, mod_assign sigue
+        // diciendo «sin intentos» de algo que ya tiene trabajo dentro.
+        $submitted = $submission->status === ASSIGN_SUBMISSION_STATUS_SUBMITTED;
+        $frozen = $DB->get_record('assignsubmission_tipnc',
+            ['submission' => $submission->id], 'ncid, path', IGNORE_MISSING);
+        $draft = $DB->get_record('assignsubmission_tipnc_open',
+            ['submission' => $submission->id], 'ncid, path', IGNORE_MISSING);
+
+        if ($submitted && !empty($frozen->ncid)) {
+            $row = $frozen;
+        } else if (!empty($draft->ncid)) {
+            $row = $draft;
+            $submitted = false;
+        } else {
+            $row = $frozen;
+        }
+
+        if (empty($row->ncid)) {
+            return null;
+        }
+
+        return (object) [
+            'mode' => $submitted ? document::MODE_SUBMISSION : document::MODE_OPEN,
+            'ncid' => (int) $row->ncid,
+
+            // La ruta guardada viaja con el resto: componerla desde el nombre de
+            // quien mira dejó de funcionar en cuanto hubo reintentos y grupos.
+            'path' => (string) ($row->path ?? ''),
+            'timemodified' => (int) $submission->timemodified,
+        ];
+    }
+
+    /**
+     * Where the brief of an assignment is.
+     *
+     * @param  int $assignment Assignment instance.
+     * @return string Path of the document in NextCloud.
+     * @throws dml_exception If the row cannot be read.
+     */
+    public function enunciate_path_of(int $assignment): string {
+        return (new document($assignment))->enunciate_path();
+    }
+
+    /**
+     * Address where a document is read, as the browser sees it.
+     *
+     * @param  int $ncid Identifier of the document in NextCloud.
+     * @return string The address, empty when the plugin is not configured.
+     * @throws dml_exception If the configuration cannot be read.
+     */
+    public function view_url(int $ncid): string {
+        $base = rtrim((string) get_config('assignsubmission_tipnc', 'url'), '/');
+        $location = (string) get_config('assignsubmission_tipnc', 'location');
+
+        if ($base === '' || $ncid === 0) {
+            return '';
+        }
+
+        return $base . $location . $ncid;
+    }
+
+    /**
+     * Name the brief of an assignment has in NextCloud.
+     *
+     * @param  int $assignment Assignment instance.
+     * @return string The file name.
+     * @throws dml_exception If the configuration cannot be read.
+     */
+    public function enunciate_filename(int $assignment): string {
+        $path = (new document($assignment))->enunciate_path();
+
+        return basename($path);
+    }
+
+    /**
+     * Address of the working folder in NextCloud.
+     *
+     * @return string|null The address, null when the plugin is not configured.
+     * @throws dml_exception If the configuration cannot be read.
+     */
+    public function folder_url(): ?string {
+        $base = rtrim((string) get_config('assignsubmission_tipnc', 'url'), '/');
+        $folder = trim((string) get_config('assignsubmission_tipnc', 'folder'), '/');
+
+        if ($base === '') {
+            return null;
+        }
+
+        return $base . '/index.php/apps/files/?dir=/' . rawurlencode($folder);
+    }
+}

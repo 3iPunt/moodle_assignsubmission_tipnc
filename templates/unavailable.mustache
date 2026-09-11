@@ -1,0 +1,60 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template assignsubmission_tipnc/unavailable
+
+    Said instead of showing a document that cannot be reached.
+
+    Context variables required for this template:
+    * title - what is happening
+    * message - what it means for whoever reads it
+    * candiagnose - whether this person can act on the cause
+    * detail - since when, for those who can act
+    * haslog - whether there is a log to link
+    * logurl - address of the incident log
+    * logtext - text of that link
+
+    Example context (json):
+    {
+        "title": "En este momento no se puede trabajar en el documento",
+        "message": "No es cosa tuya. Vuelve a intentarlo en unos minutos.",
+        "candiagnose": true,
+        "detail": "NextCloud no responde desde las 10:24.",
+        "haslog": true,
+        "logurl": "https://example.org/mod/assign/submission/tipnc/view_errors.php",
+        "logtext": "Ver el registro de incidencias"
+    }
+}}
+<div class="tipnc-unavailable" role="status">
+    <svg class="tipnc-unavailable__icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+         aria-hidden="true">
+        <path d="M12 9v4"></path>
+        <path d="M12 17h.01"></path>
+        <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path>
+    </svg>
+    <div class="tipnc-unavailable__body">
+        <p class="tipnc-unavailable__title">{{title}}</p>
+        <p class="tipnc-unavailable__message">{{message}}</p>
+        {{#candiagnose}}
+            <p class="tipnc-unavailable__detail">{{detail}}</p>
+            {{#haslog}}
+                <a class="tipnc-unavailable__log" href="{{logurl}}">{{logtext}}</a>
+            {{/haslog}}
+        {{/candiagnose}}
+    </div>
+</div>
