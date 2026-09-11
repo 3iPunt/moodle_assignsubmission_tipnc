@@ -190,8 +190,11 @@
         {{/list}}
     </div>
 
+    {{! The title of the detail arrives with the fragment, so the dialog names
+        itself: aria-labelledby would point at an id that is not here yet. }}
     <div class="tipnc-log__drawer" data-region="tipnc-incident-detail" hidden
-         role="dialog" aria-modal="true" aria-labelledby="tipnc-detail-title">
+         role="dialog" aria-modal="true"
+         aria-label="{{#str}}detail_dialog, assignsubmission_tipnc{{/str}}">
         <div class="tipnc-log__drawer-panel" data-region="tipnc-detail-body"></div>
     </div>
 

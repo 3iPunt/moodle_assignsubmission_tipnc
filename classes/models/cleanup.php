@@ -89,8 +89,8 @@ class cleanup {
      * Called before the plugin rows are deleted: they are what says which
      * documents belonged to that submission.
      *
-     * @param  int $instance Assignment instance.
-     * @param  int $userid   Whose submission it was.
+     * @param  int      $instance   Assignment instance.
+     * @param  stdClass $submission Submission being removed.
      * @return void
      * @throws dml_exception If the configuration cannot be read.
      */

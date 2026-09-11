@@ -46,6 +46,7 @@ $string['detail_context'] = 'Context';
 $string['detail_copied'] = 'Diagnòstic copiat';
 $string['detail_copy'] = 'Copiar el diagnòstic';
 $string['detail_course'] = 'Curs';
+$string['detail_dialog'] = 'Detall de la incidència';
 $string['detail_document'] = 'Document';
 $string['detail_nobody'] = 'No s\'ha registrat cap cos de resposta.';
 $string['detail_occurrences'] = 'Repeticions';

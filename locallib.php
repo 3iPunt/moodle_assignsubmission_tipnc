@@ -720,6 +720,7 @@ class assign_submission_tipnc extends assign_submission_plugin {
     /**
      * What is said instead of a document that cannot be reached.
      *
+     * @param  stdClass|null $submission The submission being looked at, if any.
      * @return string The notice, empty when everything is answering.
      * @throws coding_exception If a language string is missing.
      * @throws moodle_exception If the renderer cannot be built.

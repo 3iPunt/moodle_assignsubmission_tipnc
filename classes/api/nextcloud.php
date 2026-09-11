@@ -292,6 +292,7 @@ class nextcloud {
      * @param  string $username   Who gets it.
      * @param  int    $permission What they may do with it.
      * @param  array  $context    Context for the incident log.
+     * @param  array|null $shares Shares already read, so they are not asked for twice.
      * @return response What NextCloud answered.
      * @throws dml_exception If the incident cannot be recorded.
      */
@@ -316,6 +317,7 @@ class nextcloud {
      * @param  int    $permission What they may do with it.
      * @param  string $expires    New end date, empty for none.
      * @param  array  $context    Context for the incident log.
+     * @param  array|null $shares Shares already read, so they are not asked for twice.
      * @return response|null What NextCloud answered, null when they had none.
      * @throws dml_exception If the incident cannot be recorded.
      */
@@ -1132,6 +1134,7 @@ class nextcloud {
      *
      * @param  string $file    Path of the document.
      * @param  array  $context Context for the incident log.
+     * @param  bool   $log     Whether to record the call in the incident log.
      * @return array|null The shares, null when they could not be read.
      * @throws dml_exception If the incident cannot be recorded.
      */
@@ -1206,6 +1209,7 @@ class nextcloud {
      * @param  string $username   Account the document is shared with.
      * @param  int    $permission Permissions requested.
      * @param  array  $context    Context for the incident log.
+     * @param  string $expires    Expiry date, empty when the access never lapses.
      * @return response The share identifier, or the failure with its code.
      * @throws dml_exception If the incident cannot be recorded.
      */

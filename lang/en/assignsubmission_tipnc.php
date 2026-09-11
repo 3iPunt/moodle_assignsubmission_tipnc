@@ -46,6 +46,7 @@ $string['detail_context'] = 'Context';
 $string['detail_copied'] = 'Diagnosis copied';
 $string['detail_copy'] = 'Copy diagnosis';
 $string['detail_course'] = 'Course';
+$string['detail_dialog'] = 'Incident detail';
 $string['detail_document'] = 'Document';
 $string['detail_nobody'] = 'No response body was recorded.';
 $string['detail_occurrences'] = 'Repetitions';

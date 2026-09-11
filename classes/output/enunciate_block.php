@@ -76,6 +76,8 @@ class enunciate_block implements renderable, templatable {
      *
      * @param  int  $assignment Assignment instance.
      * @param  bool $embed      Show the document, or just link to it.
+     * @param  moodle_url|null $prepareurl Where to ask for the brief to be made.
+     * @param  bool $canedit    Whether this person may write in it.
      * @return self The block.
      * @throws dml_exception If the configuration cannot be read.
      */

@@ -92,6 +92,7 @@ class document_viewer implements renderable, templatable {
      * @param  stdClass $user     Who is looking at it.
      * @param  bool     $canedit  Whether this person may write in it.
      * @param  string   $heightclass Class that sets the height.
+     * @param  string   $readonly    Why it cannot be written in, empty when it can.
      * @return self The viewer.
      * @throws dml_exception If the configuration cannot be read.
      * @throws moodle_exception If the editor is chosen and has no secret.
