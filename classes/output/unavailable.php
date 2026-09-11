@@ -88,9 +88,9 @@ class unavailable implements renderable, templatable {
             ? userdate($this->since, get_string('strftimetime', 'core_langconfig'))
             : '';
 
-        // Decirle «inténtalo en unos minutos» a quien no tiene cuenta, o a quien
-        // mira una entrega que no llegó a existir, sería mandarlo a esperar algo
-        // que no va a pasar solo.
+        // Telling somebody with no account, or somebody looking at a submission
+        // that never came to exist, to "try again in a few minutes" would be
+        // sending them to wait for something that will not happen on its own.
         if ($this->reason !== '') {
             return [
                 'title' => get_string($this->reason . '_title', 'assignsubmission_tipnc'),

@@ -57,8 +57,8 @@ class purge_log extends scheduled_task {
     public function execute(): void {
         $days = (int) get_config('assignsubmission_tipnc', 'logretention');
 
-        // Retención a cero significa conservarlo todo: es una decisión del
-        // administrador, no un valor sin configurar.
+        // A retention of zero means keeping everything: that is a decision of
+        // the administrator, not an unconfigured value.
         if ($days <= 0) {
             mtrace('Retention disabled: nothing is purged.');
             return;

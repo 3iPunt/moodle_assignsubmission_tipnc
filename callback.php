@@ -56,8 +56,8 @@ if ($body === null) {
     callback::answer(callback::ERROR_FORBIDDEN);
 }
 
-// El editor solo pide guardar en dos estados; los demás son «sigue abierto» o
-// «se cerró sin cambios», y ahí no hay nada que hacer salvo decir que se recibió.
+// The editor only asks to save in two states; the rest are "still open" or
+// "closed with no changes", and there is nothing to do but acknowledge it.
 if (!callback::wants_saving((int) ($body['status'] ?? 0))) {
     callback::answer(callback::OK);
 }
@@ -67,8 +67,8 @@ if ($url === '') {
     callback::answer(callback::ERROR_SAVE);
 }
 
-// La clave viaja firmada en el propio token: es lo que permite saber que quien
-// guarda es la sesión que Moodle abrió, y no renovársela por debajo.
+// The key travels signed inside the token: that is what tells us whoever
+// saves is the session Moodle opened, and not to renew it underneath.
 $stored = callback::store($instance, $path, $url, (int) $body['status'],
     (string) ($payload['key'] ?? ''));
 

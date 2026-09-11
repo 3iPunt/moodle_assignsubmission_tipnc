@@ -105,8 +105,8 @@ class assign_submission_tipnc extends assign_submission_plugin {
     public function get_form_elements($submission, MoodleQuickForm $mform, stdClass $data): bool {
         global $PAGE, $USER;
 
-        // Sin servicio no hay documento que abrir, y abrir el formulario crearía
-        // uno: mejor decirlo que dejar un hueco donde debería estar el trabajo.
+        // With no service there is no document to open, and opening the form would
+        // create one: better to say so than to leave a gap where the work should be.
         $notice = $this->unavailable_notice($submission);
         if ($notice !== '') {
             $mform->addElement('html', $notice);
@@ -140,11 +140,11 @@ class assign_submission_tipnc extends assign_submission_plugin {
             $output = $PAGE->get_renderer('assignsubmission_tipnc');
             $model = new documents();
 
-            // Es el sitio donde el alumno escribe: mismo visor que en la página
-            // de la tarea, para que no parezcan dos documentos distintos.
+            // This is where the student writes: the same viewer as on the
+            // assignment page, so they do not look like two different documents.
             $openpath = (new document($submission->assignment))->open_path($submission);
 
-            // Es donde el alumno escribe: el editor abre en modo edición.
+            // This is where the student writes: the editor opens in edit mode.
             $viewer = document_viewer::for_document(
                 (int) $submission->assignment,
                 $openpath,
@@ -165,8 +165,8 @@ class assign_submission_tipnc extends assign_submission_plugin {
                 $model->frame_height_class(),
                 $viewer
             ));
-            // Como html y no como elemento estático: un elemento de formulario
-            // reserva la columna de la etiqueta, y aquí no hay etiqueta que poner.
+            // As html and not as a static element: a form element reserves the
+            // label column, and there is no label to put here.
             $mform->addElement('html', $render);
             return true;
         } else {
@@ -218,9 +218,9 @@ class assign_submission_tipnc extends assign_submission_plugin {
                 return false;
             }
         }
-        // Guardar es guardar el borrador. Congelar la entrega es otra cosa y
-        // ocurre en otro momento —submit_for_grading()—, aunque sin borradores
-        // el core los encadene y parezcan el mismo clic.
+        // Saving means saving the draft. Freezing the submission is a different
+        // thing and happens at another point —submit_for_grading()— even though
+        // with no drafts the core chains them and they look like the same click.
         if ($submission->status === ASSIGN_SUBMISSION_STATUS_SUBMITTED) {
             return $this->freeze($submission);
         }
@@ -280,12 +280,12 @@ class assign_submission_tipnc extends assign_submission_plugin {
             return false;
         }
 
-        // Puede haber salido bien y traer un aviso: la copia está hecha, pero a
-        // alguien no se le pudo dar acceso. Se registra y la entrega sigue siendo
-        // válida, porque lo que se califica ya existe.
+        // It may have gone well and still carry a warning: the copy is made, but
+        // somebody could not be given access. It is recorded and the submission
+        // is still valid, because what gets marked already exists.
         //
-        // Una respuesta sin problemas trae un error de relleno con código «0», que
-        // no es el «operación correcta» del catálogo: hay que descartar los dos.
+        // A clean response carries a filler error with code "0", which is not the
+        // catalogue's "operation successful": both have to be discarded.
         if (!in_array((string) $response->error->code, ['', '0', code::OK], true)) {
             tipnc_error::log('freeze:share', $response->error,
                 $submission->assignment, $submission->id);
@@ -305,8 +305,8 @@ class assign_submission_tipnc extends assign_submission_plugin {
         $submissionid = $submission ? $submission->id : 0;
         if ($submissionid) {
             try {
-                // Primero NextCloud: las filas que se borran a continuación son
-                // las que dicen qué documentos eran de esta entrega.
+                // NextCloud first: the rows deleted next are the ones that say
+                // which documents belonged to this submission.
                 (new cleanup())->on_submission_removed((int) $submission->assignment, $submission);
                 tipnc::delete_by_submissionid($submission->id, $submission->assignment);
                 tipnc_open::delete_by_submissionid($submission->id, $submission->assignment);
@@ -345,8 +345,8 @@ class assign_submission_tipnc extends assign_submission_plugin {
     public function view_summary(stdClass $submission, & $showviewlink): string {
         global $PAGE, $USER;
 
-        // Lo primero, porque si el servicio no responde nada de lo de abajo va a
-        // poder decir la verdad sobre el documento.
+        // First of all, because if the service does not answer nothing below is
+        // going to be able to tell the truth about the document.
         $notice = $this->unavailable_notice($submission);
         if ($notice !== '') {
             return $notice;
@@ -363,8 +363,8 @@ class assign_submission_tipnc extends assign_submission_plugin {
         }
         $isteacher = \assignsubmission_tipnc\assign::is_teacher($submission->assignment);
 
-        // La tabla de calificación monta el registro de entrega a mano y no le pone
-        // estado (gradingtable.php), así que aquí se resuelve contra la entrega real.
+        // The grading table builds the submission record by hand and gives it no
+        // status (gradingtable.php), so here it is resolved against the real one.
         $status = $submission->status
             ?? \assignsubmission_tipnc\assign::get_submission($submission->id)->status
             ?? null;
@@ -375,9 +375,9 @@ class assign_submission_tipnc extends assign_submission_plugin {
                     case ASSIGN_SUBMISSION_STATUS_DRAFT:
                     case ASSIGN_SUBMISSION_STATUS_REOPENED:
                     case ASSIGN_SUBMISSION_STATUS_NEW:
-                        // Lo que le interesa a quien corrige es en qué anda esta
-                        // persona, no volver a ver el enunciado: si ya tiene
-                        // borrador, es lo que está escribiendo.
+                        // What matters to whoever marks is what this person is
+                        // working on, not seeing the brief again: if they
+                        // already have a draft, that is what they are writing.
                         $tipncopen = tipnc_open::get($submission->id);
                         if (!empty($tipncopen->ncid)) {
                             $mode = document::MODE_OPEN;
@@ -385,8 +385,8 @@ class assign_submission_tipnc extends assign_submission_plugin {
                             break;
                         }
 
-                        // Sin borrador no ha empezado. Se dice, en lugar de enseñar
-                        // el enunciado, que parece que entregó el documento en blanco.
+                        // With no draft they have not started. That is said, rather
+                        // than showing the brief, which looks like a blank handed in.
                         return $PAGE->get_renderer('assignsubmission_tipnc')->render(
                             new unavailable(0, false, null, unavailable::NOT_STARTED));
                     case ASSIGN_SUBMISSION_STATUS_SUBMITTED:
@@ -407,11 +407,11 @@ class assign_submission_tipnc extends assign_submission_plugin {
                 switch ($status) {
                     case ASSIGN_SUBMISSION_STATUS_DRAFT:
                     case ASSIGN_SUBMISSION_STATUS_REOPENED:
-                        // Pintar una caja de estado no puede crear un documento:
-                        // copiarlo, compartirlo y localizarlo son tres peticiones
-                        // con treinta segundos de espera cada una, y esto se pinta
-                        // en cada visita. El borrador nace cuando se abre el
-                        // formulario, que es cuando alguien lo ha pedido.
+                        // Painting a status box must not create a document:
+                        // copying, sharing and locating it are three requests
+                        // with a thirty second timeout each, and this is painted
+                        // on every visit. The draft is born when the form is
+                        // opened, which is when somebody has asked for it.
                         $tipncopen = tipnc_open::get($submission->id);
 
                         if (empty($tipncopen->ncid)) {
@@ -424,9 +424,10 @@ class assign_submission_tipnc extends assign_submission_plugin {
                         $ncid = $tipncopen->ncid;
                         break;
                     case ASSIGN_SUBMISSION_STATUS_NEW:
-                        // Si ya tiene borrador, es lo que está trabajando, diga lo
-                        // que diga el estado: el documento se crea al abrir el
-                        // formulario y el estado no cambia hasta que guarda.
+                        // If there is already a draft, that is what they are
+                        // working on, whatever the status says: the document is
+                        // created when the form opens and the status only
+                        // changes when they save.
                         $tipncopen = tipnc_open::get($submission->id);
                         if (!empty($tipncopen->ncid)) {
                             $mode = document::MODE_OPEN;
@@ -434,9 +435,9 @@ class assign_submission_tipnc extends assign_submission_plugin {
                             break;
                         }
 
-                        // El acceso al enunciado se reparte al entrar en la tarea
-                        // y se recuerda; pedirlo aquí era una llamada por fila de
-                        // la tabla de calificación.
+                        // Access to the brief is handed out when entering the
+                        // assignment and remembered; asking for it here meant one
+                        // call per row of the grading table.
                         $mode = document::MODE_ENUN;
                         $ncid = $tipncenun->ncid;
                         break;
@@ -455,9 +456,9 @@ class assign_submission_tipnc extends assign_submission_plugin {
             }
         }
 
-        // Moodle dice que hay entrega y en NextCloud no hay documento. Pasa cuando
-        // el congelado falló a medias, y dejarlo en blanco hacía que se pareciera
-        // a «aún no ha entregado», que es lo contrario de lo que ocurre.
+        // Moodle says there is a submission and NextCloud has no document. This
+        // happens when the freeze half failed, and leaving it blank made it look
+        // like "not handed in yet", which is the opposite of what happened.
         if (empty($ncid)) {
             tipnc_error::log(
                 'view_summary',
@@ -479,8 +480,8 @@ class assign_submission_tipnc extends assign_submission_plugin {
         $output = $PAGE->get_renderer('assignsubmission_tipnc');
         $own = (int) ($submission->userid ?? 0) === (int) $USER->id;
 
-        // El nombre del documento solo se pone cuando sale gratis: en la tabla de
-        // calificación habría que consultarlo por cada fila.
+        // The document name is only shown when it comes for free: in the grading
+        // table it would have to be looked up once per row.
         $filename = null;
         if ($own) {
             $document = new document($submission->assignment);
@@ -491,8 +492,8 @@ class assign_submission_tipnc extends assign_submission_plugin {
             });
         }
 
-        // Al corregir, el documento se abre donde se está poniendo la nota: salir a
-        // NextCloud para leerlo parte la corrección en dos pantallas.
+        // When marking, the document opens where the grade is being given: going
+        // out to NextCloud to read it splits the marking across two screens.
         [$viewer, $marking] = $this->marking_viewer($submission, $mode, (int) $ncid);
 
         return $output->render(new submission_summary(
@@ -523,20 +524,20 @@ class assign_submission_tipnc extends assign_submission_plugin {
     private function marking_viewer(stdClass $submission, string $mode, int $ncid): array {
         global $PAGE, $USER;
 
-        // El core pone el tipo de página con la acción, y el panel de corrección se
-        // pinta por fragmento con la suya: es lo que distingue esto de la tabla.
+        // The core sets the page type from the action, and the grading panel is
+        // painted as a fragment with its own: that is what tells it from the table.
         if ($PAGE->pagetype !== 'mod-assign-gradingpanel' || $mode !== document::MODE_SUBMISSION) {
             return [null, null];
         }
 
-        // Sin servicio no hay documento que abrir: montar el editor solo consigue
-        // que sea él quien dé un error que no explica nada.
+        // With no service there is no document to open: building the editor only
+        // gets it to throw an error of its own that explains nothing.
         if (health::is_down()) {
             return [null, null];
         }
 
-        // Con evaluación anónima el nombre del archivo lleva dentro el del alumnado,
-        // así que ni se abre aquí ni se da acceso: en NextCloud se vería quién es.
+        // With blind marking the file name carries the student's name inside, so
+        // it is neither opened nor shared here: NextCloud would reveal who it is.
         if ($this->assignment->is_blind_marking()) {
             return [null, null];
         }
@@ -546,10 +547,10 @@ class assign_submission_tipnc extends assign_submission_plugin {
             return [null, null];
         }
 
-        // Haber llegado a esta pantalla ya es la comprobación: el core exige
-        // mod/assign:grade para pintarla. Aquí solo se aplica lo que Moodle decidió.
-        // Va antes de mirar cómo se muestra el documento, porque quien lo abre en
-        // otra pestaña necesita el acceso igual que quien lo ve incrustado.
+        // Reaching this screen is the check in itself: the core requires
+        // mod/assign:grade to paint it. Here we only apply what Moodle decided.
+        // It goes before looking at how the document is shown, because whoever
+        // opens it in another tab needs access just as much as whoever embeds it.
         (new nextcloud((int) $submission->assignment))->grant_submission($USER, $submission);
 
         if (!viewmode::embeds()) {
@@ -558,8 +559,8 @@ class assign_submission_tipnc extends assign_submission_plugin {
 
         $path = (new document((int) $submission->assignment))->submission_path($submission);
 
-        // El profesorado tiene permiso de escritura sobre la entrega desde que se
-        // congela: corregir sobre el documento es lo que ese permiso existe para.
+        // Teachers have write permission on the submission from the moment it is
+        // frozen: marking on the document is what that permission exists for.
         return [
             document_viewer::for_document(
                 (int) $submission->assignment,
@@ -692,9 +693,9 @@ class assign_submission_tipnc extends assign_submission_plugin {
     private function unavailable_notice(?stdClass $submission = null): string {
         global $PAGE;
 
-        // Quien no existe en NextCloud no puede recibir su documento ni escribir
-        // en él: es un impedimento suyo y permanente, no una caída pasajera, y
-        // hasta que alguien le cree la cuenta no hay nada que pueda hacer.
+        // Somebody who does not exist in NextCloud cannot be given their document
+        // nor write in it: that is their own, permanent impediment, not a passing
+        // outage, and until an account is created for them there is nothing to do.
         if ($submission !== null && $this->owner_missing($submission)) {
             return $PAGE->get_renderer('assignsubmission_tipnc')->render(
                 new unavailable(0, false, null, unavailable::NO_ACCOUNT));
@@ -735,9 +736,9 @@ class assign_submission_tipnc extends assign_submission_plugin {
             return false;
         }
 
-        // A quién afectaba, no en qué entrega ocurrió: el rechazo puede haber sido
-        // de otra persona —del profesorado, por ejemplo— y entonces no dice nada
-        // de quien entregó.
+        // Who it affected, not which submission it happened in: the rejection may
+        // have been somebody else's —a teacher, say— and then it says nothing
+        // about whoever handed in.
         return $DB->record_exists('assignsubmission_tipnc_log', [
             'errorcode' => code::SHARE_NO_ACCOUNT,
             'submission' => $submission->id,

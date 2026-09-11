@@ -24,9 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-// Los dos caminos por los que alguien deja de tener que ver con un curso. Ambos
-// solo encolan: quitar el acceso documento a documento no cabe en el clic que
-// desmatricula, y si algo falla la tarea adhoc se reintenta sola.
+// The two ways somebody stops having anything to do with a course. Both
+// only queue: removing access document by document does not fit in the
+// click that unenrols, and if anything fails the ad-hoc task retries.
 $observers = [
     [
         'eventname' => '\core\event\user_enrolment_deleted',

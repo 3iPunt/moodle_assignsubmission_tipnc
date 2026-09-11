@@ -92,9 +92,9 @@ export const init = async(elementId, config, serverUrl) => {
     try {
         await loadApi(serverUrl);
 
-        // El editor se queda vivo aunque la página se vaya. Cerrarlo al entregar
-        // parecía limpio, pero mata la sesión un instante antes de que el servidor
-        // le pida guardar, y entonces lo que se congela es la versión anterior.
+        // The editor stays alive even when the page goes. Closing it on submit
+        // looked tidy, but it kills the session an instant before the server asks
+        // it to save, and then what gets frozen is the previous version.
         new window.DocsAPI.DocEditor(elementId, config);
     } catch (error) {
         explain(container.parentNode || container);

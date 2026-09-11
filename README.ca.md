@@ -1,7 +1,7 @@
 <h1 align="center">NextCloud Submission</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-2.0.0-informational" alt="Versió">
+  <img src="https://img.shields.io/badge/version-2.0.1-informational" alt="Versió">
   <a href="https://moodle.org"><img src="https://img.shields.io/badge/Moodle-4.5%20--%205.1-orange?logo=moodle" alt="Moodle"></a>
   <img src="https://img.shields.io/badge/Workplace-4.5%2B-blue" alt="Moodle Workplace">
   <img src="https://img.shields.io/badge/PHP-8.1%2B-777BB4?logo=php&logoColor=white" alt="PHP">

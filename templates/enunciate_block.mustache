@@ -93,10 +93,10 @@
     </div>
 
     {{#embed}}
-        {{! El marco lleva title: es requisito de accesibilidad y el visor no lo trae. }}
+        {{! The frame carries a title: an accessibility requirement the viewer lacks. }}
         <div class="tipnc-viewer" data-region="tipnc-viewer">
             <div class="tipnc-frame__bar">
-                {{! El motivo lo decide el visor; aquí solo se pinta. }}
+                {{! The reason is decided by the viewer; here it is only painted. }}
                 {{#viewer.isreadonly}}
                     <p class="tipnc-frame__readonly">
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -130,8 +130,8 @@
             <p class="tipnc-enunciate__notready-title">
                 {{#str}} enunciate_notready, assignsubmission_tipnc {{/str}}
             </p>
-            {{! El diagnóstico y el botón son de quien puede hacer algo con ellos.
-                A quien no, decirle qué pasa y a quién avisar. }}
+            {{! The diagnosis and the button belong to whoever can act on them.
+                To whoever cannot, say what is happening and who to tell. }}
             {{#canprepare}}
                 <p class="tipnc-enunciate__notready-hint">
                     {{#str}} enunciate_notready_hint, assignsubmission_tipnc {{/str}}

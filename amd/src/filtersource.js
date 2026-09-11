@@ -39,8 +39,8 @@ export const transport = (selector, query, success, failure) => {
         return;
     }
 
-    // La tarea se acota al curso elegido, si lo hay: buscar entre todas las
-    // tareas del sitio no ayuda a nadie.
+    // The assignment is narrowed to the chosen course, if any: searching
+    // across every assignment on the site helps nobody.
     const course = document.querySelector('[data-filter="course"]');
     const args = {
         type: field.dataset.filter,

@@ -55,7 +55,7 @@ $string['operation_delete_draft'] = 'Esborrar l\'esborrany';
 $string['operation_delete_submission'] = 'Esborrar el lliurament';
 $string['operation_delete_assignment'] = 'Esborrar els documents de la tasca';
 
-// Registre d'incidències: catàleg de codis.
+// Incident log: catalogue of codes.
 $string['logcode_0000'] = 'Operació completada';
 $string['logcode_0101'] = "Document d'origen no trobat";
 $string['logcode_0102'] = "No s'ha pogut copiar el document";
@@ -80,7 +80,7 @@ $string['logcode_0602'] = 'Plantilla no trobada';
 $string['logcode_0701'] = 'La tasca no té document base';
 $string['logcode_0702'] = "El lliurament s'ha congelat abans de desar els canvis";
 
-// Registre d'incidències: filtres i detall.
+// Incident log: filters and detail.
 $string['log_col_actions'] = 'Accions';
 $string['log_detail'] = 'Veure detall';
 $string['log_filter_severity'] = 'Severitat';
@@ -104,7 +104,7 @@ $string['detail_when'] = 'Quan';
 $string['detail_occurrences'] = 'Repeticions';
 $string['detail_nobody'] = "No s'ha registrat cap cos de resposta.";
 
-// Registre d'incidències: filtres d'entitat i data.
+// Incident log: entity and date filters.
 $string['log_filter_course'] = 'Curs';
 $string['log_filter_assign'] = 'Tasca';
 $string['log_filter_user'] = 'Usuari';
@@ -122,7 +122,7 @@ $string['log_minutes'] = '{$a}\'';
 $string['log_hours'] = '{$a} h';
 $string['log_dateformat'] = '%d %b';
 
-// Registre d'incidències: purga i exportació.
+// Incident log: purge and export.
 $string['log_export'] = 'Exportar';
 $string['log_purge'] = 'Buidar el registre';
 $string['purge_title'] = "Buidar el registre d'incidències";
@@ -131,7 +131,7 @@ $string['task_purge_log'] = "Purga del registre d'incidències de NextCloud";
 $string['logretention'] = 'Conservar les incidències';
 $string['logretention_help'] = 'Dies que es conserva una incidència abans que la purga programada l\'esborri. Zero ho conserva tot, i llavors la taula creix sense límit.';
 
-// Diagnòstic redactat per enganxar-lo en un assistent o en un tiquet.
+// Diagnosis written to be pasted into an assistant or a ticket.
 $string['diagnosis_intro'] = "Necessito ajuda per resoldre una incidència del connector de Moodle assignsubmission_tipnc, que permet lliurar tasques com a documents allotjats a NextCloud i editats en línia.";
 $string['diagnosis_what'] = 'Què ha fallat';
 $string['diagnosis_environment'] = 'Entorn';
@@ -139,7 +139,7 @@ $string['diagnosis_ask'] = 'Què necessito';
 $string['diagnosis_question'] = "Digues-me la causa més probable i els passos concrets per arreglar-ho, indicant a cada pas si es fa a Moodle, a NextCloud o al servidor web. Si les dades anteriors no basten, digues-me què més caldria mirar.";
 $string['purge_hint'] = "No hi ha marxa enrere. Exporta'l abans si el necessites per a un tiquet; la purga programada ja esborra les antigues pel seu compte.";
 
-// L'enunciat a la pàgina de la tasca.
+// The brief on the assignment page.
 $string['enunciate_title'] = 'Enunciat de la tasca';
 $string['enunciate_intro'] = "El document del qual parteixen els alumnes. Escriu-hi el que han de fer: cada còpia es fa a partir d'aquest.";
 $string['enunciate_open'] = "Obrir l'enunciat";
@@ -159,7 +159,7 @@ $string['placement_selector'] = 'En un lloc que trio jo';
 $string['placementselector'] = "Destinació de l'enunciat";
 $string['placementselector_help'] = "Selector CSS de l'element on es porta l'enunciat; només s'usa amb «En un lloc que trio jo». El trasllat el fa el navegador: si no troba res, l'enunciat es queda al final de la pàgina. Ex: <strong>.activity-description</strong>";
 
-// Amplada de la pàgina de la tasca.
+// Width of the assignment page.
 $string['pagewidth'] = 'Amplada màxima de la pàgina de la tasca';
 $string['pagewidth_help'] = "Fins on pot créixer la pàgina de la tasca quan aquella tasca fa servir aquest connector. Els documents són amples i l'amplada de lectura d'un tema els deixa estrets. És un màxim: a les pantalles petites continua manant el tema.";
 $string['pagewidth_theme'] = "L'amplada del tema (sense canvis)";
@@ -168,9 +168,9 @@ $string['pagewidth_1400'] = '1400 px · recomanat per a documents';
 $string['pagewidth_1600'] = '1600 px · pantalles grans';
 $string['pagewidth_full'] = 'Tota l\'amplada de la finestra';
 
-// El document dins de la caixa d'estat del lliurament.
+// The document inside the submission status box.
 $string['subm_draft'] = 'Esborrany en curs';
-// Títols i explicacions de la caixa del lliurament.
+// Titles and explanations of the submission box.
 $string['subm_title_draft_own'] = 'El teu esborrany';
 $string['subm_title_draft_other'] = 'Esborrany del lliurament';
 $string['subm_title_submitted_own'] = 'El teu lliurament';
@@ -192,7 +192,7 @@ $string['fullscreen'] = 'Pantalla completa';
 $string['enunciate_reference'] = "El document del qual parteix la feina. És aquí com a referència: el que escriguis va al teu propi document.";
 $string['subm_modified'] = 'Últim canvi: {$a}';
 
-// Seccions de la pàgina de configuració.
+// Sections of the settings page.
 $string['section_connection'] = 'Connexió amb NextCloud';
 $string['section_connection_desc'] = "On és NextCloud i amb quin compte hi parla el connector. Fins que això no és correcte, no funciona res més.";
 $string['section_documents'] = 'Documents';
@@ -206,7 +206,7 @@ $string['section_display_desc'] = "On apareix l'enunciat a la pàgina de la tasc
 $string['section_log'] = "Registre d'incidències";
 $string['section_log_desc'] = 'Crides a NextCloud que no es van completar, i quant temps es conserven.';
 
-// Alçada del document encastat.
+// Height of the embedded document.
 $string['frameheight'] = 'Alçada del document encastat';
 $string['frameheight_help'] = "Quant ocupa el document dins de la pàgina. És una primera ullada: per llegir o escriure amb tranquil·litat hi ha el botó de pantalla completa que té a sobre.";
 $string['frameheight_420'] = 'Baixa · una ullada';
@@ -214,7 +214,7 @@ $string['frameheight_560'] = 'Mitjana · recomanada';
 $string['frameheight_700'] = "Alta · una pàgina de cop";
 $string['frameheight_860'] = 'Molt alta · per a pantalles grans';
 
-// Esborrar a Moodle, i què significa això a NextCloud.
+// Deleting in Moodle, and what that means in NextCloud.
 $string['section_delete'] = "Quan s'esborra alguna cosa";
 $string['section_delete_desc'] = "Esborrar a Moodle i esborrar a NextCloud són dues coses diferents. Els documents van a la paperera de NextCloud, així que un error es pot desfer durant un temps.";
 $string['ondeletesubmission'] = 'En esborrar un lliurament';
@@ -229,7 +229,7 @@ $string['ondeleteassign_delete'] = "Esborrar l'enunciat i tots els documents de 
 $string['delete_warning_frozen'] = "S'esborrarà la còpia lliurada a NextCloud. L'esborrany es conserva.";
 $string['delete_warning_all'] = "S'esborraran l'esborrany i la còpia lliurada a NextCloud. Van a la paperera de NextCloud.";
 
-// Confirmació abans de lliurar.
+// Confirmation before handing in.
 $string['confirmsaved'] = 'Demanar confirmació que el document està desat';
 $string['confirmsaved_help'] = 'Afegeix una casella que l\'alumnat ha de marcar abans de lliurar, amb el botó de lliurar desactivat fins llavors, perquè ningú lliuri amb canvis sense desar. És una promesa, no una comprovació: des d\'aquí no hi ha manera de saber si el document s\'ha desat de debò.';
 $string['confirmsaved_title'] = 'Abans de lliurar';
@@ -253,9 +253,9 @@ $string['confirmsaved_alsosubmits'] = '<strong>Desar aquí és lliurar.</strong>
 $string['confirmsaved_hint_save'] = "Desa el document amb el botó de l'editor abans de lliurar: això és el que hi escriu els teus canvis. Si ja has tancat l'editor, també hi són.";
 $string['editor_unavailable'] = "No s'ha pogut carregar l'editor. Obre el document a NextCloud amb l'enllaç de dalt; la teva feina hi és.";
 
-// El que contesta l'editor quan se li demana que desi. Queda al registre
-// d'incidències, que és el que llegeix qui ha d'esbrinar per què un lliurament
-// no portava el que s'havia escrit.
+// What the editor answers when asked to save. It ends up in the incident
+// log, which is what somebody reads when they have to work out why a
+// submission did not carry what had been written.
 $string['editor_answer_notasked'] = 'no s\'ha pogut preguntar a l\'editor';
 $string['editor_answer_ok'] = 'desat';
 $string['editor_answer_key'] = 'l\'editor no coneix aquesta clau: la sessió ja no existeix';
@@ -266,7 +266,7 @@ $string['editor_answer_command'] = 'l\'ordre no és correcta';
 $string['editor_answer_token'] = 'l\'editor ha rebutjat la signatura';
 $string['editor_answer_unknown'] = 'resposta desconeguda ({$a})';
 
-// El registre d'incidències d'un lliurament.
+// The incident log of a submission.
 $string['log_submit_nodraft'] = 'No hi ha cap esborrany registrat: es congela el que hi hagi.';
 $string['log_submit_asksave'] = 'Es demana a l\'editor que desi abans de congelar.';
 $string['log_submit_refused'] = 'L\'editor no ha acceptat desar abans de lliurar: {$a}.';
@@ -275,7 +275,7 @@ $string['log_submit_late'] = 'El desament no ha arribat a temps; es congela el q
 $string['log_submit_saved'] = 'L\'editor ha desat abans de congelar el lliurament.';
 $string['log_submit_nosession'] = 'El document no s\'ha obert mai a l\'editor: es congela el que hi hagi.';
 
-// La pantalla del registro de incidencias.
+// The incident log screen.
 $string['log_title'] = 'Registre d\'incidències';
 $string['log_intro'] = 'Trucades al NextCloud que no es van completar. El que hi ha aquí ja li va passar a algú: un enunciat que no es va crear, un esborrany que no es va obrir, un lliurament que no es va congelar.';
 $string['log_open'] = 'Obrir el registre d\'incidències';
@@ -318,7 +318,7 @@ $string['prepare_done'] = 'L\'enunciat ja està a punt. L\'alumnat ja pot trebal
 $string['prepare_already'] = 'L\'enunciat ja existia.';
 $string['prepare_failed'] = 'No s\'ha pogut preparar l\'enunciat. El registre d\'incidències diu per què.';
 
-// Cuando NextCloud no responde.
+// When NextCloud does not answer.
 $string['unavailable_title'] = 'Ara mateix no es pot obrir el document';
 $string['unavailable_student'] = 'No és cosa teva: el servei on viu el document no respon. Torna-ho a provar d\'aquí a uns minuts; no es perd res del que ja havies escrit.';
 $string['unavailable_teacher'] = 'El NextCloud no respon. Mentre duri, no es poden crear ni obrir documents i ningú pot lliurar.';
@@ -326,18 +326,18 @@ $string['unavailable_since'] = 'El NextCloud no respon des de les {$a}. Mentre d
 $string['unavailable_log'] = 'Veure el registre d\'incidències';
 $string['unavailable_submit'] = 'Ara mateix no pots lliurar: el servei on és el teu document no respon. Prova-ho d\'aquí a uns minuts; el que vas escriure està segur.';
 
-// Cuando la cuenta de la persona no existe en NextCloud.
+// When the person's account does not exist in NextCloud.
 $string['noaccount_title'] = 'El teu compte no pot accedir als documents';
 $string['noaccount_message'] = 'Per treballar en el document cal un compte al servei de documents, i el teu no hi és. Això no s\'arregla sol: demana-ho a qui administra el lloc. Fins llavors no podràs obrir ni lliurar aquesta tasca.';
 $string['noaccount_submit'] = 'No pots lliurar: el teu compte no té accés al servei de documents. Demana a qui administra el lloc que te’l creï.';
 $string['prepare_noaccount'] = 'L\'enunciat ja està a punt i l\'alumnat hi pot treballar. Tu no el podràs editar: el compte «{$a}» no existeix al NextCloud.';
 
-// Per què un document s'obre en només lectura.
+// Why a document opens read-only.
 $string['readonly_frozen'] = 'Lliurat: només lectura';
 $string['readonly_role'] = 'Només lectura';
 $string['readonly_noaccount'] = 'Només lectura: el teu compte no existeix al servei de documents';
 
-// El acceso a los documentos y su caducidad.
+// Access to the documents and how it expires.
 $string['section_access'] = 'Accés als documents';
 $string['section_access_desc'] = 'Qui pot obrir cada document ho decideix el Moodle: qui qualifica la tasca hi escriu, la resta hi llegeix. L\'accés es reparteix en el moment en què algú entra a la tasca, així que ningú ha de mantenir cap llista.';
 $string['shareexpiry'] = 'L\'accés caduca als';
@@ -347,7 +347,7 @@ $string['shareexpiry_help'] = 'L\'accés a un document es dóna per aquest temps
 // Capacitats.
 $string['tipnc:view_errors'] = "Veure el registre d'incidències del lliurament NextCloud";
 
-// La entrega que Moodle da por hecha y en NextCloud no existe.
+// The submission Moodle takes for granted and NextCloud does not have.
 $string['noaccount_detail'] = 'El seu compte no existeix al NextCloud, així que no se li pot compartir res. Cal crear-lo abans que pugui treballar en res.';
 $string['nodocument_title'] = 'Aquest lliurament no té document';
 $string['nodocument_message'] = 'El Moodle diu que la feina es va lliurar, però no es va congelar cap còpia al servei de documents. No s\'ha perdut res —l\'esborrany encara hi és— però encara no hi ha res per qualificar.';
@@ -358,7 +358,7 @@ $string['notstarted_title'] = 'Encara no ha començat';
 $string['notstarted_message'] = "Aquesta persona no ha obert el document, així que no hi ha esborrany ni res escrit. No és que hagi fallat res: no ha començat.";
 $string['notstarted_detail'] = "L'esborrany es crea la primera vegada que obre la tasca per treballar-hi.";
 
-// Privacidad: qué se guarda y qué sale del sitio.
+// Privacy: what is stored and what leaves the site.
 $string['privacy:metadata:assignment'] = 'La tasca a la qual pertany el document.';
 $string['privacy:metadata:submission'] = 'El lliurament al qual pertany el document.';
 $string['privacy:metadata:ncid'] = 'L\'identificador que té el document al NextCloud.';

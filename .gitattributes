@@ -16,6 +16,9 @@
 *.gif       binary
 *.docx      binary
 
-# Fuera de los archivos que se descarguen del repositorio.
+# Fuera de los archivos que se descarguen del repositorio. El .github vive en
+# GitHub —es donde corre el CI— pero no viaja al paquete instalable: el
+# Marketplace pide paquetes sin ficheros de desarrollo.
 .gitattributes  export-ignore
 .gitignore      export-ignore
+.github         export-ignore

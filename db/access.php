@@ -26,13 +26,13 @@ defined('MOODLE_INTERNAL') || die;
 
 $capabilities = [
 
-    // El registro de incidencias enseña rutas de documentos y nombres de cuenta
-    // de todo el sitio, así que de serie solo lo ve quien administra.
+    // The incident log shows document paths and account names from across the
+    // whole site, so out of the box only administrators see it.
     //
-    // Los demás papeles no se declaran: no tenerla es no tenerla, y así un sitio
-    // que quiera dársela a su profesorado puede hacerlo con una anulación.
-    // CAP_PROHIBIT lo impediría para siempre, que es más de lo que aquí hace
-    // falta —está pensado para lo que nunca debe permitirse—.
+    // The other archetypes are not declared: not having it is not having it,
+    // and a site that wants to give it to its teachers can do so by override.
+    // CAP_PROHIBIT would prevent that for ever, which is more than is needed
+    // here —it is meant for what must never be allowed—.
     'assignsubmission/tipnc:view_errors' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,

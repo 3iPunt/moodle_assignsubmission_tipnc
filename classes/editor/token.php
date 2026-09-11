@@ -104,8 +104,8 @@ class token {
         }
 
         try {
-            // Caducidad y firma las comprueba la propia librería; un fallo aquí es
-            // una respuesta vacía, no una excepción que se filtre a la pantalla.
+            // Expiry and signature are checked by the library itself; a failure here
+            // is an empty response, not an exception leaking to the screen.
             $payload = JWT::decode($jwt, new Key($secret, self::ALGORITHM));
         } catch (Throwable $e) {
             return null;

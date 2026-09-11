@@ -31,8 +31,8 @@ use dml_exception;
 /**
  * tipnc_error
  *
- * @deprecated  Se mantiene mientras queden llamadas del código antiguo.
- *              El registro vive ahora en assignsubmission_tipnc\log\logger.
+ * @deprecated  Kept while calls from the old code remain.
+ *              Logging now lives in assignsubmission_tipnc\log\logger.
  * @package     assignsubmission_tipnc
  * @copyright   2021 Tresipunt
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

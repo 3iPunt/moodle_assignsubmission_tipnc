@@ -136,8 +136,8 @@ class incident_detail implements renderable, templatable {
             $rows[] = [
                 'label' => get_string('detail_document', 'assignsubmission_tipnc'),
                 'value' => $incident->documentpath,
-                // Enlace a la carpeta que lo contiene en NextCloud: lo primero que
-                // hace falta comprobar es si el documento está ahí.
+                // A link to the folder holding it in NextCloud: the first thing to
+                // check is whether the document is there.
                 'url' => $this->nextcloud_folder_url($incident->documentpath),
                 'external' => true,
             ];

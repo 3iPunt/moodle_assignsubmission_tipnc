@@ -58,9 +58,9 @@ class health {
             return;
         }
 
-        // Quién es un fallo del servicio y quién de un documento lo dice el
-        // catálogo, que es donde se decide: tenerlo también aquí sería la misma
-        // verdad en dos sitios, y cada código nuevo tendría que acordarse de los dos.
+        // Which is a failure of the service and which of a document is said by
+        // the catalogue, which is where it is decided: having it here too would
+        // be the same truth twice, and every new code would have to remember both.
         if (!code::is_system_failure($errorcode)) {
             return;
         }
@@ -70,8 +70,8 @@ class health {
         self::cache()->set(self::KEY, (object) [
             'down' => true,
 
-            // Desde cuándo, no cuándo se vio por última vez: si ya estaba caído se
-            // conserva el primer momento, que es lo que dice cuánto lleva así.
+            // Since when, not when it was last seen: if it was already down the
+            // first moment is kept, which is what says how long it has been like this.
             'since' => (!empty($state->down) && !empty($state->since)) ? $state->since : time(),
             'code' => $errorcode,
         ]);

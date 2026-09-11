@@ -40,8 +40,8 @@ require_capability('mod/assign:grade', $context);
 
 $back = new moodle_url('/mod/assign/view.php', ['id' => $cmid]);
 
-// Que ya exista no es un error: dos personas pueden pulsar a la vez, o el cron
-// puede haberse adelantado.
+// It already existing is not an error: two people can click at once, or
+// cron may have got there first.
 if (tipnc_enun::get((int) $cm->instance)) {
     redirect($back, get_string('prepare_already', 'assignsubmission_tipnc'),
         null, \core\output\notification::NOTIFY_INFO);
@@ -54,8 +54,8 @@ if (!$response->success) {
         null, \core\output\notification::NOTIFY_ERROR);
 }
 
-// El enunciado está hecho y la tarea funciona, pero quien lo creó no puede
-// escribirlo: decir qué cuenta falta ahorra abrir el registro para averiguarlo.
+// The brief is made and the assignment works, but whoever created it
+// cannot write in it: naming the missing account saves opening the log.
 if ((string) $response->error->code === code::SHARE_NO_ACCOUNT) {
     redirect($back, get_string('prepare_noaccount', 'assignsubmission_tipnc', $USER->username),
         null, \core\output\notification::NOTIFY_WARNING);

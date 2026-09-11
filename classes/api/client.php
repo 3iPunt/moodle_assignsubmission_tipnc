@@ -98,10 +98,10 @@ class client {
         $url = $this->host . '/' . ltrim($path, '/');
         $context = $options['context'] ?? [];
 
-        // Sin dirección, cuenta o contraseña no hay a quién llamar. Salir igual
-        // producía una petición a una URL sin host y el registro decía «el
-        // servidor no responde», que manda a mirar NextCloud cuando lo que falta
-        // está en los ajustes de Moodle.
+        // With no address, account or password there is nobody to call. Going
+        // out anyway produced a request to a URL with no host, and the log said
+        // "the server does not answer", which sends you to look at NextCloud
+        // when what is missing is in the Moodle settings.
         if (!$this->is_configured()) {
             $answer = new http_response(0, '', 0, 'sin configurar');
 
@@ -124,8 +124,8 @@ class client {
             $options['form'] ?? null
         );
 
-        // La comprobación de estado no se registra: se ejecuta en cada carga de la
-        // pantalla y llenaría de ruido el propio registro que se está mirando.
+        // The health check is not logged: it runs on every load of the screen
+        // and would fill with noise the very log being looked at.
         if (($options['log'] ?? true) !== false) {
             $this->record($method, $url, $answer, $context);
         }
@@ -152,8 +152,8 @@ class client {
             $client = new http_client([
                 'timeout' => self::TIMEOUT,
                 'connect_timeout' => self::CONNECT_TIMEOUT,
-                // La verificación TLS se deja intacta a propósito: estas llamadas
-                // llevan las credenciales de la cuenta de servicio.
+                // TLS verification is deliberately left intact: these calls
+                // carry the service account credentials.
                 'verify' => true,
                 'http_errors' => false,
             ]);
@@ -207,12 +207,12 @@ class client {
             return;
         }
 
-        // El significado de un rechazo depende de la operación: un 404 al compartir
-        // no es lo mismo que un 404 al copiar.
+        // What a rejection means depends on the operation: a 404 when sharing
+        // is not the same as a 404 when copying.
         $errorcode = $bystatus[$answer->httpcode] ?? $this->classify($answer, $expected);
 
-        // Antes de registrarlo: si el servicio se ha caído, las páginas tienen que
-        // poder decirlo, y esta es la única llamada real que va a haber.
+        // Before logging it: if the service has gone down, the pages have to be
+        // able to say so, and this is the only real call there is going to be.
         health::note($errorcode);
 
         logger::record(code::severity($errorcode), $errorcode, $operation, $context);

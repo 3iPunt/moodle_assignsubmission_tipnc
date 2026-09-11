@@ -60,8 +60,8 @@ class create_enunciate extends adhoc_task {
             return;
         }
 
-        // Entre que se encoló y ahora, alguien pudo haberlo creado: la tarea se
-        // reintenta cuando falla, y crear dos veces dejaría un documento suelto.
+        // Between queueing and now somebody may have created it: the task is
+        // retried on failure, and creating twice would leave a loose document.
         if (tipnc_enun::get($assignment)) {
             return;
         }

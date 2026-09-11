@@ -84,8 +84,8 @@ class documents {
     public function own_work(int $instance, int $userid): ?stdClass {
         global $CFG, $DB;
 
-        // Las constantes de estado las define locallib.php de mod_assign, y este
-        // método se llama desde hooks que corren antes de que nadie la cargue.
+        // The status constants are defined by mod_assign's locallib.php, and this
+        // method is called from hooks that run before anybody loads it.
         require_once($CFG->dirroot . '/mod/assign/locallib.php');
 
         $submission = $DB->get_record('assign_submission', [
@@ -98,9 +98,9 @@ class documents {
             return null;
         }
 
-        // Manda el documento que existe, no el estado del core: el borrador se crea
-        // al abrir el formulario, y hasta que la persona guarda, mod_assign sigue
-        // diciendo «sin intentos» de algo que ya tiene trabajo dentro.
+        // The document that exists rules, not the core status: the draft is made
+        // when the form opens, and until the person saves, mod_assign keeps
+        // saying "no attempt" about something that already has work inside.
         $submitted = $submission->status === ASSIGN_SUBMISSION_STATUS_SUBMITTED;
         $frozen = $DB->get_record('assignsubmission_tipnc',
             ['submission' => $submission->id], 'ncid, path', IGNORE_MISSING);
@@ -124,8 +124,8 @@ class documents {
             'mode' => $submitted ? document::MODE_SUBMISSION : document::MODE_OPEN,
             'ncid' => (int) $row->ncid,
 
-            // La ruta guardada viaja con el resto: componerla desde el nombre de
-            // quien mira dejó de funcionar en cuanto hubo reintentos y grupos.
+            // The stored path travels with the rest: building it from the name of
+            // whoever looks stopped working as soon as re-attempts and groups existed.
             'path' => (string) ($row->path ?? ''),
             'timemodified' => (int) $submission->timemodified,
         ];

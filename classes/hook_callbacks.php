@@ -99,7 +99,7 @@ class hook_callbacks {
         $header = $PAGE->activityheader;
         $description = $header->export_for_template($PAGE->get_renderer('core'))['description'] ?? null;
         if ($description === null) {
-            // El tema no pinta cabecera de actividad en esta página.
+            // The theme paints no activity header on this page.
             return;
         }
 
@@ -128,8 +128,8 @@ class hook_callbacks {
             return;
         }
 
-        // El destino a medida se resuelve en el navegador: es el único que puede
-        // saber qué ha pintado el tema.
+        // The custom destination is resolved in the browser: it is the only one that
+        // can know what the theme has painted.
         if ($placement === self::PLACE_SELECTOR) {
             $selector = trim((string) get_config('assignsubmission_tipnc', 'placementselector'));
             if ($selector !== '') {
@@ -162,8 +162,8 @@ class hook_callbacks {
 
         $width = self::page_width();
 
-        // Todas las páginas de la tarea, no solo la primera: el documento también
-        // se edita y se corrige, y el ancho de lectura del tema lo aprieta igual.
+        // Every page of the assignment, not just the first: the document is also
+        // edited and marked, and the theme's reading width squeezes it just the same.
         if ($width === null || !str_starts_with($PAGE->pagetype, 'mod-assign-')) {
             return;
         }
@@ -251,18 +251,18 @@ class hook_callbacks {
             return;
         }
 
-        // Sin borradores, «Guardar cambios» del formulario entrega directamente: es
-        // el último momento en el que alguien puede decir que su documento está
-        // guardado, así que la confirmación tiene que estar ahí y no en una pantalla
-        // de confirmación que en esa configuración no llega a existir.
+        // With no drafts, the form's "Save changes" submits straight away: it is the
+        // last moment at which somebody can say that their document is saved, so
+        // the confirmation has to be there and not on a confirmation screen that
+        // in that configuration never comes to exist.
         $drafts = (int) $DB->get_field('assign', 'submissiondrafts', ['id' => $cm->instance], IGNORE_MISSING);
         if ($PAGE->pagetype === 'mod-assign-editsubmission' && $drafts) {
             return;
         }
 
-        // Cómo se vuelca el documento depende de quién manda en el editor: con el
-        // editor embebido, el guardado forzado lo pone el plugin y hay botón; con
-        // la página de NextCloud depende de su configuración, y no lo sabemos.
+        // How the document is flushed depends on who is in charge of the editor: with
+        // the embedded editor the plugin forces the save and there is a button; with
+        // the NextCloud page it depends on its settings, and we do not know them.
         $hook->add_html($OUTPUT->render_from_template(
             'assignsubmission_tipnc/confirm_save',
             [
@@ -316,8 +316,8 @@ class hook_callbacks {
             return null;
         }
 
-        // El módulo se lee a una variable: moodle_page tiene __get pero no
-        // __isset, así que empty($PAGE->cm) es cierto aunque el cm esté puesto.
+        // The module is read into a variable: moodle_page has __get but not
+        // __isset, so empty($PAGE->cm) is true even when the cm is set.
         $cm = $PAGE->cm;
         if (!$cm instanceof cm_info || !assign::is_submission_nextcloud($cm)) {
             return null;
@@ -326,9 +326,9 @@ class hook_callbacks {
         $instance = (int) $cm->instance;
         $output = $PAGE->get_renderer('assignsubmission_tipnc');
 
-        // Antes que nada: montar el editor contra un servicio que no responde deja
-        // que sea el editor quien dé la cara, con un «error de descarga» que no
-        // dice a quién avisar ni si el trabajo sigue estando.
+        // First of all: building the editor against a service that does not answer
+        // leaves the editor to take the blame, with a "download error" that does not
+        // say who to tell, nor whether the work is still there.
         $state = health::state();
         if ($state !== null) {
             $candiagnose = has_capability('assignsubmission/tipnc:view_errors', $cm->context);
@@ -342,10 +342,10 @@ class hook_callbacks {
 
         $model = new documents();
 
-        // Entrar en la tarea es el momento en que se sabe quién la imparte y quién
-        // la cursa, así que es cuando se reparte el acceso al enunciado: escritura
-        // a quien califica, lectura a quien no. Cuesta una llamada la primera vez
-        // de cada persona y ninguna después.
+        // Entering the assignment is the moment when it is known who teaches it and
+        // who takes it, so that is when access to the brief is handed out: write
+        // for whoever marks, read for whoever does not. It costs one call the first
+        // time for each person and none afterwards.
         $cangrade = has_capability('mod/assign:grade', $cm->context);
 
         if ($model->get_enunciate($instance)) {
@@ -354,12 +354,12 @@ class hook_callbacks {
 
         $own = $model->own_work($instance, (int) $USER->id);
 
-        // Quien ya tiene borrador o entrega trabaja sobre su documento: ese es el
-        // que se ve, y el enunciado queda arriba como referencia con enlace.
+        // Whoever already has a draft or a submission works on their own document:
+        // that is what is shown, and the brief stays above as a linked reference.
         $embed = viewmode::embeds();
 
-        // Sin enunciado la tarea no funciona, y hasta ahora la única salida era
-        // entrar en NextCloud. Quien califica puede pedir que se cree desde aquí.
+        // Without a brief the assignment does not work, and until now the only way
+        // out was going into NextCloud. Whoever marks can ask for it from here.
         $prepare = $cangrade
             ? new moodle_url('/mod/assign/submission/tipnc/prepare.php',
                 ['id' => $cm->id, 'sesskey' => sesskey()])
@@ -371,8 +371,8 @@ class hook_callbacks {
         if ($own !== null && $own->path !== '') {
             $path = $own->path;
 
-            // La entrega congelada se lee, el borrador se escribe: es lo que decide
-            // si el editor abre en modo edición o solo lectura.
+            // The frozen submission is read, the draft is written: that is what decides
+            // whether the editor opens in edit or read-only mode.
             $viewer = $embed ? document_viewer::for_document(
                 $instance,
                 $path,
@@ -382,7 +382,7 @@ class hook_callbacks {
                 $own->mode !== document::MODE_SUBMISSION,
                 $model->frame_height_class(),
 
-                // Congelado, no «no te toca»: entregar es lo que lo cerró.
+                // Frozen, not "not yours": handing in is what closed it.
                 $own->mode === document::MODE_SUBMISSION ? document_viewer::READONLY_FROZEN : ''
             ) : null;
 

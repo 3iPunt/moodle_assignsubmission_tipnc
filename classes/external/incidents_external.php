@@ -161,7 +161,7 @@ class incidents_external extends external_api {
 
         $decorated = $model->decorate([$incident->id => $incident]);
 
-        // El entorno lo resuelve el servicio: la vista no consulta configuración.
+        // The service resolves the environment: the view reads no configuration.
         $environment = [
             'moodle' => $CFG->release,
             'plugin' => get_config('assignsubmission_tipnc', 'version'),

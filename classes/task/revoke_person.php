@@ -66,9 +66,9 @@ class revoke_person extends adhoc_task {
             return;
         }
 
-        // Los documentos registrados del curso: enunciados, borradores y entregas.
-        // Se recorren las rutas guardadas y no se componen, que es lo único que
-        // funciona con reintentos y con entregas de grupo.
+        // The recorded documents of the course: briefs, drafts and submissions.
+        // The stored paths are walked rather than rebuilt, which is the only
+        // thing that works with re-attempts and group submissions.
         $sql = "SELECT id, assignment, 0 AS submissionid, path FROM {assignsubmission_tipnc_enun}
                  WHERE path IS NOT NULL AND assignment IN (SELECT id FROM {assign} WHERE course = :c1)
              UNION ALL
@@ -88,9 +88,9 @@ class revoke_person extends adhoc_task {
                 ->revoke_person($row->path, $user->username,
                     array_merge($context, ['assignment' => (int) $row->assignment]));
 
-            // Que la próxima visita vuelva a repartir acceso si resulta que esta
-            // persona sigue teniendo por qué tenerlo. Los dos tipos: el enunciado
-            // va por tarea y las entregas por entrega, y aquí llegan mezcladas.
+            // So that the next visit hands access out again if this person turns
+            // out to still have a reason for it. Both kinds: the brief goes by
+            // assignment and submissions by submission, and they arrive mixed.
             grants::forget(grants::ENUNCIATE, (int) $row->assignment, $userid);
 
             if ((int) $row->submissionid > 0) {

@@ -71,9 +71,9 @@ class viewmode {
     public static function current(): string {
         $mode = (string) get_config('assignsubmission_tipnc', 'viewmode');
 
-        // Se cae al enlace, no al marco: embeber la página de NextCloud exige un
-        // proxy inverso y el mismo dominio, así que como respaldo automático es
-        // justo el que más papeletas tiene de no funcionar.
+        // It falls back to the link, not to the frame: embedding the NextCloud
+        // page requires a reverse proxy and the same domain, so as an automatic
+        // fallback it is precisely the one most likely not to work.
         if ($mode === self::EDITOR && !token::is_configured()) {
             return self::TAB;
         }

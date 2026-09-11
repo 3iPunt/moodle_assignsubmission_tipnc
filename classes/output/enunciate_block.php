@@ -83,8 +83,8 @@ class enunciate_block implements renderable, templatable {
 
         $path = $model->enunciate_path_of($assignment);
 
-        // Quien califica escribe el enunciado; el resto lo lee. Abrirlo siempre en
-        // solo lectura obligaba al profesorado a salir a NextCloud para escribirlo.
+        // Whoever marks writes the brief; everybody else reads it. Always opening
+        // it read-only forced teachers out to NextCloud to write it.
         $viewer = ($enunciate && $embed)
             ? document_viewer::for_document($assignment, $path, (int) $enunciate->ncid,
                 get_string('enunciate_frametitle', 'assignsubmission_tipnc'),
@@ -122,8 +122,8 @@ class enunciate_block implements renderable, templatable {
             'folderurl' => $this->folderurl,
             'hasfolder' => !empty($this->folderurl),
 
-            // Quien puede arreglarlo ve el diagnóstico y el botón; quien no, una
-            // frase que le diga qué pasa y a quién avisar.
+            // Whoever can fix it sees the diagnosis and the button; whoever cannot,
+            // a sentence telling them what is happening and who to tell.
             'canprepare' => $this->prepareurl !== null,
             'prepareurl' => $this->prepareurl?->out(false),
             'frametitle' => get_string('enunciate_frametitle', 'assignsubmission_tipnc'),

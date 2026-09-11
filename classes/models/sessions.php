@@ -93,7 +93,7 @@ class sessions {
         [$table, $record] = $this->find($ncid);
 
         if ($record === null) {
-            // Un documento que no está registrado se abre igual, pero su sesión no
+            // A document that is not recorded still opens, but its session is not
             // sobrevive a la recarga: es preferible a no poder abrirlo.
             return self::mint();
         }

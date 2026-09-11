@@ -275,7 +275,7 @@ $string['log_submit_late'] = 'The save did not arrive in time; whatever is there
 $string['log_submit_saved'] = 'The editor saved before the submission was frozen.';
 $string['log_submit_nosession'] = 'The document was never opened in the editor: whatever is there gets frozen.';
 
-// La pantalla del registro de incidencias.
+// The incident log screen.
 $string['log_title'] = 'Incident log';
 $string['log_intro'] = 'Calls to NextCloud that did not complete. What is here has already affected somebody: a brief that was not created, a draft that did not open, a submission that was not frozen.';
 $string['log_open'] = 'Open the incident log';
@@ -318,7 +318,7 @@ $string['prepare_done'] = 'The brief is ready. Students can now work on the assi
 $string['prepare_already'] = 'The brief was already there.';
 $string['prepare_failed'] = 'The brief could not be prepared. The incident log says why.';
 
-// Cuando NextCloud no responde.
+// When NextCloud does not answer.
 $string['unavailable_title'] = 'The document cannot be opened right now';
 $string['unavailable_student'] = 'It is not something you did. The service where the document lives is not answering; try again in a few minutes. Nothing you had already written is lost.';
 $string['unavailable_teacher'] = 'NextCloud is not answering. While that lasts, documents cannot be created or opened and nobody can submit.';
@@ -326,7 +326,7 @@ $string['unavailable_since'] = 'NextCloud has not been answering since {$a}. Whi
 $string['unavailable_log'] = 'See the incident log';
 $string['unavailable_submit'] = 'You cannot submit right now: the service where your document lives is not answering. Try again in a few minutes — what you wrote is safe.';
 
-// Cuando la cuenta de la persona no existe en NextCloud.
+// When the person's account does not exist in NextCloud.
 $string['noaccount_title'] = 'Your account cannot reach the documents';
 $string['noaccount_message'] = 'Working on the document needs an account in the document service, and yours is not there. It will not sort itself out: ask whoever administers the site to create it. Until then you cannot open or submit this assignment.';
 $string['noaccount_submit'] = 'You cannot submit: your account cannot reach the document service. Ask whoever administers the site to create it for you.';
@@ -337,7 +337,7 @@ $string['readonly_frozen'] = 'Submitted: read only';
 $string['readonly_role'] = 'Read only';
 $string['readonly_noaccount'] = 'Read only: your account does not exist in the document service';
 
-// El acceso a los documentos y su caducidad.
+// Access to the documents and how it expires.
 $string['section_access'] = 'Access to the documents';
 $string['section_access_desc'] = 'Who can open each document is decided by Moodle: whoever marks the assignment gets to write, everybody else gets to read. Access is handed out the moment somebody walks into the assignment, so nobody has to keep a list.';
 $string['shareexpiry'] = 'Access lapses after';
@@ -347,7 +347,7 @@ $string['shareexpiry_help'] = 'Access to a document is given for this long and <
 // Capabilities.
 $string['tipnc:view_errors'] = 'See the incident log of the NextCloud submission';
 
-// La entrega que Moodle da por hecha y en NextCloud no existe.
+// The submission Moodle takes for granted and NextCloud does not have.
 $string['noaccount_detail'] = 'Their account does not exist in NextCloud, so nothing can be shared with them. It has to be created before they can work on anything.';
 $string['nodocument_title'] = 'This submission has no document';
 $string['nodocument_message'] = 'Moodle says the work was handed in, but no copy was frozen in the document service. Nothing was lost —the draft is still there— but there is nothing to mark yet.';
@@ -358,7 +358,7 @@ $string['notstarted_title'] = 'Not started yet';
 $string['notstarted_message'] = 'This person has not opened the document, so there is no draft and nothing has been written. It is not that something failed: they have not begun.';
 $string['notstarted_detail'] = 'The draft is created the first time they open the assignment to work on it.';
 
-// Privacidad: qué se guarda y qué sale del sitio.
+// Privacy: what is stored and what leaves the site.
 $string['privacy:metadata:assignment'] = 'The assignment the document belongs to.';
 $string['privacy:metadata:submission'] = 'The submission the document belongs to.';
 $string['privacy:metadata:ncid'] = 'The identifier the document has in NextCloud.';

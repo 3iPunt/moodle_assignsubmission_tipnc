@@ -1,7 +1,7 @@
-/* Registro de incidencias — maquetación del sistema de diseño Tresipunt.
-   Los tokens se declaran en el ámbito del plugin, no en :root, para no
-   contaminar el tema del sitio. Tipografía y color primario del tema quedan
-   intactos: el naranja de marca solo vive en acentos e identidad. */
+/* Incident log — layout from the Tresipunt design system.
+   Tokens are declared in the plugin scope, not in :root, so that the site theme
+   is not polluted. The theme's typography and primary colour are left intact:
+   the brand orange only lives in accents and identity. */
 
 .tipnc-log {
     --tip-orange-50: #fff1ed;
@@ -46,8 +46,8 @@
     padding: 50px;
 }
 
-/* La pantalla es una única tarjeta blanca sobre el fondo de la página: el
-   contenedor del tema se neutraliza para no dibujar un doble marco. */
+/* The screen is a single white card on the page background: the theme's own
+   container is neutralised so no double frame is drawn. */
 #page-mod-assign-submission-tipnc-view_errors #region-main {
     background: transparent !important;
     border: 0 !important;
@@ -55,10 +55,10 @@
     padding: 0 !important;
 }
 
-/* ---- Estados de interacción ---------------------------------------------
-   Reglas del sistema de diseño: hover oscurece un paso, press hunde 1px,
-   focus siempre visible con halo naranja al 45%, disabled al 45% sin sombra.
-   Movimiento rápido y calmado: 120 ms para color, 200 ms para elevación. */
+/* ---- Interaction states --------------------------------------------------
+   Design system rules: hover darkens one step, press sinks 1px, focus is always
+   visible with a 45% orange halo, disabled sits at 45% with no shadow.
+   Movement is quick and calm: 120 ms for colour, 200 ms for elevation. */
 
 .tipnc-log {
     --tip-focus-ring: color-mix(in srgb, var(--tip-orange-500) 45%, transparent);
@@ -92,8 +92,8 @@
     outline-offset: 2px;
 }
 
-/* Los enlaces son naranja de marca, no el azul del tema: es el `--text-link`
-   del sistema de diseño. */
+/* Links are brand orange, not the theme blue: this is the design system's
+   `--text-link`. */
 .tipnc-log a {
     color: var(--tip-orange-600);
     text-decoration: none;
@@ -124,7 +124,7 @@
     }
 }
 
-/* ---- Cabecera co-brandada ------------------------------------------------ */
+/* ---- Co-branded header --------------------------------------------------- */
 
 .tipnc-log__header {
     align-items: flex-start;
@@ -165,8 +165,8 @@
     margin: 0;
 }
 
-/* Ocupa su propia línea y empuja su contenido al final, así el logo cierra la
-   cabecera por la derecha esté como esté el ancho. */
+/* Takes a line of its own and pushes its content to the end, so the logo closes
+   the header on the right whatever the width. */
 .tipnc-log__brand {
     align-items: center;
     display: flex;
@@ -182,7 +182,7 @@
     width: auto;
 }
 
-/* Estado de la conexión: responde «¿está pasando ahora?» sin leer una fila. */
+/* Connection state: answers "is it happening right now?" without reading a row. */
 .tipnc-log__status {
     align-items: center;
     border-radius: var(--tip-radius-pill);
@@ -220,7 +220,7 @@
     width: 8px;
 }
 
-/* ---- Contadores ---------------------------------------------------------- */
+/* ---- Counters ------------------------------------------------------------ */
 
 .tipnc-log__counters {
     display: grid;
@@ -229,7 +229,7 @@
     margin-top: 24px;
 }
 
-/* Contador que además filtra: las tarjetas se elevan al pasar por encima. */
+/* A counter that also filters: the cards lift on hover. */
 .tipnc-log__counter {
     background: #fff;
     border: 1px solid var(--tip-neutral-200);
@@ -264,10 +264,10 @@ button.tipnc-log__counter:active {
     font-size: .69rem;
 }
 
-/* ---- Filtros ------------------------------------------------------------- */
+/* ---- Filters ------------------------------------------------------------- */
 
-/* Dos filas: arriba las entidades, que ocupan todo el ancho; abajo los filtros
-   de valor cerrado, que solo necesitan lo suyo. */
+/* Two rows: entities on top, taking the full width; closed-value filters below,
+   which only need as much room as they use. */
 .tipnc-log__filters {
     display: flex;
     flex-direction: column;
@@ -358,7 +358,7 @@ button.tipnc-log__counter:active {
     border-color: var(--tip-neutral-400);
 }
 
-/* Acción secundaria: sin marco ni subrayado, del alto de los demás controles. */
+/* Secondary action: no border, no underline, same height as the other controls. */
 .tipnc-log__clear {
     background: transparent;
     border: 0;
@@ -376,7 +376,7 @@ button.tipnc-log__counter:active {
     text-decoration: none;
 }
 
-/* Acciones sobre el registro entero: exportar y vaciar. */
+/* Actions on the whole log: export and purge. */
 .tipnc-log__action {
     align-items: center;
     background: #fff;
@@ -403,8 +403,8 @@ button.tipnc-log__counter:active {
     color: color-mix(in srgb, var(--tip-danger-500) 70%, black);
 }
 
-/* Mientras se recarga el listado, se atenúa en vez de vaciarse: la tabla no
-   debe saltar. */
+/* While the listing reloads it dims instead of emptying: the table must not
+   jump. */
 .tipnc-log__listing--busy {
     opacity: .45;
     pointer-events: none;
@@ -431,7 +431,7 @@ button.tipnc-log__counter:active {
     line-height: 1.35;
 }
 
-/* ---- Diagnóstico: la pared de incidencias en una frase accionable -------- */
+/* ---- Diagnosis: the wall of incidents in one actionable sentence --------- */
 
 .tipnc-log__diagnosis {
     align-items: center;
@@ -453,7 +453,7 @@ button.tipnc-log__counter:active {
     white-space: nowrap;
 }
 
-/* ---- Listado ------------------------------------------------------------- */
+/* ---- Listing ------------------------------------------------------------- */
 
 .tipnc-log__summary {
     color: var(--tip-neutral-400);
@@ -468,8 +468,8 @@ button.tipnc-log__counter:active {
     width: 100%;
 }
 
-/* Solo líneas horizontales: los temas que dibujan rejilla completa en las
-   tablas sin clase se neutralizan aquí (además de la clase `table-reboot`). */
+/* Horizontal rules only: themes that draw a full grid on unclassed tables are
+   neutralised here (on top of the `table-reboot` class). */
 .tipnc-log__table th,
 .tipnc-log__table td,
 .tipnc-log__table tr,
@@ -490,8 +490,8 @@ button.tipnc-log__counter:active {
     white-space: nowrap;
 }
 
-/* Densidad media: son pantallas de administración, información compacta antes
-   que espacio decorativo. */
+/* Medium density: these are administration screens, compact information before
+   decorative space. */
 .tipnc-log__table td {
     border-bottom: 1px solid var(--tip-neutral-100);
     font-size: .6875rem;
@@ -509,7 +509,7 @@ button.tipnc-log__counter:active {
     text-align: right;
 }
 
-/* Botón de fila: discreto, del ancho de su texto. */
+/* Row button: discreet, as wide as its text. */
 .tipnc-log__detail {
     background: #fff;
     border: 1px solid var(--tip-neutral-200);
@@ -528,7 +528,7 @@ button.tipnc-log__counter:active {
     border-color: var(--tip-neutral-300, #c6c6c9);
 }
 
-/* Una incidencia repetida es un problema sistémico: se distingue del resto. */
+/* A repeated incident is a systemic problem: it is told apart from the rest. */
 .tipnc-log__row--repeated {
     background: var(--tip-neutral-25);
 }
@@ -545,8 +545,8 @@ button.tipnc-log__counter:active {
     font-size: .6875rem;
 }
 
-/* Dos grises distintos, como en el diseño: `muted` para lo que se puede leer
-   (curso, significado del código) y `subtle` para lo accesorio. */
+/* Two different greys, as in the design: `muted` for what is meant to be read
+   (course, meaning of the code) and `subtle` for the incidental. */
 .tipnc-log__sub {
     color: var(--tip-neutral-500);
     font-size: .625rem;
@@ -573,8 +573,8 @@ button.tipnc-log__counter:active {
     font-weight: 500;
 }
 
-/* El nombre de quien ejecutó la operación no compite con los enlaces de
-   navegación: va en color de texto. */
+/* The name of whoever ran the operation does not compete with the navigation
+   links: it uses the text colour. */
 .tipnc-log__person {
     color: var(--tip-neutral-800) !important;
     font-size: .6875rem;
@@ -647,7 +647,7 @@ button.tipnc-log__counter:active {
     font-weight: 600;
 }
 
-/* Severidad siempre con icono y texto, nunca solo color. */
+/* Severity always with icon and text, never colour alone. */
 .tipnc-badge {
     align-items: center;
     border-radius: var(--tip-radius-pill);
@@ -678,7 +678,7 @@ button.tipnc-log__counter:active {
     color: color-mix(in srgb, var(--tip-info-500) 70%, black);
 }
 
-/* ---- Paginación ---------------------------------------------------------- */
+/* ---- Pagination ---------------------------------------------------------- */
 
 .tipnc-log__pages {
     display: flex;
@@ -707,7 +707,7 @@ button.tipnc-log__counter:active {
     font-weight: 600;
 }
 
-/* ---- Estado vacío -------------------------------------------------------- */
+/* ---- Empty state --------------------------------------------------------- */
 
 .tipnc-log__empty {
     padding: 56px 0;
@@ -727,7 +727,7 @@ button.tipnc-log__counter:active {
     margin: 6px 0 0;
 }
 
-/* ---- Móvil: la tabla pasa a tarjetas y nada produce scroll horizontal ---- */
+/* ---- Mobile: the table becomes cards and nothing scrolls horizontally ---- */
 
 @media (max-width: 767.98px) {
     .tipnc-log {
@@ -735,8 +735,8 @@ button.tipnc-log__counter:active {
         padding: 20px;
     }
 
-    /* La marca sigue cerrando por la derecha también aquí: moverla de sitio
-       según el ancho la esconde. */
+    /* The brand still closes on the right here too: moving it around depending
+       on the width would hide it. */
     .tipnc-log__brand {
         justify-content: flex-end;
     }
@@ -782,7 +782,7 @@ button.tipnc-log__counter:active {
     }
 }
 
-/* ---- Panel de detalle ---------------------------------------------------- */
+/* ---- Detail panel -------------------------------------------------------- */
 
 .tipnc-log__drawer {
     background: rgba(30, 30, 31, .32);
@@ -897,7 +897,7 @@ button.tipnc-log__counter:active {
     overflow-wrap: anywhere;
 }
 
-/* El cuerpo de la respuesta puede ser largo: scroll propio, nunca desborda. */
+/* The response body can be long: it scrolls on its own and never overflows. */
 .tipnc-detail__body {
     background: var(--tip-neutral-25);
     border-radius: var(--tip-radius-sm);
@@ -973,7 +973,7 @@ button.tipnc-log__counter:active {
     box-shadow: 0 8px 24px rgba(248, 64, 21, .28);
 }
 
-/* El autocompletado lo pinta el core: solo se ajusta su caja al resto. */
+/* The autocomplete is rendered by the core: only its box is aligned with the rest. */
 .tipnc-log__filters .form-autocomplete-downarrow,
 .tipnc-log__filters .form-autocomplete-selection {
     margin: 0;
@@ -1002,14 +1002,14 @@ button.tipnc-log__counter:active {
     }
 }
 
-/* ---- Autocompletado del core dentro de la pantalla -----------------------
-   El componente lo pinta Moodle; aquí solo se ajusta a la escala y a los
-   colores de marca. El foco azul de Bootstrap se sustituye por el halo
-   naranja del sistema de diseño, que es el que usa el resto de la pantalla. */
+/* ---- The core autocomplete inside this screen ----------------------------
+   The component is rendered by Moodle; here it is only brought into the scale
+   and the brand colours. Bootstrap's blue focus is replaced by the design
+   system's orange halo, which is what the rest of the screen uses. */
 
-/* Se acota por el id de la página, no por `.tipnc-log`: el desplegable de
-   sugerencias lo inyecta el core y puede quedar fuera del contenedor. El id
-   basta para ganar al estilo del tema sin recurrir a !important. */
+/* Scoped by the page id, not by `.tipnc-log`: the suggestions dropdown is
+   injected by the core and can end up outside the container. The id is enough
+   to beat the theme's style without resorting to !important. */
 #page-mod-assign-submission-tipnc-view_errors .form-autocomplete-suggestions li,
 #page-mod-assign-submission-tipnc-view_errors [role="listbox"] [role="option"] {
     font-size: .75rem;
@@ -1047,12 +1047,11 @@ button.tipnc-log__counter:active {
     color: var(--tip-neutral-400);
 }
 
-/* El campo del autocompletado usa `.form-control` de Bootstrap, que viene con
-   la escala de los formularios de Moodle. Se ajusta SOLO dentro de esta
-   pantalla: tocar `.form-control` a secas cambiaría todos los formularios del
-   sitio. */
-/* Campo sin marco, resuelto con fondo: los tres buscadores se leen como una
-   sola pieza y no compiten con los grupos segmentados de al lado. */
+/* The autocomplete field uses Bootstrap's `.form-control`, which comes with the
+   scale of Moodle's forms. It is adjusted ONLY inside this screen: touching
+   `.form-control` on its own would change every form on the site. */
+/* Borderless field, solved with a background: the three search boxes read as a
+   single piece and do not compete with the segmented groups next to them. */
 .tipnc-log .form-control,
 .tipnc-log .form-autocomplete-input {
     background: var(--tip-neutral-50);
@@ -1070,11 +1069,11 @@ button.tipnc-log__counter:active {
     background: var(--tip-neutral-100);
 }
 
-/* El foco se marca con el halo naranja del sistema, nunca con el azul de
-   Bootstrap ni quitándolo: sin indicador visible no se puede navegar con
-   teclado. El halo lo dibuja el contenedor, no el input interno: el
-   componente del core anida un campo más pequeño que la caja visible y el
-   recuadro quedaba descolocado. */
+/* Focus is marked with the system's orange halo, never with Bootstrap's blue
+   nor by removing it: without a visible indicator there is no way to navigate
+   with the keyboard. The halo is drawn by the container, not by the inner
+   input: the core component nests a field smaller than the visible box and the
+   outline ended up misplaced. */
 .tipnc-log .form-control:focus,
 .tipnc-log .form-autocomplete-input:focus {
     background: var(--tip-neutral-50);
@@ -1092,17 +1091,17 @@ button.tipnc-log__counter:active {
     color: var(--tip-neutral-400);
 }
 
-/* La caja de selección del autocompletado no debe añadir su propio marco:
-   el campo ya lo tiene. */
+/* The autocomplete's selection box must not add a border of its own:
+   the field already has one. */
 .tipnc-log .form-autocomplete-selection {
     margin-bottom: 0;
     min-height: 0;
 }
 
-/* El autocompletado del core clona la etiqueta del campo original y la pinta
-   sobre el input. Aquí sobra —el marcador de posición ya dice qué se busca—,
-   pero se oculta solo a la vista: quien use un lector de pantalla la sigue
-   necesitando para saber qué campo está rellenando. */
+/* The core autocomplete clones the original field's label and paints it over
+   the input. It is redundant here —the placeholder already says what is being
+   searched— but it is hidden visually only: anyone using a screen reader still
+   needs it to know which field they are filling in. */
 .tipnc-log__filters-row--entities label {
     border: 0;
     clip-path: inset(50%);
@@ -1115,8 +1114,8 @@ button.tipnc-log__counter:active {
     width: 1px;
 }
 
-/* Reparto de las columnas: «Dónde» lleva tarea y curso, dos textos largos que
-   no deberían partirse; severidad, respuesta y código son de ancho fijo. */
+/* How the columns are shared out: "Where" carries assignment and course, two
+   long texts that should not break; severity, response and code are fixed. */
 .tipnc-log__table th:nth-child(1) { width: 1%; }
 .tipnc-log__table th:nth-child(2) { width: 9%; }
 .tipnc-log__table th:nth-child(3) { width: 24%; }
@@ -1144,9 +1143,9 @@ button.tipnc-log__counter:active {
     flex: none;
 }
 
-/* ---- Confirmación (modal) ------------------------------------------------
-   Mismo lenguaje que la pantalla: icono en cuadrado redondeado, texto
-   principal y una segunda línea con el matiz que evita el arrepentimiento. */
+/* ---- Confirmation (modal) ------------------------------------------------
+   Same language as the screen: icon in a rounded square, main text and a
+   second line with the nuance that prevents regret. */
 
 .tipnc-confirm {
     display: flex;
@@ -1182,7 +1181,7 @@ button.tipnc-log__counter:active {
     margin: 0;
 }
 
-/* La modal del core, con la geometría del sistema de diseño. */
+/* The core modal, with the design system's geometry. */
 .modal .tipnc-confirm {
     padding-top: 4px;
 }
@@ -1239,10 +1238,10 @@ button.tipnc-log__counter:active {
     font-weight: 500;
 }
 
-/* ---- El enunciado en la página de la tarea -------------------------------
-   Se inyecta al final de la región principal: es el único sitio donde un
-   subplugin puede pintar en esa página. Por eso necesita entidad propia y un
-   título que se explique solo. */
+/* ---- The brief on the assignment page ------------------------------------
+   It is injected at the end of the main region: the only place where a
+   subplugin can paint on that page. That is why it needs an identity of its
+   own and a title that explains itself. */
 
 .tipnc-enunciate {
     --tip-orange-500: #f84015;
@@ -1305,7 +1304,7 @@ button.tipnc-log__counter:active {
     gap: 10px;
 }
 
-/* Estado del documento: siempre icono y texto, nunca solo color. */
+/* Document state: always icon and text, never colour alone. */
 .tipnc-enunciate__badge {
     align-items: center;
     border-radius: 999px;
@@ -1346,9 +1345,9 @@ button.tipnc-log__counter:active {
     text-decoration: none;
 }
 
-/* El visor no trae altura propia: sin esto el marco se colapsa a unos pocos
-   píxeles. La altura la elige el sitio, y para leerlo entero está el botón de
-   pantalla completa que tiene encima. */
+/* The viewer has no height of its own: without this the frame collapses to a
+   few pixels. The height is chosen by the site, and to read the whole thing
+   there is the fullscreen button above it. */
 .tipnc-frame {
     height: 560px;
     border: 1px solid var(--tip-neutral-100);
@@ -1406,9 +1405,10 @@ button.tipnc-log__counter:active {
     }
 }
 
-/* ---- El documento en la caja de estado de la entrega ----------------------
-   Vive dentro de una celda de tabla, a veces una por alumno: dice qué
-   documento es, en qué estado está y cómo llegar a él, sin ocupar la pantalla. */
+/* ---- The document in the submission status box ---------------------------
+   It lives inside a table cell, sometimes one per student: it says which
+   document it is, what state it is in and how to reach it, without taking over
+   the screen. */
 
 .tipnc-subm {
     --tip-orange-500: #f84015;
@@ -1525,13 +1525,13 @@ button.tipnc-log__counter:active {
     }
 }
 
-/* ---- El marco del documento ----------------------------------------------
-   Pieza compartida por el enunciado y por la entrega. El botón de pantalla
-   completa flota sobre el visor: dentro del marco no hay sitio, y en pantalla
-   completa el propio contenedor es lo que se agranda. */
+/* ---- The document frame --------------------------------------------------
+   A piece shared by the brief and the submission. The fullscreen button floats
+   over the viewer: there is no room inside the frame, and in fullscreen it is
+   the container itself that grows. */
 
-/* Va en la fila de acciones, no sobre el visor: encima del marco tapaba la
-   barra de herramientas del editor. */
+/* It goes in the actions row, not over the viewer: on top of the frame it
+   covered the editor's toolbar. */
 .tipnc-frame__full {
     align-items: center;
     background: #fff;
@@ -1555,7 +1555,7 @@ button.tipnc-log__counter:active {
     color: #da3208;
 }
 
-/* La caja de la entrega: cabecera y marco apilados. */
+/* The submission box: header and frame stacked. */
 
 .tipnc-subm {
     flex-direction: column;
@@ -1593,7 +1593,7 @@ button.tipnc-log__counter:active {
     margin-top: 14px;
 }
 
-/* El enunciado como referencia: sin marco, solo identidad y enlace. */
+/* The brief as a reference: no frame, just identity and link. */
 
 .tipnc-enunciate--compact {
     padding: 16px 20px;
@@ -1629,11 +1629,11 @@ button.tipnc-log__counter:active {
     }
 }
 
-/* Barra de acciones del marco: encima del visor, no dentro. */
-/* Tres zonas: el aviso manda en el centro y el botón se queda a la derecha,
-   esté el aviso o no. */
-/* Todo lo que se dice sobre el documento va en una fila pegada a la derecha,
-   junto al botón: son etiquetas del documento, no encabezados de la caja. */
+/* The frame's action bar: above the viewer, not inside it. */
+/* Three areas: the notice rules the centre and the button stays on the right,
+   whether the notice is there or not. */
+/* Everything said about the document goes in a row pinned to the right, next to
+   the button: they are labels of the document, not headings of the box. */
 .tipnc-frame__bar {
     align-items: center;
     display: flex;
@@ -1642,7 +1642,7 @@ button.tipnc-log__counter:active {
     margin: 10px 0;
 }
 
-/* El visor, en pantalla completa, es barra arriba y documento debajo. */
+/* The viewer, in full screen, is bar on top and document below. */
 .tipnc-viewer:fullscreen {
     background: #fff;
     display: flex;
@@ -1669,10 +1669,10 @@ button.tipnc-log__counter:active {
     margin-top: 0;
 }
 
-/* ---- Contención ----------------------------------------------------------
-   Los bloques se inyectan en la descripción de la cabecera de la actividad,
-   un sitio que no es suyo: se contienen para no desbordarse sobre lo que
-   mod_assign pinta debajo. */
+/* ---- Containment ---------------------------------------------------------
+   The blocks are injected into the activity header's description, a place that
+   is not theirs: they are contained so they do not spill over what mod_assign
+   paints below. */
 
 .tipnc-enunciate,
 .tipnc-subm {
@@ -1694,7 +1694,7 @@ button.tipnc-log__counter:active {
     max-width: 100%;
 }
 
-/* Alturas del visor, a elección del sitio. */
+/* Viewer heights, chosen by the site. */
 .tipnc-frame--h420 {
     height: 420px;
 }
@@ -1711,7 +1711,7 @@ button.tipnc-log__counter:active {
     height: 860px;
 }
 
-/* En pantalla completa manda el alto de la ventana. */
+/* In full screen the window height rules. */
 .tipnc-viewer:fullscreen .tipnc-frame,
 .tipnc-viewer:fullscreen .tipnc-frame--h420,
 .tipnc-viewer:fullscreen .tipnc-frame--h560,
@@ -1720,7 +1720,7 @@ button.tipnc-log__counter:active {
     height: auto;
 }
 
-/* El documento no se pega al borde de la caja que lo contiene. */
+/* The document does not stick to the edge of the box containing it. */
 .tipnc-subm .tipnc-viewer,
 .tipnc-enunciate .tipnc-viewer {
     padding-bottom: 4px;
@@ -1734,10 +1734,10 @@ button.tipnc-log__counter:active {
     padding-bottom: 24px;
 }
 
-/* ---- Confirmación antes de entregar --------------------------------------- */
+/* ---- Confirmation before handing in ---------------------------------------- */
 
-/* Va encima del grupo de botones y fuera de él: es un aviso, no otro control
-   del formulario, y lo último que se lee antes de decidir. */
+/* It goes above the button group and outside it: it is a notice, not another
+   form control, and the last thing read before deciding. */
 .tipnc-confirmsave {
     background: #fcf3df;
     border: 1px solid #f4dfab;
@@ -1777,11 +1777,11 @@ button.tipnc-log__counter:active {
     max-width: 70ch;
 }
 
-/* El grupo de botones que queda bajo el aviso: en columna y a la izquierda.
-   La clase la pone el módulo al insertar el aviso; .align-items-center es una
-   utilidad del core y tocarla suelta volcaría filas de toda la plataforma. */
-/* Es el propio contenedor flex de los botones —el que mform envuelve alrededor
-   de todos ellos—, marcado por el módulo al insertar el aviso. */
+/* The button group left under the notice: in a column and to the left. The
+   class is added by the module when it inserts the notice; .align-items-center
+   is a core utility and touching it loose would tip rows across the platform. */
+/* This is the buttons' own flex container —the one mform wraps around all of
+   them— marked by the module when it inserts the notice. */
 .tipnc-buttons {
     align-content: flex-start;
     align-items: flex-start;
@@ -1794,10 +1794,10 @@ button.tipnc-log__counter:active {
     margin-left: 0;
 }
 
-/* ---- El editor embebido --------------------------------------------------
-   Lo monta el Document Server dentro de este hueco, así que solo necesita
-   sitio. Si no llega a cargarse, el aviso ocupa su lugar: un hueco en blanco
-   es la peor respuesta para quien tiene que entregar. */
+/* ---- The embedded editor -------------------------------------------------
+   The Document Server builds it inside this gap, so all it needs is room. If it
+   fails to load, the notice takes its place: a blank gap is the worst possible
+   answer for somebody who has to hand work in. */
 
 .tipnc-frame__editor {
     height: 100%;
@@ -1813,10 +1813,10 @@ button.tipnc-log__counter:active {
     padding: 16px 18px;
 }
 
-/* Cuando el servicio no responde: ocupa el sitio del documento, con el peso de
-   un aviso y no el de un error, porque casi siempre se arregla solo.
-   Los tokens se declaran aquí porque este bloque vive en la página de la tarea,
-   fuera del ámbito donde los declara la pantalla del registro. */
+/* When the service does not answer: it takes the document's place, with the
+   weight of a notice and not of an error, because it almost always fixes
+   itself. The tokens are declared here because this block lives on the
+   assignment page, outside the scope where the log screen declares them. */
 .tipnc-unavailable {
     --tip-neutral-500: #6f6f73;
     --tip-neutral-900: #1e1e1f;
@@ -1871,8 +1871,8 @@ button.tipnc-log__counter:active {
     font-weight: 500;
 }
 
-/* Por qué un documento no se puede escribir. Es una etiqueta, no un aviso: lo
-   dice y se aparta, encima del documento al que se refiere. */
+/* Why a document cannot be written in. It is a label, not a notice: it says so
+   and steps aside, above the document it refers to. */
 .tipnc-frame__readonly {
     --tip-neutral-100: #ececed;
     --tip-neutral-200: #dddddf;

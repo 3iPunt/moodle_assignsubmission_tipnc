@@ -91,8 +91,8 @@ class incident_log_page implements renderable, templatable {
             'list' => $this->list->export_for_template($output),
             'settingsurl' => (new moodle_url('/admin/settings.php',
                 ['section' => 'assignsubmission_tipnc']))->out(false),
-            // La exportación respeta los filtros aplicados y lleva sesskey: es una
-            // descarga de datos, no una página pública.
+            // The export honours the applied filters and carries a sesskey: it is a
+            // data download, not a public page.
             'exporturl' => (new moodle_url('/mod/assign/submission/tipnc/export.php',
                 array_merge($this->filters, ['sesskey' => sesskey()])))->out(false),
         ];

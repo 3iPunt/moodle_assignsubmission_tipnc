@@ -142,7 +142,7 @@ class incidents {
         }
 
         $top = reset($rows);
-        // Por debajo de la mitad no hay una causa dominante que merezca destacarse.
+        // Below half there is no dominant cause worth singling out.
         if ($top->occurrences < $total / 2) {
             return null;
         }
@@ -345,7 +345,7 @@ class incidents {
             $conditions[] = 'severity = ?';
             $params[] = $filters['severity'];
         } else {
-            // Los éxitos son historial: no ensucian la lista salvo que se pidan.
+            // Successes are history: they do not clutter the list unless asked for.
             $conditions[] = 'severity <> ?';
             $params[] = code::SEVERITY_INFO;
         }

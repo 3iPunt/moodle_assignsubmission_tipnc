@@ -183,7 +183,7 @@ class incident_list implements renderable, templatable {
             return get_string('log_justnow', 'assignsubmission_tipnc');
         }
 
-        // Abreviado y de una sola unidad: «hace 55'», no «hace 55 minutos 39 segundos».
+        // Short and single unit: "55m ago", not "55 minutes 39 seconds ago".
         if ($elapsed < HOURSECS) {
             $amount = get_string('log_minutes', 'assignsubmission_tipnc', (int) floor($elapsed / MINSECS));
         } else if ($elapsed < DAYSECS) {

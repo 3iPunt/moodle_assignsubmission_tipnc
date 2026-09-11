@@ -92,8 +92,8 @@ class config {
                     'name' => fullname($user),
                 ],
                 'customization' => [
-                    // El editor guarda cuando la persona lo pide, no solo al cerrar:
-                    // es media parte de que lo entregado sea lo escrito.
+                    // The editor saves when the person asks, not only on close:
+                    // it is half of what makes the submission be what was written.
                     'forcesave' => true,
                 ],
             ],

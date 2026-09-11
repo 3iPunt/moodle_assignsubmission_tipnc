@@ -100,9 +100,9 @@ class cleanup {
         $document = new document($instance);
         $nextcloud = new nextcloud($instance);
 
-        // La ruta guardada, no una compuesta: con reintentos y grupos el nombre ya
-        // no se puede adivinar desde el del alumnado, y borrar por adivinanza es
-        // borrar el documento de otro o no borrar ninguno.
+        // The stored path, not a rebuilt one: with re-attempts and groups the
+        // name can no longer be guessed from the student's, and deleting by
+        // guesswork means deleting somebody else's document, or none at all.
         $draft = $document->open_path($submission);
         $frozen = $document->submission_path($submission);
 
@@ -168,8 +168,8 @@ class cleanup {
         $delete = self::assignment_policy() === self::ASSIGN_DELETE;
         $context = ['assignment' => $instance];
 
-        // Se recorren los documentos registrados, no las personas: es la única
-        // lista que incluye los reintentos y las entregas de grupo.
+        // The recorded documents are walked, not the people: it is the only
+        // list that includes re-attempts and group submissions.
         $paths = $DB->get_fieldset_sql(
             "SELECT path FROM {assignsubmission_tipnc} WHERE assignment = :a1 AND path IS NOT NULL
              UNION

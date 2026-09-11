@@ -44,8 +44,8 @@ export const init = (selector) => {
     try {
         destination = document.querySelector(selector);
     } catch (error) {
-        // Un selector mal escrito no puede tirar la página: el enunciado se queda
-        // donde está y sigue siendo legible.
+        // A mistyped selector must not bring the page down: the brief stays
+        // where it is and remains readable.
         window.console.warn('assignsubmission_tipnc: destino no válido', selector);
         return;
     }

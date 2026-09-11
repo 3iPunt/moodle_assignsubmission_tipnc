@@ -28,7 +28,7 @@ $tasks = [
     [
         'classname' => 'assignsubmission_tipnc\task\purge_log',
         'blocking' => 0,
-        // De madrugada: borra filas y no compite con el uso del campus.
+        // Overnight: it deletes rows and does not compete with campus use.
         'minute' => '25',
         'hour' => '3',
         'day' => '*',

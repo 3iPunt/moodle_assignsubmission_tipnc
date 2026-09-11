@@ -24,14 +24,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-// mod_assign no ofrece ningún hueco donde un subplugin de entrega pueda pintar en
-// la página de la tarea: la caja de estado exige mod/assign:viewownsubmissionsummary,
-// que solo tiene el alumnado. Sin estos callbacks, nadie más ve el enunciado.
+// mod_assign offers no gap where a submission subplugin can paint on the
+// assignment page: the status box requires mod/assign:viewownsubmissionsummary,
+// which only students have. Without these callbacks, nobody else sees the brief.
 //
-// Se declaran los dos destinos y el ajuste «placement» decide cuál actúa:
-// before_http_headers es la única ventana a la cabecera de la actividad —después
-// de que mod_assign fije la descripción y antes de que el tema la exporte—, y el
-// de la región principal funciona en cualquier tema.
+// Both destinations are declared and the "placement" setting decides which acts:
+// before_http_headers is the only window into the activity header —after
+// mod_assign sets the description and before the theme exports it— and the
+// one on the main region works in any theme.
 $callbacks = [
     [
         'hook' => core\hook\output\before_http_headers::class,

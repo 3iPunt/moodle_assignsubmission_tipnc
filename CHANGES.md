@@ -2,6 +2,26 @@
 
 All notable changes to this plugin are documented here.
 
+## 2.0.1 — 2026-09-11 (`2026091101`)
+
+Housekeeping release for publication. **No behaviour changes**: every comment in
+the source was translated, and the code itself was verified to be untouched —the
+59 changed files hash identically to 2.0.0 once comments are stripped.
+
+### Changed
+
+- **The whole source is now in English**, comments included, as the Moodle
+  Marketplace requires. This covers PHP, CSS, JavaScript and the Mustache
+  templates.
+- The AMD bundles were rebuilt, so the source maps no longer carry the previous
+  comments.
+
+### Added
+
+- **`LICENSE`** shipped inside the package, stating GPL v3 or later.
+- **`.gitattributes`** pinning line endings to LF, so a clone on Windows does not
+  rewrite every file.
+
 ## 2.0.0 — 2026-09-11 (`2026091100`)
 
 Major release. The plugin now answers for what it does: it tells the core

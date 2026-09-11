@@ -37,7 +37,7 @@ use assignsubmission_tipnc\editor\token;
 $signature = required_param('token', PARAM_RAW);
 $payload = token::verify($signature);
 
-// Una firma que no es nuestra, o que ha caducado, no merece una explicación.
+// A signature that is not ours, or that has expired, deserves no explanation.
 if ($payload === null || ($payload['use'] ?? '') !== 'download') {
     header('HTTP/1.1 403 Forbidden');
     die();

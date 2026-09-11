@@ -45,8 +45,8 @@
             <h2 class="tipnc-log__title">{{#str}} log_title, assignsubmission_tipnc {{/str}}</h2>
             <p class="tipnc-log__lead">{{#str}} log_intro, assignsubmission_tipnc {{/str}}</p>
         </div>
-        {{! El estado primero y el logo al final, en el orden en que se leen: la
-            marca cierra la fila, no la abre. }}
+        {{! State first and the logo last, in the order they are read: the brand
+            closes the row, it does not open it. }}
         <div class="tipnc-log__brand">
             <div class="tipnc-log__status tipnc-log__status--{{connection.state}}">
                 <span class="tipnc-log__dot" aria-hidden="true"></span>
@@ -80,7 +80,7 @@
 
     {{#diagnosis}}
         <div class="tipnc-log__diagnosis">
-            {{! Bombilla: esto no es un error más, es la pista que resuelve el resto. }}
+            {{! Bulb: this is not one more error, it is the clue that solves the rest. }}
             <svg class="tipnc-log__diagnosis-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                  aria-hidden="true">
@@ -96,11 +96,11 @@
     {{/diagnosis}}
 
     <div class="tipnc-log__filters">
-        {{! Fila superior: las entidades, que ocupan todo el ancho. Siempre con
-            autocompletado, nunca una lista cargada: no escala a miles de cursos. }}
+        {{! Top row: the entities, which take the full width. Always with
+            autocomplete, never a loaded list: it does not scale to thousands. }}
         <div class="tipnc-log__filters-row tipnc-log__filters-row--entities">
-            {{! Sin etiqueta visible: el marcador de posición ya dice qué se busca.
-                La etiqueta sigue existiendo para quien navega con lector de pantalla. }}
+            {{! No visible label: the placeholder already says what is searched.
+                The label still exists for anyone using a screen reader. }}
             <div class="tipnc-log__field">
                 <label class="sr-only" for="tipnc-filter-course">
                     {{#str}} log_filter_course, assignsubmission_tipnc {{/str}}
@@ -127,7 +127,7 @@
             </div>
         </div>
 
-        {{! Fila inferior: los filtros de valor cerrado y la acción de limpiar. }}
+        {{! Bottom row: the closed-value filters and the clear action. }}
         <div class="tipnc-log__filters-row">
             <div class="tipnc-log__field">
                 <span class="tipnc-log__label">{{#str}} log_filter_severity, assignsubmission_tipnc {{/str}}</span>

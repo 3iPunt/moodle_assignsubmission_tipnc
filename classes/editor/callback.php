@@ -96,8 +96,8 @@ class callback {
             return null;
         }
 
-        // El editor firma su mensaje con el mismo secreto: es lo que distingue una
-        // llamada suya de cualquiera que haya visto pasar la dirección.
+        // The editor signs its message with the same secret: that is what tells
+        // its call apart from anyone who has seen the address go by.
         $signature = $body['token'] ?? self::bearer();
         if (!is_string($signature) || $signature === '') {
             return null;
@@ -108,7 +108,7 @@ class callback {
             return null;
         }
 
-        // Lo firmado manda sobre lo que venga suelto en el cuerpo.
+        // What is signed prevails over whatever comes loose in the body.
         return array_merge($body, $verified['payload'] ?? $verified);
     }
 
@@ -168,13 +168,13 @@ class callback {
             return false;
         }
 
-        // El documento acaba de cambiar, pero lo cambió la sesión que sigue abierta:
-        // se anota la fecha nueva y se le deja su clave, o al siguiente pintado se
-        // le daría una nueva y ya no habría a quién pedirle que guarde.
+        // The document has just changed, but it was changed by the session that
+        // is still open: the new date is noted and its key is left alone, or the
+        // next render would mint a new one and leave nobody to ask to save.
         (new sessions())->note_save($key, $nextcloud->modified_time($path));
 
-        // Un guardado que sale bien también se registra: es la prueba de que lo que
-        // hay en NextCloud es lo que la persona escribió, y en qué momento.
+        // A save that goes well is logged too: it is the proof that what is in
+        // NextCloud is what the person wrote, and when.
         logger::info(code::OK, $context['operation'], array_merge($context, [
             'responsebody' => 'Guardado ' . strlen($content) . ' bytes.',
         ]));

@@ -97,8 +97,8 @@ class document_viewer implements renderable, templatable {
                                         string $readonly = ''): self {
         $url = document::get_url($ncid);
 
-        // Sin cuenta no hay escritura posible, diga lo que diga el papel de cada
-        // cual: es la razón que manda sobre las demás.
+        // With no account there is no writing possible, whatever anybody's role
+        // says: this is the reason that overrules the others.
         if (grants::lacks_account((int) $user->id)) {
             $canedit = false;
             $readonly = self::READONLY_NOACCOUNT;
@@ -110,8 +110,8 @@ class document_viewer implements renderable, templatable {
             return new self($url, $title, $heightclass, null, $readonly);
         }
 
-        // Abrir es el único momento en el que la clave puede cambiar: mientras el
-        // documento está abierto es lo que permite pedirle a esa sesión que guarde.
+        // Opening is the only moment when the key can change: while the document
+        // is open it is what allows that session to be asked to save.
         $editor = (new config($instance))->for_document(
             $path,
             (new sessions())->for_opening($ncid, $instance, $path),
@@ -139,8 +139,8 @@ class document_viewer implements renderable, templatable {
             'serverurl' => token::server_url(),
             'configjson' => $this->editor !== null ? json_encode($this->editor) : '',
 
-            // Que un documento se abra y no se pueda escribir tiene siempre un
-            // motivo, y decirlo evita que se descubra al intentar teclear.
+            // A document that opens and cannot be written in always has a reason,
+            // and saying so saves it from being discovered by trying to type.
             'isreadonly' => $this->readonly !== '',
             'readonlytext' => $this->readonly !== ''
                 ? get_string('readonly_' . $this->readonly, 'assignsubmission_tipnc')

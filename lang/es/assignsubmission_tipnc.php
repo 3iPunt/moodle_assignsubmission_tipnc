@@ -55,7 +55,7 @@ $string['operation_delete_draft'] = 'Borrar el borrador';
 $string['operation_delete_submission'] = 'Borrar la entrega';
 $string['operation_delete_assignment'] = 'Borrar los documentos de la tarea';
 
-// Registro de incidencias: catálogo de códigos.
+// Incident log: catalogue of codes.
 $string['logcode_0000'] = 'Operación completada';
 $string['logcode_0101'] = 'Documento de origen no encontrado';
 $string['logcode_0102'] = 'No se pudo copiar el documento';
@@ -80,7 +80,7 @@ $string['logcode_0602'] = 'Plantilla no encontrada';
 $string['logcode_0701'] = 'La tarea no tiene documento base';
 $string['logcode_0702'] = 'La entrega se congeló antes de guardar los cambios';
 
-// Registro de incidencias: filtros y detalle.
+// Incident log: filters and detail.
 $string['log_col_actions'] = 'Acciones';
 $string['log_detail'] = 'Ver detalle';
 $string['log_filter_severity'] = 'Severidad';
@@ -104,7 +104,7 @@ $string['detail_when'] = 'Cuándo';
 $string['detail_occurrences'] = 'Repeticiones';
 $string['detail_nobody'] = 'No se registró ningún cuerpo de respuesta.';
 
-// Registro de incidencias: filtros de entidad y fecha.
+// Incident log: entity and date filters.
 $string['log_filter_course'] = 'Curso';
 $string['log_filter_assign'] = 'Tarea';
 $string['log_filter_user'] = 'Usuario';
@@ -122,7 +122,7 @@ $string['log_minutes'] = '{$a}\'';
 $string['log_hours'] = '{$a} h';
 $string['log_dateformat'] = '%d %b';
 
-// Registro de incidencias: purga y exportación.
+// Incident log: purge and export.
 $string['log_export'] = 'Exportar';
 $string['log_purge'] = 'Vaciar registro';
 $string['purge_title'] = 'Vaciar el registro de incidencias';
@@ -131,7 +131,7 @@ $string['task_purge_log'] = 'Purga del registro de incidencias de NextCloud';
 $string['logretention'] = 'Conservar las incidencias';
 $string['logretention_help'] = 'Días que se conserva una incidencia antes de que la purga programada la borre. Cero lo conserva todo, y entonces la tabla crece sin límite.';
 
-// Diagnóstico redactado para pegarlo en un asistente o en un ticket.
+// Diagnosis written to be pasted into an assistant or a ticket.
 $string['diagnosis_intro'] = 'Necesito ayuda para resolver una incidencia del plugin de Moodle assignsubmission_tipnc, que permite entregar tareas como documentos alojados en NextCloud y editados en línea.';
 $string['diagnosis_what'] = 'Qué ha fallado';
 $string['diagnosis_environment'] = 'Entorno';
@@ -139,7 +139,7 @@ $string['diagnosis_ask'] = 'Qué necesito';
 $string['diagnosis_question'] = 'Dime la causa más probable y los pasos concretos para arreglarlo, indicando en cada paso si se hace en Moodle, en NextCloud o en el servidor web. Si los datos anteriores no bastan, dime qué más habría que mirar.';
 $string['purge_hint'] = 'No hay vuelta atrás. Expórtalo antes si lo necesitas para un ticket; la purga programada ya borra las antiguas por su cuenta.';
 
-// El enunciado en la página de la tarea.
+// The brief on the assignment page.
 $string['enunciate_title'] = 'Enunciado de la tarea';
 $string['enunciate_intro'] = 'El documento del que parten los alumnos. Escribe aquí lo que tienen que hacer: cada copia se hace a partir de este.';
 $string['enunciate_open'] = 'Abrir el enunciado';
@@ -150,7 +150,7 @@ $string['enunciate_notready_hint'] = 'Nadie puede trabajar en ella hasta que el 
 $string['enunciate_ready'] = 'Enunciado preparado';
 $string['enunciate_pending'] = 'Falta el enunciado';
 
-// Dónde se muestra el enunciado.
+// Where the brief is shown.
 $string['placement'] = 'Dónde se muestra el enunciado';
 $string['placement_help'] = 'Lugar de la página de la tarea donde aparece el enunciado para todo el mundo menos el alumnado, que ya lo tiene en su caja de estado de la entrega.';
 $string['placement_header'] = 'En la cabecera de la actividad';
@@ -159,7 +159,7 @@ $string['placement_selector'] = 'En un sitio que elijo yo';
 $string['placementselector'] = 'Destino del enunciado';
 $string['placementselector_help'] = 'Selector CSS del elemento al que se lleva el enunciado; solo se usa con «En un sitio que elijo yo». El traslado lo hace el navegador: si no encuentra nada, el enunciado se queda al final de la página. Ej: <strong>.activity-description</strong>';
 
-// Ancho de la página de la tarea.
+// Width of the assignment page.
 $string['pagewidth'] = 'Ancho máximo de la página de la tarea';
 $string['pagewidth_help'] = 'Hasta dónde puede crecer la página de la tarea cuando esa tarea usa este plugin. Los documentos son anchos y el ancho de lectura de un tema los deja apretados. Es un máximo: en pantallas pequeñas sigue mandando el tema.';
 $string['pagewidth_theme'] = 'El ancho del tema (sin cambios)';
@@ -168,9 +168,9 @@ $string['pagewidth_1400'] = '1400 px · recomendado para documentos';
 $string['pagewidth_1600'] = '1600 px · pantallas grandes';
 $string['pagewidth_full'] = 'Todo el ancho de la ventana';
 
-// El documento dentro de la caja de estado de la entrega.
+// The document inside the submission status box.
 $string['subm_draft'] = 'Borrador en curso';
-// Títulos y explicaciones de la caja de la entrega.
+// Titles and explanations of the submission box.
 $string['subm_title_draft_own'] = 'Tu borrador';
 $string['subm_title_draft_other'] = 'Borrador de la entrega';
 $string['subm_title_submitted_own'] = 'Tu entrega';
@@ -192,7 +192,7 @@ $string['fullscreen'] = 'Pantalla completa';
 $string['enunciate_reference'] = 'El documento del que parte el trabajo. Está aquí como referencia: lo que escribas va en tu propio documento.';
 $string['subm_modified'] = 'Último cambio: {$a}';
 
-// Secciones de la página de ajustes.
+// Sections of the settings page.
 $string['section_connection'] = 'Conexión con NextCloud';
 $string['section_connection_desc'] = 'Dónde está NextCloud y con qué cuenta habla el plugin. Hasta que esto no es correcto, no funciona nada más.';
 $string['section_documents'] = 'Documentos';
@@ -206,7 +206,7 @@ $string['section_display_desc'] = 'Dónde aparece el enunciado en la página de 
 $string['section_log'] = 'Registro de incidencias';
 $string['section_log_desc'] = 'Llamadas a NextCloud que no se completaron, y cuánto tiempo se conservan.';
 
-// Alto del documento embebido.
+// Height of the embedded document.
 $string['frameheight'] = 'Alto del documento embebido';
 $string['frameheight_help'] = 'Cuánto ocupa el documento dentro de la página. Es un primer vistazo: para leer o escribir con holgura está el botón de pantalla completa que tiene encima.';
 $string['frameheight_420'] = 'Bajo · un vistazo';
@@ -214,7 +214,7 @@ $string['frameheight_560'] = 'Medio · recomendado';
 $string['frameheight_700'] = 'Alto · una página de golpe';
 $string['frameheight_860'] = 'Muy alto · para pantallas grandes';
 
-// Borrar en Moodle, y qué significa eso en NextCloud.
+// Deleting in Moodle, and what that means in NextCloud.
 $string['section_delete'] = 'Cuando se borra algo';
 $string['section_delete_desc'] = 'Borrar en Moodle y borrar en NextCloud son dos cosas distintas. Los documentos van a la papelera de NextCloud, así que un error se puede deshacer durante un tiempo.';
 $string['ondeletesubmission'] = 'Al borrar una entrega';
@@ -229,14 +229,14 @@ $string['ondeleteassign_delete'] = 'Borrar el enunciado y todos los documentos d
 $string['delete_warning_frozen'] = 'Se borrará la copia entregada en NextCloud. El borrador se conserva.';
 $string['delete_warning_all'] = 'Se borrarán el borrador y la copia entregada en NextCloud. Van a la papelera de NextCloud.';
 
-// Confirmación antes de entregar.
+// Confirmation before handing in.
 $string['confirmsaved'] = 'Pedir confirmación de que el documento está guardado';
 $string['confirmsaved_help'] = 'Añade una casilla que el alumnado debe marcar antes de entregar, con el botón de entregar desactivado hasta entonces, para que nadie entregue con cambios sin guardar. Es una promesa, no una comprobación: desde aquí no hay forma de saber si el documento se guardó de verdad.';
 $string['confirmsaved_title'] = 'Antes de entregar';
 $string['confirmsaved_label'] = 'He cerrado el editor y mis cambios están en el documento';
 $string['confirmsaved_hint'] = 'El editor mantiene tus cambios en su propia sesión y solo los escribe en el documento cuando esa sesión termina. Guarda con el botón del editor si lo tiene disponible; si no lo tiene, cierra el editor, espera unos segundos y entonces entrega.';
 
-// El editor.
+// The editor.
 $string['section_editor'] = 'El editor';
 $string['section_editor_desc'] = 'Cómo se abre el documento. Cada forma pide cosas distintas a la infraestructura; el README explica qué necesita cada una.';
 $string['viewmode'] = 'Cómo se abre el documento';
@@ -253,9 +253,9 @@ $string['confirmsaved_alsosubmits'] = '<strong>Guardar aquí es entregar.</stron
 $string['confirmsaved_hint_save'] = 'Guarda el documento con el botón del editor antes de entregar: eso es lo que escribe tus cambios en él. Si ya cerraste el editor, también están dentro.';
 $string['editor_unavailable'] = 'No se ha podido cargar el editor. Abre el documento en NextCloud con el enlace de arriba; tu trabajo está ahí.';
 
-// Lo que contesta el editor cuando se le pide que guarde. Queda en el registro
-// de incidencias, que es lo que lee quien tiene que averiguar por qué una
-// entrega no llevaba lo que se había escrito.
+// What the editor answers when asked to save. It ends up in the incident
+// log, which is what somebody reads when they have to work out why a
+// submission did not carry what had been written.
 $string['editor_answer_notasked'] = 'no se pudo preguntar al editor';
 $string['editor_answer_ok'] = 'guardado';
 $string['editor_answer_key'] = 'el editor no conoce esa clave: la sesión ya no existe';
@@ -266,7 +266,7 @@ $string['editor_answer_command'] = 'la orden no es correcta';
 $string['editor_answer_token'] = 'el editor rechazó la firma';
 $string['editor_answer_unknown'] = 'respuesta desconocida ({$a})';
 
-// El registro de incidencias de una entrega.
+// The incident log of a submission.
 $string['log_submit_nodraft'] = 'No hay borrador registrado: se congela lo que haya.';
 $string['log_submit_asksave'] = 'Se pide al editor que guarde antes de congelar.';
 $string['log_submit_refused'] = 'El editor no aceptó guardar antes de entregar: {$a}.';
@@ -275,7 +275,7 @@ $string['log_submit_late'] = 'El guardado no llegó a tiempo; se congela lo que 
 $string['log_submit_saved'] = 'El editor guardó antes de congelar la entrega.';
 $string['log_submit_nosession'] = 'El documento no se abrió nunca en el editor: se congela lo que haya.';
 
-// La pantalla del registro de incidencias.
+// The incident log screen.
 $string['log_title'] = 'Registro de incidencias';
 $string['log_intro'] = 'Llamadas a NextCloud que no se completaron. Lo que hay aquí ya le pasó a alguien: un enunciado que no se creó, un borrador que no se abrió, una entrega que no se congeló.';
 $string['log_open'] = 'Abrir el registro de incidencias';
@@ -318,7 +318,7 @@ $string['prepare_done'] = 'El enunciado ya está listo. El alumnado ya puede tra
 $string['prepare_already'] = 'El enunciado ya existía.';
 $string['prepare_failed'] = 'No se pudo preparar el enunciado. El registro de incidencias dice por qué.';
 
-// Cuando NextCloud no responde.
+// When NextCloud does not answer.
 $string['unavailable_title'] = 'Ahora mismo no se puede abrir el documento';
 $string['unavailable_student'] = 'No es cosa tuya: el servicio donde vive el documento no responde. Inténtalo de nuevo en unos minutos; no se pierde nada de lo que ya habías escrito.';
 $string['unavailable_teacher'] = 'NextCloud no responde. Mientras dure, no se pueden crear ni abrir documentos y nadie puede entregar.';
@@ -326,18 +326,18 @@ $string['unavailable_since'] = 'NextCloud no responde desde las {$a}. Mientras d
 $string['unavailable_log'] = 'Ver el registro de incidencias';
 $string['unavailable_submit'] = 'Ahora mismo no puedes entregar: el servicio donde está tu documento no responde. Inténtalo en unos minutos; lo que escribiste está a salvo.';
 
-// Cuando la cuenta de la persona no existe en NextCloud.
+// When the person's account does not exist in NextCloud.
 $string['noaccount_title'] = 'Tu cuenta no puede acceder a los documentos';
 $string['noaccount_message'] = 'Para trabajar en el documento hace falta una cuenta en el servicio de documentos, y la tuya no está. Esto no se arregla solo: pídeselo a quien administra el sitio. Hasta entonces no podrás abrir ni entregar esta tarea.';
 $string['noaccount_submit'] = 'No puedes entregar: tu cuenta no tiene acceso al servicio de documentos. Pide a quien administra el sitio que te la cree.';
 $string['prepare_noaccount'] = 'El enunciado ya está listo y el alumnado puede trabajar en él. Tú no vas a poder editarlo: la cuenta «{$a}» no existe en NextCloud.';
 
-// Por qué un documento se abre en solo lectura.
+// Why a document opens read-only.
 $string['readonly_frozen'] = 'Entregado: solo lectura';
 $string['readonly_role'] = 'Solo lectura';
 $string['readonly_noaccount'] = 'Solo lectura: tu cuenta no existe en el servicio de documentos';
 
-// El acceso a los documentos y su caducidad.
+// Access to the documents and how it expires.
 $string['section_access'] = 'Acceso a los documentos';
 $string['section_access_desc'] = 'Quién puede abrir cada documento lo decide Moodle: quien califica la tarea escribe, el resto lee. El acceso se reparte en el momento en que alguien entra en la tarea, así que nadie tiene que mantener una lista.';
 $string['shareexpiry'] = 'El acceso caduca a los';
@@ -347,18 +347,18 @@ $string['shareexpiry_help'] = 'El acceso a un documento se da por este tiempo y 
 // Capacidades.
 $string['tipnc:view_errors'] = 'Ver el registro de incidencias de la entrega NextCloud';
 
-// La entrega que Moodle da por hecha y en NextCloud no existe.
+// The submission Moodle takes for granted and NextCloud does not have.
 $string['noaccount_detail'] = 'Su cuenta no existe en NextCloud, así que no se le puede compartir nada. Hay que crearla antes de que pueda trabajar en nada.';
 $string['nodocument_title'] = 'Esta entrega no tiene documento';
 $string['nodocument_message'] = 'Moodle dice que el trabajo se entregó, pero no se congeló ninguna copia en el servicio de documentos. No se ha perdido nada —el borrador sigue ahí— pero todavía no hay nada que calificar.';
 $string['nodocument_detail'] = 'Devuelve la entrega a borrador y pide que la vuelvan a enviar: eso congela la copia. El registro de incidencias dice por qué falló la primera vez.';
 
-// Todavía no ha abierto el documento.
+// They have not opened the document yet.
 $string['notstarted_title'] = 'Todavía no ha empezado';
 $string['notstarted_message'] = 'Esta persona no ha abierto el documento, así que no hay borrador ni nada escrito. No es que haya fallado algo: no ha empezado.';
 $string['notstarted_detail'] = 'El borrador se crea la primera vez que abre la tarea para trabajar en ella.';
 
-// Privacidad: qué se guarda y qué sale del sitio.
+// Privacy: what is stored and what leaves the site.
 $string['privacy:metadata:assignment'] = 'La tarea a la que pertenece el documento.';
 $string['privacy:metadata:submission'] = 'La entrega a la que pertenece el documento.';
 $string['privacy:metadata:ncid'] = 'El identificador que tiene el documento en NextCloud.';

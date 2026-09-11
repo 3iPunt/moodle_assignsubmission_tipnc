@@ -127,11 +127,11 @@ final class provider_test extends \mod_assign\tests\provider_testcase {
         $this->assertContains('assignsubmission_tipnc_open', $names);
         $this->assertContains('assignsubmission_tipnc_enun', $names);
 
-        // El registro de incidencias guarda quién hizo qué sobre el documento de
-        // quién: es dato personal aunque no lo parezca.
+        // The incident log records who did what on whose document: it is
+        // personal data even though it does not look like it.
         $this->assertContains('assignsubmission_tipnc_log', $names);
 
-        // Y lo que de verdad mira quien revisa: que salen datos a otro sistema.
+        // And what a reviewer really looks at: that data leaves for another system.
         $this->assertContains('nextcloud', $names);
     }
 

@@ -30,8 +30,8 @@
 
 const SELECTORS = {
     button: '[data-action="tipnc-fullscreen"]',
-    // El botón vive en la cabecera del bloque, no sobre el visor: encima tapaba
-    // la barra de herramientas del editor.
+    // The button lives in the block header, not over the viewer: on top it
+    // covered the editor toolbar.
     block: '[data-region="tipnc-enunciate"], [data-region="assignsubmission_tipnc"]',
     viewer: '[data-region="tipnc-viewer"]',
 };
@@ -68,8 +68,8 @@ export const init = () => {
             return;
         }
 
-        // Un rechazo del navegador —permiso denegado, o la pestaña en segundo
-        // plano— deja el documento donde estaba, que es una salida aceptable.
+        // A refusal from the browser —permission denied, or the tab in the
+        // background— leaves the document where it was, an acceptable outcome.
         viewer.requestFullscreen().catch(() => {
             return;
         });

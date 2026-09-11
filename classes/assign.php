@@ -49,8 +49,8 @@ class assign {
     public static function is_submission_nextcloud(cm_info $cm): bool {
         global $DB;
 
-        // Sin SQL propio: los backticks y el alias entrecomillado de la versión
-        // anterior eran sintaxis exclusiva de MySQL y rompían en PostgreSQL.
+        // No SQL of our own: the backticks and the quoted alias of the previous
+        // version were MySQL-only syntax and broke on PostgreSQL.
         $enabled = $DB->get_field('assign_plugin_config', 'value', [
             'assignment' => $cm->instance,
             'plugin' => 'tipnc',

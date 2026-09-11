@@ -146,15 +146,15 @@ class logger {
         $entry->lastseen = $now;
         $entry->timecreated = $now;
 
-        // Los éxitos no se agrupan: cada uno es un hecho distinto del historial de
-        // un documento. Agrupar tiene sentido cuando algo falla una y otra vez.
+        // Successes are not grouped: each one is a distinct fact in the history
+        // of a document. Grouping makes sense when something fails over and over.
         $existing = $severity === code::SEVERITY_INFO ? false : self::find_equivalent($entry);
 
         if ($existing) {
             $existing->occurrences++;
             $existing->lastseen = $now;
-            // Solo se refrescan los datos que trae la repetición: una llamada sin
-            // cuerpo de respuesta no debe borrar el diagnóstico ya registrado.
+            // Only the data the repetition brings is refreshed: a call with no
+            // response body must not wipe the diagnosis already recorded.
             foreach (['httpcode', 'responsebody', 'duration', 'requesturl', 'httpmethod', 'documentpath'] as $field) {
                 if ($entry->$field !== null) {
                     $existing->$field = $entry->$field;
@@ -204,10 +204,10 @@ class logger {
         // Credenciales dentro de la propia URL.
         $text = preg_replace('#(://)[^/@\s]+:[^/@\s]+@#', '$1' . self::MASK . '@', $text) ?? $text;
 
-        // Cabeceras de autenticación que puedan venir en el cuerpo o en la traza.
+        // Authentication headers that may come in the body or in the trace.
         $text = preg_replace('#(Authorization:\s*\w+\s+)\S+#i', '$1' . self::MASK, $text) ?? $text;
 
-        // La contraseña del servicio, si el servidor la devolviera en algún mensaje.
+        // The service password, should the server echo it back in a message.
         $password = get_config('assignsubmission_tipnc', 'password');
         if (!empty($password)) {
             $text = str_replace($password, self::MASK, $text);

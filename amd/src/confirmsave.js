@@ -44,24 +44,24 @@ export const init = () => {
 
     const buttons = Array.from(form.querySelectorAll(SELECTORS.submit));
     if (!buttons.length) {
-        // Sin botón que sujetar, el aviso se queda donde está y no estorba.
+        // With no button to hold back, the notice stays put and is harmless.
         return;
     }
 
     const primary = buttons[0];
 
-    // Encima del grupo de botones y fuera de él: dentro quedaría en la misma fila
-    // que «Guardar cambios» y «Cancelar», como si fuera otro control más.
-    // La fila entera, no el botón: mform envuelve cada botón en su propio .fitem
-    // y todos ellos en un contenedor flex. Colgarse del .fitem dejaba el aviso
-    // dentro de esa fila, en línea con «Guardar cambios» y «Cancelar».
+    // Above the button group and outside it: inside it would sit in the same
+    // row as "Save changes" and "Cancel", as if it were another control.
+    // The whole row, not the button: mform wraps each button in its own .fitem
+    // and all of them in a flex container. Hanging off the .fitem left the
+    // notice inside that row, in line with "Save changes" and "Cancel".
     const row = primary.closest('.d-flex') || primary.closest('.fitem, .form-group, fieldset')
         || primary.parentNode;
     row.parentNode.insertBefore(box, row);
     box.hidden = false;
 
-    // El contenedor se marca desde aquí en lugar de adivinar su estructura en
-    // styles.css: así la regla apunta a lo que hay, no a lo que suponemos.
+    // The container is marked from here instead of guessing its structure in
+    // styles.css: that way the rule targets what is there, not what we assume.
     row.classList.add('tipnc-buttons');
 
     const check = box.querySelector(SELECTORS.check);

@@ -132,8 +132,8 @@ class document {
         $groupid = (int) ($submission->groupid ?? 0);
 
         if ($groupid > 0) {
-            // El identificador y no el nombre: un grupo se renombra, y el fichero
-            // dejaría de encontrarse.
+            // The id and not the name: a group gets renamed, and the file
+            // would stop being found.
             return self::PREFIX_GROUP . $groupid;
         }
 
@@ -255,7 +255,7 @@ class document {
 
         $assign = $DB->get_record('assign', ['id' => $this->instance], 'id, name, course', IGNORE_MISSING);
         if (!$assign) {
-            // Sin la tarea no hay carpeta que componer: se queda en la base.
+            // With no assignment there is no folder to build: it stays in the base.
             $this->assignmentfolder = $this->folder;
             return $this->assignmentfolder;
         }
@@ -300,8 +300,8 @@ class document {
      * @return string A name that can be a folder, never empty.
      */
     protected static function clean_name(string $name): string {
-        // Los caracteres que WebDAV y los sistemas de ficheros no admiten, más los
-        // puntos al final, que Windows recorta en silencio al sincronizar.
+        // The characters WebDAV and file systems do not accept, plus trailing
+        // dots, which Windows silently trims when syncing.
         $clean = preg_replace('/[\\/\\\\:*?"<>|]+/u', ' ', $name);
         $clean = trim(preg_replace('/\s+/u', ' ', $clean), " .\t\n\r\0\x0B");
         $clean = core_text::substr($clean, 0, self::NAME_LIMIT);

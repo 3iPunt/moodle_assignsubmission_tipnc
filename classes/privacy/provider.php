@@ -89,8 +89,8 @@ class provider implements
             'responsebody' => 'privacy:metadata:log_responsebody',
         ], 'privacy:metadata:tipnc_log');
 
-        // Lo que de verdad mira quien revisa la privacidad de un plugin: aquí
-        // salen datos personales del sitio y van a otro sistema.
+        // What whoever reviews a plugin's privacy really looks at: personal
+        // data leaves the site here and goes to another system.
         $collection->add_external_location_link('nextcloud', [
             'username' => 'privacy:metadata:nextcloud:username',
             'document' => 'privacy:metadata:nextcloud:document',
@@ -144,7 +144,7 @@ class provider implements
      * @return void
      */
     public static function get_student_user_ids(useridlist $useridlist) {
-        // Los saca mod_assign de assign_submission; aquí no hay nadie más.
+        // mod_assign takes them from assign_submission; nobody else here.
     }
 
     /**
@@ -195,8 +195,8 @@ class provider implements
     public static function export_submission_user_data(assign_plugin_request_data $exportdata) {
         global $DB;
 
-        // Igual que en los plugins del core: la entrega del alumnado no se
-        // exporta dentro de los datos de quien la corrige.
+        // As in the core plugins: a student's submission is not exported
+        // inside the data of whoever marks it.
         if ($exportdata->get_user() != null) {
             return;
         }
@@ -306,8 +306,8 @@ class provider implements
             return;
         }
 
-        // El enunciado no se borra —es de la tarea, no de una persona—, pero deja
-        // de decir quién lo creó, que es el dato personal que hay en él.
+        // The brief is not deleted —it belongs to the assignment, not to a
+        // person— but it stops saying who created it, which is the personal
         [$insql, $params] = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
         $params['assignment'] = $assignment;
 

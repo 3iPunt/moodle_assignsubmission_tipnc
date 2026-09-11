@@ -83,9 +83,9 @@ function xmldb_assignsubmission_tipnc_upgrade(int $oldversion): bool {
 
     if ($oldversion < 2026090801) {
 
-        // El registro antiguo se descarta en lugar de migrarse: solo guardaba
-        // método, código y un mensaje que casi siempre era una respuesta vacía,
-        // sin URL, sin código HTTP y sin documento. No sirve para diagnosticar.
+        // The old log is discarded rather than migrated: it only held the
+        // method, the code and a message that was almost always an empty
+        // response, with no URL, no HTTP status and no document. Useless.
         $old = new xmldb_table('assignsubmission_tipnc_error');
         if ($dbman->table_exists($old)) {
             $dbman->drop_table($old);
@@ -96,9 +96,9 @@ function xmldb_assignsubmission_tipnc_upgrade(int $oldversion): bool {
 
     if ($oldversion < 2026090805) {
 
-        // Dónde está de verdad cada documento. Se guarda en lugar de recomponerlo
-        // porque la ruta lleva el nombre del curso y de la tarea, y renombrar
-        // cualquiera de los dos dejaría los documentos ilocalizables.
+        // Where each document really is. It is stored rather than rebuilt
+        // because the path carries the course and assignment names, and
+        // renaming either of them would make the documents untraceable.
         foreach ([
             'assignsubmission_tipnc',
             'assignsubmission_tipnc_open',
@@ -111,9 +111,9 @@ function xmldb_assignsubmission_tipnc_upgrade(int $oldversion): bool {
             }
         }
 
-        // Los documentos existentes están sueltos en la carpeta base. Moverlos
-        // habla con NextCloud, y un upgrade que espera a la red es un upgrade
-        // que se puede quedar colgado: lo hace el cron.
+        // Existing documents sit loose in the base folder. Moving them talks
+        // to NextCloud, and an upgrade that waits on the network is an
+        // upgrade that can hang: cron does it.
         \core\task\manager::queue_adhoc_task(
             new \assignsubmission_tipnc\task\migrate_documents(), true);
 
@@ -122,10 +122,10 @@ function xmldb_assignsubmission_tipnc_upgrade(int $oldversion): bool {
 
     if ($oldversion < 2026090806) {
 
-        // La clave de la sesión de edición. Se guarda porque tiene que cumplir dos
-        // cosas a la vez: cambiar cuando cambia el documento —o el editor sigue
-        // sirviendo la copia que tenía— y no cambiar mientras está abierto, o no
-        // hay forma de pedirle que guarde lo que tiene.
+        // The editing session key. It is stored because it has to do two
+        // things at once: change when the document changes —or the editor
+        // keeps serving the copy it had— and stay put while it is open, or
+        // there is no way to ask it to save what it holds.
         foreach ([
             'assignsubmission_tipnc',
             'assignsubmission_tipnc_open',
@@ -143,9 +143,9 @@ function xmldb_assignsubmission_tipnc_upgrade(int $oldversion): bool {
 
     if ($oldversion < 2026090807) {
 
-        // Con que estado del documento se acuño la clave. Sin esto no se puede
-        // saber si la sesion del editor sigue sirviendo lo que hay: la clave se
-        // renueva cuando el contenido cambio, y solo entonces.
+        // Which state of the document the key was minted for. Without this
+        // there is no telling whether the editor session still serves what is
+        // there: the key is renewed when the content changed, and only then.
         foreach ([
             'assignsubmission_tipnc',
             'assignsubmission_tipnc_open',

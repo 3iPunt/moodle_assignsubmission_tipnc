@@ -33,11 +33,11 @@ use assignsubmission_tipnc\models\cleanup;
 
 $logurl = new moodle_url('/mod/assign/submission/tipnc/view_errors.php');
 
-// El registro es una página propia del árbol: así se encuentra navegando, sin
-// tener que entrar antes en los ajustes ni conocer la URL. No se securiza con
-// admin_externalpage_setup() porque este archivo solo se incluye cuando el árbol
-// se carga completo, y esa llamada lo carga reducido: la página comprueba la
-// capacidad por su cuenta.
+// The log is a page of its own in the tree: that way it is found by
+// browsing, without going into the settings first or knowing the URL. It
+// is not secured with admin_externalpage_setup() because this file is only
+// included when the full tree is loaded, and that call loads it reduced:
+// the page checks the capability on its own.
 if (isset($ADMIN) && $ADMIN instanceof part_of_admin_tree) {
     $ADMIN->add('assignsubmissionplugins', new admin_externalpage(
         'assignsubmission_tipnc_log',
@@ -47,7 +47,7 @@ if (isset($ADMIN) && $ADMIN instanceof part_of_admin_tree) {
     ));
 }
 
-// --- Conexión con NextCloud -------------------------------------------------
+// --- Connection with NextCloud ----------------------------------------------
 
 $settings->add(new admin_setting_heading('assignsubmission_tipnc/section_connection',
     new lang_string('section_connection', 'assignsubmission_tipnc'),
@@ -69,7 +69,7 @@ $settings->add(new admin_setting_configpasswordunmask('assignsubmission_tipnc/pa
     new lang_string('password', 'assignsubmission_tipnc'),
     new lang_string('password_help', 'assignsubmission_tipnc'), ''));
 
-// --- Documentos -------------------------------------------------------------
+// --- Documents --------------------------------------------------------------
 
 $settings->add(new admin_setting_heading('assignsubmission_tipnc/section_documents',
     new lang_string('section_documents', 'assignsubmission_tipnc'),
@@ -87,7 +87,7 @@ $settings->add(new admin_setting_configtext('assignsubmission_tipnc/location',
     new lang_string('location', 'assignsubmission_tipnc'),
     new lang_string('location_help', 'assignsubmission_tipnc'), '/apps/onlyoffice/'));
 
-// --- En las tareas ----------------------------------------------------------
+// --- In assignments ---------------------------------------------------------
 
 $settings->add(new admin_setting_heading('assignsubmission_tipnc/section_assignments',
     new lang_string('section_assignments', 'assignsubmission_tipnc'),
@@ -97,7 +97,7 @@ $settings->add(new admin_setting_configcheckbox('assignsubmission_tipnc/default'
     new lang_string('default', 'assignsubmission_tipnc'),
     new lang_string('default_help', 'assignsubmission_tipnc'), 0));
 
-// --- El editor --------------------------------------------------------------
+// --- The editor -------------------------------------------------------------
 
 $settings->add(new admin_setting_heading('assignsubmission_tipnc/section_editor',
     new lang_string('section_editor', 'assignsubmission_tipnc'),
@@ -125,19 +125,19 @@ $settings->add(new admin_setting_configcheckbox('assignsubmission_tipnc/confirms
     new lang_string('confirmsaved', 'assignsubmission_tipnc'),
     new lang_string('confirmsaved_help', 'assignsubmission_tipnc'), 1));
 
-// Sin el editor embebido, esos dos datos no se usan para nada.
+// Without the embedded editor those two values are not used at all.
 $settings->hide_if('assignsubmission_tipnc/docserverurl',
     'assignsubmission_tipnc/viewmode', 'neq', viewmode::EDITOR);
 $settings->hide_if('assignsubmission_tipnc/docserversecret',
     'assignsubmission_tipnc/viewmode', 'neq', viewmode::EDITOR);
 
-// Con el editor embebido, Moodle fuerza el guardado antes de congelar la copia:
-// pedir además que lo confirme el alumnado es un paso que no aporta nada.
+// With the embedded editor, Moodle forces the save before freezing the copy:
+// asking the student to confirm on top of that adds nothing.
 $settings->hide_if('assignsubmission_tipnc/confirmsaved',
     'assignsubmission_tipnc/viewmode', 'eq', viewmode::EDITOR);
 
 
-// --- El acceso a los documentos ---------------------------------------------
+// --- Access to the documents ------------------------------------------------
 
 $settings->add(new admin_setting_heading('assignsubmission_tipnc/section_access',
     new lang_string('section_access', 'assignsubmission_tipnc'),
@@ -155,7 +155,7 @@ $settings->add(new admin_setting_configselect('assignsubmission_tipnc/shareexpir
         '365' => new lang_string('numdays', 'core', 365),
     ]));
 
-// --- Al borrar --------------------------------------------------------------
+// --- When deleting ----------------------------------------------------------
 
 $settings->add(new admin_setting_heading('assignsubmission_tipnc/section_delete',
     new lang_string('section_delete', 'assignsubmission_tipnc'),
@@ -180,7 +180,7 @@ $settings->add(new admin_setting_configselect('assignsubmission_tipnc/ondeleteas
         cleanup::ASSIGN_DELETE => new lang_string('ondeleteassign_delete', 'assignsubmission_tipnc'),
     ]));
 
-// --- Cómo se ve el enunciado ------------------------------------------------
+// --- How the brief is shown -------------------------------------------------
 
 $settings->add(new admin_setting_heading('assignsubmission_tipnc/section_display',
     new lang_string('section_display', 'assignsubmission_tipnc'),
@@ -200,7 +200,7 @@ $settings->add(new admin_setting_configtext('assignsubmission_tipnc/placementsel
     new lang_string('placementselector', 'assignsubmission_tipnc'),
     new lang_string('placementselector_help', 'assignsubmission_tipnc'), '', PARAM_RAW_TRIMMED));
 
-// El destino a medida solo tiene sentido con la ubicación que lo usa.
+// The custom destination only makes sense with the placement that uses it.
 $settings->hide_if('assignsubmission_tipnc/placementselector',
     'assignsubmission_tipnc/placement', 'neq', hook_callbacks::PLACE_SELECTOR);
 
@@ -227,7 +227,7 @@ $settings->add(new admin_setting_configselect('assignsubmission_tipnc/frameheigh
         '860' => new lang_string('frameheight_860', 'assignsubmission_tipnc'),
     ]));
 
-// --- Registro de incidencias ------------------------------------------------
+// --- Incident log -----------------------------------------------------------
 
 $settings->add(new admin_setting_heading('assignsubmission_tipnc/section_log',
     new lang_string('section_log', 'assignsubmission_tipnc'),

@@ -81,8 +81,8 @@ class submission_summary implements renderable, templatable {
             default => ['enun', 'subm_enunciate', 'subm_open_enunciate'],
         };
 
-        // El texto cambia según quién lea: a quien es suyo se le habla de tú, y a
-        // quien corrige se le dice de quién es el documento.
+        // The wording changes with who reads: the owner is addressed directly, and
+        // whoever marks is told whose document it is.
         $whose = $this->own ? '_own' : '_other';
         $title = get_string("subm_title_$state" . $whose, 'assignsubmission_tipnc');
 

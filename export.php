@@ -46,8 +46,8 @@ if ($range > 0) {
     $filters['since'] = time() - ($range * DAYSECS);
 }
 
-// Cabeceras en snake_case y sin espacios: el fichero se abre con cualquier hoja
-// de cálculo y se puede volver a leer con un script.
+// Headers in snake_case and with no spaces: the file opens in any
+// spreadsheet and can be read back by a script.
 $columns = [
     'id', 'severity', 'error_code', 'error_meaning', 'operation', 'method',
     'course', 'assignment', 'user', 'affected_user', 'http_method', 'http_code',
@@ -85,7 +85,7 @@ foreach ($records as $incident) {
         $incident->occurrences,
         userdate($incident->firstseen, '%Y-%m-%d %H:%M:%S'),
         userdate($incident->lastseen, '%Y-%m-%d %H:%M:%S'),
-        // La URL va enmascarada desde el propio registro: nunca lleva credenciales.
+        // The URL comes masked from the log itself: it never carries credentials.
         $incident->requesturl ?? '',
     ]);
 }

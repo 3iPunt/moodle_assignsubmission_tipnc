@@ -71,7 +71,7 @@ class migrate_documents extends adhoc_task {
                 ? $document->get_enunciate()
                 : $document->legacy_name($prefix, $username);
 
-            // Lo viejo vivía suelto en la carpeta base, con el nombre por delante.
+            // The old ones lived loose in the base folder, with the name in front.
             $origin = $folder . '/' . basename($destiny);
             if ($origin === $destiny) {
                 continue;
@@ -87,8 +87,8 @@ class migrate_documents extends adhoc_task {
                 $failed++;
             }
 
-            // La ruta se guarda igual: si el documento ya estaba en su sitio, es
-            // la buena, y si el movimiento falló, es donde debería estar.
+            // The path is stored either way: if the document was already in place
+            // it is the right one, and if the move failed, it is where it should be.
             $row->path = $destiny;
             $DB->update_record($table, $row);
         }

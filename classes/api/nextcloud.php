@@ -57,9 +57,9 @@ class nextcloud {
 
     /** @var int Read, write and pass on: everything a FILE can be given.
      *
-     * No es 31: crear (4) y borrar (8) solo tienen sentido en carpetas, y
-     * NextCloud recorta la peticion sin decirlo. Pedir lo que corresponde al
-     * recurso es lo que permite comprobar despues lo que se concedio.
+     * Not 31: create (4) and delete (8) only make sense on folders, and
+     * NextCloud trims the request without saying so. Asking for what suits the
+     * resource is what makes it possible to check afterwards what was granted.
      */
     const PERMISSION_FILE_ALL = 19;
 
@@ -152,9 +152,9 @@ class nextcloud {
             return $reslisting;
         }
 
-        // Se registra antes de compartir. El documento ya existe y lo gobierna la
-        // cuenta de servicio, así que la tarea funciona; abortar aquí dejaba el
-        // fichero huérfano en NextCloud y la tarea rota para toda la clase.
+        // Recorded before sharing. The document already exists and is governed by
+        // the service account, so the assignment works; giving up here left the
+        // file orphaned in NextCloud and the assignment broken for the whole class.
         $data = new stdClass();
         $data->assignment = $this->instance;
         $data->path = $enun;
@@ -162,9 +162,9 @@ class nextcloud {
         $data->userid = $USER->id;
         tipnc_enun::set($data);
 
-        // Dar acceso a quien lo crea es lo que le permite escribir el enunciado.
-        // Que falle es grave para esa persona y para nadie más: se cuenta como
-        // aviso dentro de una respuesta que sigue siendo un éxito.
+        // Giving access to whoever creates it is what lets them write the brief.
+        // A failure there is serious for that person and nobody else: it counts
+        // as a warning inside a response that is still a success.
         $resshare = $this->grant_or_renew($enun, $USER->username, self::PERMISSION_FILE_ALL,
             $this->context('share_enunciate', 'teacher_create:share_file',
                 ['affecteduserid' => $USER->id]));
@@ -238,12 +238,12 @@ class nextcloud {
         $context = $this->context('grant_enunciate', $method, ['affecteduserid' => $user->id]);
 
         // Se intenta renovar antes de crear: NextCloud rechaza compartir dos veces
-        // lo mismo, y sin esto cada visita posterior a la caducidad de la caché
-        // dejaría un aviso en el registro sin conseguir nada.
+        // the same, and without this every visit after the cache expires would
+        // leave a warning in the log without achieving anything.
         $answer = $this->grant_or_renew($path, $user->username, $permission, $context);
 
-        // Solo se recuerda lo que salió bien: si NextCloud estaba caído, la
-        // próxima visita lo vuelve a intentar en vez de dejarlo sin acceso.
+        // Only what went well is remembered: if NextCloud was down, the next
+        // visit tries again instead of leaving them without access.
         if ($answer->success) {
             grants::remember($what, $id, (int) $user->id);
         }
@@ -287,9 +287,9 @@ class nextcloud {
     protected function renew_permission(string $file, string $username, int $permission,
                                         string $expires, array $context = [],
                                         ?array $shares = null): ?response {
-        // La lista se pide una vez por documento, no una por persona: repartir el
-        // acceso de un grupo son tantas llamadas como miembros, y duplicarlas no
-        // aporta nada. No se registra porque no es una incidencia de nadie.
+        // The list is asked for once per document, not once per person: handing out
+        // access for a group is as many calls as members, and doubling them adds
+        // nothing. It is not logged because it is nobody's incident.
         $shares ??= $this->shares_of($file, $context, false);
 
         if ($shares === null) {
@@ -328,7 +328,7 @@ class nextcloud {
      * The day access given now stops working, if the site wants one.
      *
      * Access is handed out when somebody walks into the assignment, so it renews
-     * itself by being used. Giving it an end date turns «find out that this
+     * itself by being used. Giving it an end date turns "find out that this
      * person stopped teaching here» —which nothing reliably tells us— into
      * «it lapses unless somebody keeps coming», which needs telling by nobody.
      *
@@ -358,8 +358,8 @@ class nextcloud {
             $this->context('open_draft', 'student_open:copy_file',
                 ['submission' => $submission->id]));
         if ($rescopy->success) {
-            // A quien es suya, no a quien pasaba por aquí: en una entrega de grupo
-            // son todos sus miembros, y el profesorado abre esto sin ser ninguno.
+            // To whoever it belongs to, not to whoever happened by: in a group
+            // submission that is every member, and teachers open this being none.
             $ressharestudent = $this->share_with_owners($open, $submission, self::PERMISSION_FILE_ALL,
                 $this->context('share_draft', 'student_open:share_file',
                     ['submission' => $submission->id]));
@@ -406,9 +406,9 @@ class nextcloud {
         $open = $this->document->open_path($submission);
         $sub = $this->document->submission_for($submission);
 
-        // Antes de congelar nada, se le pide al editor que escriba lo que tiene:
-        // sin esto se copia la versión anterior y el alumno entrega lo que había
-        // hace un minuto, que es el fallo que esto viene a cerrar.
+        // Before freezing anything, the editor is asked to write what it holds:
+        // without this the previous version is copied and the student hands in
+        // what they had a minute ago, which is the bug this closes.
         $this->settle_document($open, $submission);
 
         $rescopy = $this->copy_file($open, $sub,
@@ -425,9 +425,9 @@ class nextcloud {
             return $reslisting;
         }
 
-        // La entrega queda registrada antes de repartir accesos: la copia ya está
-        // hecha y es lo que se califica. Abortar aquí por un permiso dejaba a
-        // Moodle diciendo «entregado» sin que existiera ninguna entrega.
+        // The submission is recorded before handing out access: the copy is made
+        // and it is what gets marked. Giving up here over a permission left
+        // Moodle saying "submitted" with no submission in existence.
         $tipnc = tipnc::get($submission->id) ?: new stdClass();
         $tipnc->assignment = $submission->assignment;
         $tipnc->submission = $submission->id;
@@ -436,9 +436,9 @@ class nextcloud {
 
         isset($tipnc->id) ? tipnc::update($tipnc) : tipnc::set($tipnc);
 
-        // Quien entregó pasa a solo lectura sobre su copia. Al profesorado no se
-        // le comparte aquí: recibe acceso al abrir la entrega para corregirla, que
-        // es lo único que funciona cuando quien enseña cambia con el tiempo.
+        // Whoever handed in drops to read-only on their copy. Teachers are not
+        // given it here: they get access when they open the submission to mark it,
+        // which is the only thing that works when who teaches changes over time.
         $resshare = $this->share_with_owners($sub, $submission, self::PERMISSION_READ,
             $this->context('share_submission', 'student_submit:share_student',
                 ['submission' => $submission->id]));
@@ -461,8 +461,8 @@ class nextcloud {
         $answer = $this->client->request('COPY', $this->dav_path($origin), [
             'headers' => [
                 'OCS-APIRequest' => 'true',
-                // El destino se resuelve contra el mismo host de la llamada: usar la
-                // URL pública haría que NextCloud lo rechazara como externo.
+                // The destination resolves against the same host as the call: using
+                // the public URL would make NextCloud reject it as external.
                 'Destination' => $this->client->base_url() . $this->dav_path($destiny),
             ],
             'context' => array_merge($context, [
@@ -494,8 +494,8 @@ class nextcloud {
         $this->ensure_folder($this->context('open_draft', 'reattempt:folder',
             ['submission' => $destiny->id]));
 
-        // Lo entregado si llegó a entregarse, y si no, lo que quedara en el
-        // borrador: es lo último que esa persona escribió.
+        // What was handed in if it ever was, and if not, whatever is left in the
+        // draft: it is the last thing that person wrote.
         $previous = tipnc::get($source->id)
             ? $this->document->submission_path($source)
             : $this->document->open_path($source);
@@ -574,7 +574,7 @@ class nextcloud {
             return new response(false, null, new error(code::SHARE_NO_ACCOUNT, ''));
         }
 
-        // Una sola lectura de los compartidos para todo el grupo.
+        // A single read of the shares for the whole group.
         $shares = $this->shares_of($file, $context, false) ?? [];
 
         $last = new response(true);
@@ -603,8 +603,8 @@ class nextcloud {
      * @throws dml_exception If the incident cannot be recorded.
      */
     public function set_draft_access(stdClass $submission, bool $canwrite): response {
-        // El dueño de la entrega, no quien ejecuta: esto lo dispara el profesorado
-        // sobre el documento de otra persona.
+        // The owner of the submission, not whoever runs this: teachers trigger it
+        // on somebody else's document.
         $student = core_user::get_user((int) $submission->userid);
 
         if (!$student) {
@@ -620,9 +620,9 @@ class nextcloud {
             'affecteduserid' => $student->id,
         ]);
 
-        // Aquí siempre hay un compartido de antes —el que se dio al abrir el
-        // borrador—, así que lo que toca es cambiarle los permisos. Compartir otra
-        // vez lo mismo lo rechaza NextCloud, y bloquear sería el caso frecuente.
+        // There is always an earlier share here —the one given when the draft was
+        // opened— so what is needed is to change its permissions. Sharing the same
+        // thing twice is rejected by NextCloud, and locking is the common case.
         return $this->grant_or_renew($draft, $student->username, $permission, $context);
     }
 
@@ -655,18 +655,18 @@ class nextcloud {
 
         $before = $this->modified_time($open);
 
-        // El guardado forzado y la espera no pasan por el cliente instrumentado, así
-        // que sin esto la entrega no cuenta nada de lo más importante que hace.
+        // The forced save and the wait do not go through the instrumented client, so
+        // without this the submission records nothing of the most important step.
         logger::info(code::OK, 'submit_freeze', $this->context(
             'submit_freeze', 'student_submit:asksave',
             ['submission' => $submission->id, 'documentpath' => $open,
                 'responsebody' => get_string('log_submit_asksave', 'assignsubmission_tipnc')]));
 
-        // La misma clave con la que se abrió, tal cual quedó guardada: si se
-        // recalculara ya no sería la de ninguna sesión viva, y el editor rechazaría
-        // la orden sin más.
-        // La que hay guardada, nunca una nueva: renovarla aquí sería inventarse una
-        // sesión que el editor no tiene abierta, y rechazaría la orden.
+        // The same key it was opened with, exactly as it was stored: recalculating
+        // it would no longer belong to any live session, and the editor would reject
+        // the command outright.
+        // The stored one, never a new one: renewing it here would invent a session
+        // the editor does not have open, and it would reject the command.
         $key = (new sessions())->current($ncid);
 
         if ($key === '') {
@@ -688,7 +688,7 @@ class nextcloud {
             return;
         }
 
-        // Sin nadie editando no hay nada que esperar: el documento ya está entero.
+        // With nobody editing there is nothing to wait for: the document is whole.
         if ($answer === command::NOTHING_TO_SAVE) {
             logger::info(code::OK, 'submit_freeze', $this->context(
                 'submit_freeze', 'student_submit:forcesave',
@@ -697,8 +697,8 @@ class nextcloud {
             return;
         }
 
-        // El editor contesta enseguida y escribe un momento después: lo que decide
-        // que la entrega es correcta es que el documento haya cambiado.
+        // The editor answers at once and writes a moment later: what decides that
+        // the submission is sound is that the document has changed.
         if (!$this->wait_for_change($open, $before)) {
             logger::warning(code::SUBMIT_NOT_SAVED, 'submit_freeze', $this->context(
                 'submit_freeze', 'student_submit:wait',
@@ -833,7 +833,7 @@ class nextcloud {
         $answer = $this->client->request('MOVE', $this->dav_path($origin), [
             'headers' => [
                 'Destination' => $this->client->base_url() . $this->dav_path($destiny),
-                // Nunca pisar: si en el destino ya hay algo, se mira antes de tocarlo.
+                // Never overwrite: if something is already at the target, look before touching.
                 'Overwrite' => 'F',
             ],
             'context' => array_merge($context, [
@@ -861,8 +861,8 @@ class nextcloud {
      */
     public function ensure_folder(array $context = []): response {
         foreach ($this->document->folder_chain() as $folder) {
-            // Sin registro automático: crear una carpeta que ya existe responde
-            // 405, y eso no es una incidencia sino el resultado que se buscaba.
+            // No automatic logging: creating a folder that already exists answers
+            // 405, and that is not an incident but the result we were after.
             $answer = $this->client->request('MKCOL', $this->dav_path($folder), [
                 'log' => false,
                 'context' => array_merge($context, [
@@ -905,7 +905,7 @@ class nextcloud {
             ]),
         ]);
 
-        // Que ya no esté es el resultado que se buscaba.
+        // It being gone already is the result we were after.
         if ($answer->is_success() || $answer->httpcode === 404) {
             return new response(true, '');
         }
@@ -987,8 +987,8 @@ class nextcloud {
             . rawurlencode('/' . ltrim($file, '/')), [
                 'headers' => ['OCS-APIRequest' => 'true'],
 
-                // Al nivel de las opciones, no dentro del contexto: ahí dentro es
-                // un campo más del registro y no lo desactiva.
+                // At the options level, not inside the context: in there it is just
+                // one more field of the log entry and does not switch it off.
                 'log' => $log,
                 'context' => array_merge($context, [
                     'errorcode' => code::UNSHARE_FAILED,
@@ -1061,8 +1061,8 @@ class nextcloud {
             'permissions' => $permission,
         ];
 
-        // Un acceso con fecha se apaga solo si nadie vuelve a usarlo, que es lo
-        // que hace que no dependa de enterarse de nada.
+        // A dated access switches itself off if nobody uses it again, which is
+        // what keeps it from depending on finding anything out.
         if ($expires !== '') {
             $form['expireDate'] = $expires;
         }
@@ -1077,8 +1077,8 @@ class nextcloud {
             ]),
         ]);
 
-        // Un 404 al compartir significa que el destinatario no es una cuenta válida:
-        // el usuario podrá trabajar desde Moodle, pero no abrirlo en NextCloud.
+        // A 404 when sharing means the recipient is not a valid account: the user
+        // will be able to work from Moodle, but not to open it in NextCloud.
         if ($answer->httpcode === 404) {
             return new response(false, null, new error(code::SHARE_NO_ACCOUNT, $answer->body));
         }
@@ -1093,7 +1093,7 @@ class nextcloud {
             return new response(false, null, new error(code::SHARE_FAILED, $answer->body));
         }
 
-        // NextCloud concede lo que puede, no lo que se le pide: hay que mirarlo.
+        // NextCloud grants what it can, not what it is asked for: check it.
         $granted = (int) ($data['ocs']['data']['permissions'] ?? $permission);
         if ($granted !== $permission) {
             $this->settle_permission((int) $shareid, $permission, $granted, $file, $context);
@@ -1125,7 +1125,7 @@ class nextcloud {
         ]);
         unset($entry['errorcode'], $entry['errorcodes']);
 
-        // Menos acceso del pedido molesta a quien lo recibe; no es peligroso.
+        // Less access than asked for annoys whoever gets it; it is not dangerous.
         if (($granted & ~$requested) === 0) {
             logger::warning(code::SHARE_PERMISSIONS, $context['operation'] ?? 'share', $entry);
             return;

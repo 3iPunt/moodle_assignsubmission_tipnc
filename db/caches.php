@@ -26,9 +26,9 @@ defined('MOODLE_INTERNAL') || die();
 
 $definitions = [
 
-    // Si NextCloud responde o no. Lo escribe cada llamada real, así que las
-    // páginas pueden decir «ahora no se puede» sin preguntar nada a la red: en la
-    // tabla de calificación esa pregunta se haría una vez por fila.
+    // Whether NextCloud answers. Every real call writes it, so the pages can
+    // say "not right now" without asking the network anything: in the grading
+    // table that question would be asked once per row.
     'health' => [
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,
@@ -36,8 +36,8 @@ $definitions = [
         'staticacceleration' => true,
         'ttl' => 300,
     ],
-    // A quien ya se le dio acceso a un documento. NextCloud rechaza compartir
-    // dos veces lo mismo, y preguntarselo seria una llamada por pintado.
+    // Who has already been given access to a document. NextCloud refuses to
+    // share the same thing twice, and asking it would be a call per render.
     'granted' => [
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,

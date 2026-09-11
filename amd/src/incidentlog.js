@@ -50,7 +50,7 @@ let opener = null;
  */
 const reload = async(root) => {
     const listing = root.querySelector(SELECTORS.listing);
-    // Se atenúa en lugar de vaciarse: la tabla no debe saltar mientras carga.
+    // It dims instead of emptying: the table must not jump while loading.
     listing.classList.add('tipnc-log__listing--busy');
 
     try {
@@ -165,7 +165,7 @@ const copyDiagnosis = async(button) => {
 /**
  * Asks for confirmation and empties the log.
  *
- * Borrar es irreversible: la confirmación dice cuántos registros se pierden.
+ * Deleting is irreversible: the confirmation says how many rows are lost.
  *
  * @param {Element} trigger The button, which carries the count.
  * @returns {Promise<void>}
@@ -271,7 +271,7 @@ export const init = (root) => {
         }
     });
 
-    // El panel es un diálogo: se cierra con Escape y pulsando fuera.
+    // The panel is a dialog: it closes with Escape and by clicking outside.
     root.addEventListener('keydown', (event) => {
         if (event.key === 'Escape' && !root.querySelector(SELECTORS.drawer).hidden) {
             closeDetail(root);
@@ -292,7 +292,7 @@ export const init = (root) => {
             reload(root);
         });
 
-        // Curso, tarea y usuario pueden ser miles: se buscan, no se listan.
+        // Course, assignment and user can be thousands: searched, not listed.
         enhanceFilter(select);
     });
 };
@@ -318,7 +318,7 @@ const enhanceFilter = async(select) => {
             true
         );
     } catch (error) {
-        // Sin autocompletado el filtro sigue siendo utilizable: no se molesta al usuario.
+        // Without autocomplete the filter still works: the user is not bothered.
         window.console.debug(error);
     }
 };
