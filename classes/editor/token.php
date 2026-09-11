@@ -42,7 +42,6 @@ use Throwable;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class token {
-
     /** @var string The only algorithm accepted, on both sides. */
     public const ALGORITHM = 'HS256';
 

@@ -50,7 +50,6 @@ use templatable;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class document_viewer implements renderable, templatable {
-
     /** @var string It is frozen: it was handed in and no longer changes. */
     public const READONLY_FROZEN = 'frozen';
 
@@ -70,10 +69,15 @@ class document_viewer implements renderable, templatable {
      * @param string     $readonly    Why it cannot be written in, empty when it can.
      */
     public function __construct(
+        /** @var string Address of the NextCloud page, for the frame. */
         private readonly string $url,
+        /** @var string Name of what is being shown. */
         private readonly string $title,
+        /** @var string Class that sets the height. */
         private readonly string $heightclass = '',
+        /** @var ?array Configuration for the embedded editor, when used. */
         private readonly ?array $editor = null,
+        /** @var string Why it cannot be written in, empty when it can. */
         private readonly string $readonly = ''
     ) {
     }
@@ -92,9 +96,16 @@ class document_viewer implements renderable, templatable {
      * @throws dml_exception If the configuration cannot be read.
      * @throws moodle_exception If the editor is chosen and has no secret.
      */
-    public static function for_document(int $instance, string $path, int $ncid, string $title,
-                                        stdClass $user, bool $canedit, string $heightclass = '',
-                                        string $readonly = ''): self {
+    public static function for_document(
+        int $instance,
+        string $path,
+        int $ncid,
+        string $title,
+        stdClass $user,
+        bool $canedit,
+        string $heightclass = '',
+        string $readonly = ''
+    ): self {
         $url = document::get_url($ncid);
 
         // With no account there is no writing possible, whatever anybody's role

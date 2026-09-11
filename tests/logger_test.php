@@ -41,7 +41,6 @@ use assignsubmission_tipnc\log\logger;
  * @covers     \assignsubmission_tipnc\log\logger
  */
 final class logger_test extends advanced_testcase {
-
     /** @var string Stands in for the service password in these tests. */
     private const SECRET = 'ClaveDeServicio123';
 
@@ -130,8 +129,10 @@ final class logger_test extends advanced_testcase {
             ]);
         }
 
-        $this->assertSame(1, $DB->count_records('assignsubmission_tipnc_log',
-            ['errorcode' => code::SHARE_NO_ACCOUNT]));
+        $this->assertSame(1, $DB->count_records(
+            'assignsubmission_tipnc_log',
+            ['errorcode' => code::SHARE_NO_ACCOUNT]
+        ));
         $this->assertSame(3, (int) $this->last()->occurrences);
     }
 
@@ -148,8 +149,10 @@ final class logger_test extends advanced_testcase {
             logger::info(code::OK, 'editor_save', ['method' => 'test', 'assignment' => 1]);
         }
 
-        $this->assertSame(3, $DB->count_records('assignsubmission_tipnc_log',
-            ['errorcode' => code::OK]));
+        $this->assertSame(3, $DB->count_records(
+            'assignsubmission_tipnc_log',
+            ['errorcode' => code::OK]
+        ));
     }
 
     /**

@@ -32,7 +32,6 @@ namespace assignsubmission_tipnc\api;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class error {
-
     /** @var int Error Code */
     public $code;
 
@@ -48,5 +47,4 @@ class error {
         $this->code = $code;
         $this->message = $message;
     }
-
 }

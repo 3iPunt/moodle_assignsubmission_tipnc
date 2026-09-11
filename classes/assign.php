@@ -38,7 +38,6 @@ use moodle_exception;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class assign {
-
     /**
      * Is Submission NextCloud?
      *
@@ -70,7 +69,7 @@ class assign {
      */
     public static function get_submission(int $submissionid) {
         global $DB;
-        return $DB->get_record('assign_submission', array('id' => $submissionid));
+        return $DB->get_record('assign_submission', ['id' => $submissionid]);
     }
 
     /**
@@ -91,5 +90,4 @@ class assign {
 
         return has_capability('mod/assign:grade', context_module::instance($cm->id));
     }
-
 }

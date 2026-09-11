@@ -43,23 +43,39 @@ $back = new moodle_url('/mod/assign/view.php', ['id' => $cmid]);
 // It already existing is not an error: two people can click at once, or
 // cron may have got there first.
 if (tipnc_enun::get((int) $cm->instance)) {
-    redirect($back, get_string('prepare_already', 'assignsubmission_tipnc'),
-        null, \core\output\notification::NOTIFY_INFO);
+    redirect(
+        $back,
+        get_string('prepare_already', 'assignsubmission_tipnc'),
+        null,
+        \core\output\notification::NOTIFY_INFO
+    );
 }
 
 $response = (new nextcloud((int) $cm->instance))->teacher_create();
 
 if (!$response->success) {
-    redirect($back, get_string('prepare_failed', 'assignsubmission_tipnc'),
-        null, \core\output\notification::NOTIFY_ERROR);
+    redirect(
+        $back,
+        get_string('prepare_failed', 'assignsubmission_tipnc'),
+        null,
+        \core\output\notification::NOTIFY_ERROR
+    );
 }
 
 // The brief is made and the assignment works, but whoever created it
 // cannot write in it: naming the missing account saves opening the log.
 if ((string) $response->error->code === code::SHARE_NO_ACCOUNT) {
-    redirect($back, get_string('prepare_noaccount', 'assignsubmission_tipnc', $USER->username),
-        null, \core\output\notification::NOTIFY_WARNING);
+    redirect(
+        $back,
+        get_string('prepare_noaccount', 'assignsubmission_tipnc', $USER->username),
+        null,
+        \core\output\notification::NOTIFY_WARNING
+    );
 }
 
-redirect($back, get_string('prepare_done', 'assignsubmission_tipnc'),
-    null, \core\output\notification::NOTIFY_SUCCESS);
+redirect(
+    $back,
+    get_string('prepare_done', 'assignsubmission_tipnc'),
+    null,
+    \core\output\notification::NOTIFY_SUCCESS
+);

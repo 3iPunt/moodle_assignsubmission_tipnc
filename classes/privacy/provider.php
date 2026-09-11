@@ -50,10 +50,9 @@ use mod_assign\privacy\useridlist;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
-        \core_privacy\local\metadata\provider,
-        \mod_assign\privacy\assignsubmission_provider,
-        \mod_assign\privacy\assignsubmission_user_provider {
-
+    \core_privacy\local\metadata\provider,
+    \mod_assign\privacy\assignsubmission_provider,
+    \mod_assign\privacy\assignsubmission_user_provider {
     /**
      * Everything this plugin stores or sends about a person.
      *
@@ -68,11 +67,17 @@ class provider implements
             'path' => 'privacy:metadata:path',
         ];
 
-        $collection->add_database_table('assignsubmission_tipnc', $document,
-            'privacy:metadata:tipnc');
+        $collection->add_database_table(
+            'assignsubmission_tipnc',
+            $document,
+            'privacy:metadata:tipnc'
+        );
 
-        $collection->add_database_table('assignsubmission_tipnc_open', $document,
-            'privacy:metadata:tipnc_open');
+        $collection->add_database_table(
+            'assignsubmission_tipnc_open',
+            $document,
+            'privacy:metadata:tipnc_open'
+        );
 
         $collection->add_database_table('assignsubmission_tipnc_enun', [
             'assignment' => 'privacy:metadata:assignment',
@@ -144,7 +149,7 @@ class provider implements
      * @return void
      */
     public static function get_student_user_ids(useridlist $useridlist) {
-        // mod_assign takes them from assign_submission; nobody else here.
+        // Taken by mod_assign from assign_submission; nobody else here.
     }
 
     /**
@@ -162,23 +167,32 @@ class provider implements
 
         $params = ['instanceid' => $context->instanceid];
 
-        $userlist->add_from_sql('userid',
+        $userlist->add_from_sql(
+            'userid',
             "SELECT e.userid
                FROM {course_modules} cm
                JOIN {assignsubmission_tipnc_enun} e ON e.assignment = cm.instance
-              WHERE cm.id = :instanceid", $params);
+              WHERE cm.id = :instanceid",
+            $params
+        );
 
-        $userlist->add_from_sql('userid',
+        $userlist->add_from_sql(
+            'userid',
             "SELECT l.userid
                FROM {course_modules} cm
                JOIN {assignsubmission_tipnc_log} l ON l.assignment = cm.instance
-              WHERE cm.id = :instanceid AND l.userid IS NOT NULL", $params);
+              WHERE cm.id = :instanceid AND l.userid IS NOT NULL",
+            $params
+        );
 
-        $userlist->add_from_sql('affecteduserid',
+        $userlist->add_from_sql(
+            'affecteduserid',
             "SELECT l.affecteduserid
                FROM {course_modules} cm
                JOIN {assignsubmission_tipnc_log} l ON l.assignment = cm.instance
-              WHERE cm.id = :instanceid AND l.affecteduserid IS NOT NULL", $params);
+              WHERE cm.id = :instanceid AND l.affecteduserid IS NOT NULL",
+            $params
+        );
     }
 
     /**
@@ -219,8 +233,10 @@ class provider implements
             ];
 
             writer::with_context($context)->export_data(
-                array_merge($exportdata->get_subcontext(),
-                    [get_string('pluginname', 'assignsubmission_tipnc'), $data->kind]),
+                array_merge(
+                    $exportdata->get_subcontext(),
+                    [get_string('pluginname', 'assignsubmission_tipnc'), $data->kind]
+                ),
                 $data
             );
         }
@@ -254,9 +270,11 @@ class provider implements
      * @throws dml_exception If the tables cannot be read.
      */
     public static function delete_submission_for_userid(assign_plugin_request_data $deletedata) {
-        self::forget([(int) $deletedata->get_pluginobject()->id],
+        self::forget(
+            [(int) $deletedata->get_pluginobject()->id],
             [(int) $deletedata->get_user()->id],
-            (int) $deletedata->get_assignid());
+            (int) $deletedata->get_assignid()
+        );
     }
 
     /**
@@ -267,8 +285,11 @@ class provider implements
      * @throws dml_exception If the tables cannot be read.
      */
     public static function delete_submissions(assign_plugin_request_data $deletedata) {
-        self::forget($deletedata->get_submissionids(), $deletedata->get_userids(),
-            (int) $deletedata->get_assignid());
+        self::forget(
+            $deletedata->get_submissionids(),
+            $deletedata->get_userids(),
+            (int) $deletedata->get_assignid()
+        );
     }
 
     /**
@@ -288,18 +309,32 @@ class provider implements
             $params['assignment'] = $assignment;
 
             $paths = array_merge(
-                (array) $DB->get_fieldset_select('assignsubmission_tipnc', 'path',
-                    "assignment = :assignment AND submission $insql AND path IS NOT NULL", $params),
-                (array) $DB->get_fieldset_select('assignsubmission_tipnc_open', 'path',
-                    "assignment = :assignment AND submission $insql AND path IS NOT NULL", $params)
+                (array) $DB->get_fieldset_select(
+                    'assignsubmission_tipnc',
+                    'path',
+                    "assignment = :assignment AND submission $insql AND path IS NOT NULL",
+                    $params
+                ),
+                (array) $DB->get_fieldset_select(
+                    'assignsubmission_tipnc_open',
+                    'path',
+                    "assignment = :assignment AND submission $insql AND path IS NOT NULL",
+                    $params
+                )
             );
 
             cleanup::erase($paths, $assignment);
 
-            $DB->delete_records_select('assignsubmission_tipnc',
-                "assignment = :assignment AND submission $insql", $params);
-            $DB->delete_records_select('assignsubmission_tipnc_open',
-                "assignment = :assignment AND submission $insql", $params);
+            $DB->delete_records_select(
+                'assignsubmission_tipnc',
+                "assignment = :assignment AND submission $insql",
+                $params
+            );
+            $DB->delete_records_select(
+                'assignsubmission_tipnc_open',
+                "assignment = :assignment AND submission $insql",
+                $params
+            );
         }
 
         if (!$userids) {
@@ -308,16 +343,28 @@ class provider implements
 
         // The brief is not deleted —it belongs to the assignment, not to a
         // person— but it stops saying who created it, which is the personal
+        // data it holds.
         [$insql, $params] = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
         $params['assignment'] = $assignment;
 
-        $DB->set_field_select('assignsubmission_tipnc_enun', 'userid', 0,
-            "assignment = :assignment AND userid $insql", $params);
+        $DB->set_field_select(
+            'assignsubmission_tipnc_enun',
+            'userid',
+            0,
+            "assignment = :assignment AND userid $insql",
+            $params
+        );
 
-        $DB->delete_records_select('assignsubmission_tipnc_log',
-            "assignment = :assignment AND userid $insql", $params);
-        $DB->delete_records_select('assignsubmission_tipnc_log',
-            "assignment = :assignment AND affecteduserid $insql", $params);
+        $DB->delete_records_select(
+            'assignsubmission_tipnc_log',
+            "assignment = :assignment AND userid $insql",
+            $params
+        );
+        $DB->delete_records_select(
+            'assignsubmission_tipnc_log',
+            "assignment = :assignment AND affecteduserid $insql",
+            $params
+        );
     }
 
     /**
@@ -336,7 +383,9 @@ class provider implements
                 UNION
                 SELECT path FROM {assignsubmission_tipnc_enun} WHERE assignment = :a3 AND path IS NOT NULL";
 
-        return (array) $DB->get_fieldset_sql($sql,
-            ['a1' => $assignment, 'a2' => $assignment, 'a3' => $assignment]);
+        return (array) $DB->get_fieldset_sql(
+            $sql,
+            ['a1' => $assignment, 'a2' => $assignment, 'a3' => $assignment]
+        );
     }
 }

@@ -43,7 +43,6 @@ use assignsubmission_tipnc\models\sessions;
  * @covers     \assignsubmission_tipnc\models\sessions
  */
 final class sessions_test extends advanced_testcase {
-
     /** @var int Identifier of the document in NextCloud. */
     private const NCID = 1234;
 

@@ -41,7 +41,6 @@ use assignsubmission_tipnc\models\health;
  * @covers     \assignsubmission_tipnc\models\health
  */
 final class health_test extends advanced_testcase {
-
     /**
      * Nothing is known before anything has been tried.
      *
@@ -88,8 +87,10 @@ final class health_test extends advanced_testcase {
             health::forget();
             health::note($errorcode);
 
-            $this->assertTrue(health::is_down(),
-                'El código ' . $errorcode . ' debería marcar el servicio como caído.');
+            $this->assertTrue(
+                health::is_down(),
+                'El código ' . $errorcode . ' debería marcar el servicio como caído.'
+            );
         }
     }
 
@@ -104,8 +105,10 @@ final class health_test extends advanced_testcase {
             health::forget();
             health::note($errorcode);
 
-            $this->assertFalse(health::is_down(),
-                'El código ' . $errorcode . ' es de un documento, no del servicio.');
+            $this->assertFalse(
+                health::is_down(),
+                'El código ' . $errorcode . ' es de un documento, no del servicio.'
+            );
         }
     }
 

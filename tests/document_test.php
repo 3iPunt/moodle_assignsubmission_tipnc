@@ -42,7 +42,6 @@ use stdClass;
  * @covers     \assignsubmission_tipnc\api\document
  */
 final class document_test extends advanced_testcase {
-
     /** @var stdClass The course holding the assignment. */
     private stdClass $course;
 
@@ -66,8 +65,10 @@ final class document_test extends advanced_testcase {
         set_config('template', 'template.docx', 'assignsubmission_tipnc');
 
         $this->course = $this->getDataGenerator()->create_course(['shortname' => 'TIPNCQA']);
-        $this->assign = $this->getDataGenerator()->create_module('assign',
-            ['course' => $this->course->id, 'name' => 'Tarea NC']);
+        $this->assign = $this->getDataGenerator()->create_module(
+            'assign',
+            ['course' => $this->course->id, 'name' => 'Tarea NC']
+        );
         $this->student = $this->getDataGenerator()->create_user(['username' => 'alumno1']);
     }
 
@@ -97,11 +98,15 @@ final class document_test extends advanced_testcase {
         $document = new document($this->assign->id);
         $submission = $this->submission();
 
-        $this->assertSame('open_' . $this->assign->id . '_alumno1.docx',
-            basename($document->open_for($submission)));
+        $this->assertSame(
+            'open_' . $this->assign->id . '_alumno1.docx',
+            basename($document->open_for($submission))
+        );
 
-        $this->assertSame('subm_' . $this->assign->id . '_alumno1.docx',
-            basename($document->submission_for($submission)));
+        $this->assertSame(
+            'subm_' . $this->assign->id . '_alumno1.docx',
+            basename($document->submission_for($submission))
+        );
     }
 
     /**
@@ -163,8 +168,10 @@ final class document_test extends advanced_testcase {
     public function test_a_missing_owner_does_not_produce_a_nameless_document(): void {
         $document = new document($this->assign->id);
 
-        $this->assertSame(document::UNKNOWN_OWNER,
-            $document->owner_of($this->submission(['userid' => -1])));
+        $this->assertSame(
+            document::UNKNOWN_OWNER,
+            $document->owner_of($this->submission(['userid' => -1]))
+        );
     }
 
     /**
@@ -191,15 +198,19 @@ final class document_test extends advanced_testcase {
      */
     public function test_folder_names_drop_what_webdav_cannot_take(): void {
         $course = $this->getDataGenerator()->create_course(['shortname' => 'A/B: "C" <D>']);
-        $assign = $this->getDataGenerator()->create_module('assign',
-            ['course' => $course->id, 'name' => 'Tarea con | tubería']);
+        $assign = $this->getDataGenerator()->create_module(
+            'assign',
+            ['course' => $course->id, 'name' => 'Tarea con | tubería']
+        );
 
         $folder = (new document($assign->id))->assignment_folder();
 
         foreach (['/A', '\\', ':', '*', '?', '"', '<', '>', '|'] as $forbidden) {
-            $this->assertStringNotContainsString($forbidden,
+            $this->assertStringNotContainsString(
+                $forbidden,
                 substr($folder, strlen('tasks/')),
-                'El nombre de carpeta conserva un carácter que WebDAV no admite: ' . $forbidden);
+                'El nombre de carpeta conserva un carácter que WebDAV no admite: ' . $forbidden
+            );
         }
     }
 
@@ -221,8 +232,10 @@ final class document_test extends advanced_testcase {
             'path' => 'donde/esta/de/verdad.docx',
         ]);
 
-        $this->assertSame('donde/esta/de/verdad.docx',
-            (new document($this->assign->id))->open_path($submission));
+        $this->assertSame(
+            'donde/esta/de/verdad.docx',
+            (new document($this->assign->id))->open_path($submission)
+        );
     }
 
     /**
@@ -234,7 +247,9 @@ final class document_test extends advanced_testcase {
     public function test_legacy_names_are_still_composable(): void {
         $document = new document($this->assign->id);
 
-        $this->assertStringEndsWith('open_' . $this->assign->id . '_alumno1.docx',
-            $document->legacy_name(document::PREFIX_OPEN, 'alumno1'));
+        $this->assertStringEndsWith(
+            'open_' . $this->assign->id . '_alumno1.docx',
+            $document->legacy_name(document::PREFIX_OPEN, 'alumno1')
+        );
     }
 }

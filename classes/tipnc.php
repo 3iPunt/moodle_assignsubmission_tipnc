@@ -37,8 +37,8 @@ use stdClass;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class tipnc {
-
-    const TABLE_TIPNC = 'assignsubmission_tipnc';
+    /** @var string Table holding the frozen submissions. */
+    public const TABLE_TIPNC = 'assignsubmission_tipnc';
 
     /**
      * Get tipnc submission information from the database
@@ -49,7 +49,7 @@ class tipnc {
      */
     public static function get(int $submissionid) {
         global $DB;
-        return $DB->get_record(self::TABLE_TIPNC, array('submission' => $submissionid));
+        return $DB->get_record(self::TABLE_TIPNC, ['submission' => $submissionid]);
     }
 
     /**
@@ -98,8 +98,12 @@ class tipnc {
         try {
             $DB->delete_records(self::TABLE_TIPNC, ['submission' => $submissionid]);
         } catch (moodle_exception $e) {
-            tipnc_error::log('tipnc:delete_by_submissionid',
-                new error('2002', $e->getMessage()), $assignment, $submissionid);
+            tipnc_error::log(
+                'tipnc:delete_by_submissionid',
+                new error('2002', $e->getMessage()),
+                $assignment,
+                $submissionid
+            );
         }
     }
 
@@ -117,5 +121,4 @@ class tipnc {
             tipnc_error::log('tipnc:delete', new error('2003', $e->getMessage()), $instance);
         }
     }
-
 }

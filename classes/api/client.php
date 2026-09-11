@@ -40,7 +40,6 @@ use Throwable;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class client {
-
     /** @var int Seconds a call may take before giving up. */
     private const TIMEOUT = 30;
 
@@ -106,11 +105,15 @@ class client {
             $answer = new http_response(0, '', 0, 'sin configurar');
 
             if (($options['log'] ?? true) !== false) {
-                logger::record(code::severity(code::CONFIG_MISSING), code::CONFIG_MISSING,
-                    (string) ($context['operation'] ?? ''), array_merge($context, [
+                logger::record(
+                    code::severity(code::CONFIG_MISSING),
+                    code::CONFIG_MISSING,
+                    (string) ($context['operation'] ?? ''),
+                    array_merge($context, [
                         'httpmethod' => $method,
                         'requesturl' => $path,
-                    ]));
+                    ])
+                );
             }
 
             return $answer;
@@ -144,8 +147,13 @@ class client {
      * @param  array|null  $form    Form fields; the client builds the body and its header.
      * @return http_response The answer.
      */
-    private function send(string $method, string $url, array $headers, ?string $body,
-                          ?array $form = null): http_response {
+    private function send(
+        string $method,
+        string $url,
+        array $headers,
+        ?string $body,
+        ?array $form = null
+    ): http_response {
         $started = microtime(true);
 
         try {

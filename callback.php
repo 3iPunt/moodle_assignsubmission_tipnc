@@ -69,7 +69,12 @@ if ($url === '') {
 
 // The key travels signed inside the token: that is what tells us whoever
 // saves is the session Moodle opened, and not to renew it underneath.
-$stored = callback::store($instance, $path, $url, (int) $body['status'],
-    (string) ($payload['key'] ?? ''));
+$stored = callback::store(
+    $instance,
+    $path,
+    $url,
+    (int) $body['status'],
+    (string) ($payload['key'] ?? '')
+);
 
 callback::answer($stored ? callback::OK : callback::ERROR_SAVE);

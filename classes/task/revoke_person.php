@@ -43,7 +43,6 @@ use dml_exception;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class revoke_person extends adhoc_task {
-
     /**
      * Withdraws every document of the course from that person.
      *
@@ -78,15 +77,20 @@ class revoke_person extends adhoc_task {
                 SELECT id, assignment, submission AS submissionid, path FROM {assignsubmission_tipnc_open}
                  WHERE path IS NOT NULL AND assignment IN (SELECT id FROM {assign} WHERE course = :c3)";
 
-        $rows = $DB->get_recordset_sql($sql,
-            ['c1' => $courseid, 'c2' => $courseid, 'c3' => $courseid]);
+        $rows = $DB->get_recordset_sql(
+            $sql,
+            ['c1' => $courseid, 'c2' => $courseid, 'c3' => $courseid]
+        );
 
         $context = ['operation' => 'revoke_assignment', 'affecteduserid' => $userid];
 
         foreach ($rows as $row) {
             (new nextcloud((int) $row->assignment))
-                ->revoke_person($row->path, $user->username,
-                    array_merge($context, ['assignment' => (int) $row->assignment]));
+                ->revoke_person(
+                    $row->path,
+                    $user->username,
+                    array_merge($context, ['assignment' => (int) $row->assignment])
+                );
 
             // So that the next visit hands access out again if this person turns
             // out to still have a reason for it. Both kinds: the brief goes by

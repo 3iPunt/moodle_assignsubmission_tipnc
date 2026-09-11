@@ -40,7 +40,6 @@ use templatable;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class incident_detail implements renderable, templatable {
-
     /**
      * Constructor.
      *
@@ -49,8 +48,11 @@ class incident_detail implements renderable, templatable {
      * @param array      $environment Versions and public address of NextCloud.
      */
     public function __construct(
+        /** @var stdClass The incident, with its names resolved. */
         private readonly stdClass $incident,
+        /** @var array Every call of the same action. */
         private readonly array $trace = [],
+        /** @var array Versions and public address of NextCloud. */
         private readonly array $environment = []
     ) {
     }
@@ -103,15 +105,19 @@ class incident_detail implements renderable, templatable {
             $rows[] = [
                 'label' => get_string('detail_course', 'assignsubmission_tipnc'),
                 'value' => format_string($incident->assignmentinfo->coursename),
-                'url' => (new moodle_url('/course/view.php',
-                    ['id' => $incident->assignmentinfo->course]))->out(false),
+                'url' => (new moodle_url(
+                    '/course/view.php',
+                    ['id' => $incident->assignmentinfo->course]
+                ))->out(false),
             ];
             $rows[] = [
                 'label' => get_string('detail_assignment', 'assignsubmission_tipnc'),
                 'value' => format_string($incident->assignmentinfo->name),
                 'url' => empty($incident->assignmentinfo->cmid) ? '' :
-                    (new moodle_url('/mod/assign/view.php',
-                        ['id' => $incident->assignmentinfo->cmid]))->out(false),
+                    (new moodle_url(
+                        '/mod/assign/view.php',
+                        ['id' => $incident->assignmentinfo->cmid]
+                    ))->out(false),
             ];
         }
 
@@ -127,8 +133,10 @@ class incident_detail implements renderable, templatable {
             $rows[] = [
                 'label' => get_string('detail_affected', 'assignsubmission_tipnc'),
                 'value' => fullname($incident->affecteduserinfo),
-                'url' => (new moodle_url('/user/profile.php',
-                    ['id' => $incident->affecteduserinfo->id]))->out(false),
+                'url' => (new moodle_url(
+                    '/user/profile.php',
+                    ['id' => $incident->affecteduserinfo->id]
+                ))->out(false),
             ];
         }
 

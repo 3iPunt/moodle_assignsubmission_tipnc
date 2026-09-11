@@ -49,7 +49,6 @@ use assignsubmission_tipnc\tipnc_open;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class assign_submission_tipnc extends assign_submission_plugin {
-
     /**
      * Get the name of the file submission plugin
      * @return string
@@ -65,7 +64,6 @@ class assign_submission_tipnc extends assign_submission_plugin {
      * @param MoodleQuickForm $mform
      */
     public function get_settings(MoodleQuickForm $mform) {
-
     }
 
     /**
@@ -122,7 +120,9 @@ class assign_submission_tipnc extends assign_submission_plugin {
                     tipnc_error::log(
                         'get_form_elements',
                         new error_log('1000', 'The NextCloud ID could not be retrieved'),
-                        $submission->assignment, $submission->id);
+                        $submission->assignment,
+                        $submission->id
+                    );
                     return false;
                 } else {
                     $ncid = $tipncopen->ncid;
@@ -176,10 +176,11 @@ class assign_submission_tipnc extends assign_submission_plugin {
                 tipnc_error::log(
                     'get_form_elements',
                     new error_log('1001', 'The Enunciate does not exist'),
-                    $submission->assignment, $submission->id);
+                    $submission->assignment,
+                    $submission->id
+                );
                 return false;
             }
-
         }
     }
 
@@ -202,7 +203,9 @@ class assign_submission_tipnc extends assign_submission_plugin {
                 tipnc_error::log(
                     'save',
                     new error_log('1100', 'The Enunciate does not exist'),
-                    $submission->assignment, $submission->id);
+                    $submission->assignment,
+                    $submission->id
+                );
                 return false;
             }
         }
@@ -214,7 +217,9 @@ class assign_submission_tipnc extends assign_submission_plugin {
                 tipnc_error::log(
                     'save',
                     new error_log('1101', 'The Open Submission does not exist'),
-                    $submission->assignment, $submission->id);
+                    $submission->assignment,
+                    $submission->id
+                );
                 return false;
             }
         }
@@ -257,17 +262,23 @@ class assign_submission_tipnc extends assign_submission_plugin {
         $enunciate = tipnc_enun::get($submission->assignment);
 
         if (!$enunciate) {
-            tipnc_error::log('freeze',
+            tipnc_error::log(
+                'freeze',
                 new error_log('1100', 'The Enunciate does not exist'),
-                $submission->assignment, $submission->id);
+                $submission->assignment,
+                $submission->id
+            );
 
             return false;
         }
 
         if (!tipnc_open::get($submission->id)) {
-            tipnc_error::log('freeze',
+            tipnc_error::log(
+                'freeze',
                 new error_log('1101', 'The Open Submission does not exist'),
-                $submission->assignment, $submission->id);
+                $submission->assignment,
+                $submission->id
+            );
 
             return false;
         }
@@ -287,8 +298,12 @@ class assign_submission_tipnc extends assign_submission_plugin {
         // A clean response carries a filler error with code "0", which is not the
         // catalogue's "operation successful": both have to be discarded.
         if (!in_array((string) $response->error->code, ['', '0', code::OK], true)) {
-            tipnc_error::log('freeze:share', $response->error,
-                $submission->assignment, $submission->id);
+            tipnc_error::log(
+                'freeze:share',
+                $response->error,
+                $submission->assignment,
+                $submission->id
+            );
         }
 
         return true;
@@ -314,7 +329,9 @@ class assign_submission_tipnc extends assign_submission_plugin {
                 tipnc_error::log(
                     'remove',
                     new error_log('1200', $e->getMessage()),
-                    $submission->assignment, $submission->id);
+                    $submission->assignment,
+                    $submission->id
+                );
                 return false;
             }
         }
@@ -342,7 +359,7 @@ class assign_submission_tipnc extends assign_submission_plugin {
      * @throws coding_exception
      * @throws moodle_exception
      */
-    public function view_summary(stdClass $submission, & $showviewlink): string {
+    public function view_summary(stdClass $submission, &$showviewlink): string {
         global $PAGE, $USER;
 
         // First of all, because if the service does not answer nothing below is
@@ -358,7 +375,9 @@ class assign_submission_tipnc extends assign_submission_plugin {
                 'view_summary',
                 new error_log('1300', 'The Enunciate does not exist. ' .
                 'Check if the task also has the delivery as a file activated'),
-                $submission->assignment, $submission->id);
+                $submission->assignment,
+                $submission->id
+            );
             return '';
         }
         $isteacher = \assignsubmission_tipnc\assign::is_teacher($submission->assignment);
@@ -388,7 +407,8 @@ class assign_submission_tipnc extends assign_submission_plugin {
                         // With no draft they have not started. That is said, rather
                         // than showing the brief, which looks like a blank handed in.
                         return $PAGE->get_renderer('assignsubmission_tipnc')->render(
-                            new unavailable(0, false, null, unavailable::NOT_STARTED));
+                            new unavailable(0, false, null, unavailable::NOT_STARTED)
+                        );
                     case ASSIGN_SUBMISSION_STATUS_SUBMITTED:
                         $mode = document::MODE_SUBMISSION;
                         $tipncsub = tipnc::get($submission->id);
@@ -398,7 +418,9 @@ class assign_submission_tipnc extends assign_submission_plugin {
                         tipnc_error::log(
                             'view_summary',
                             new error_log('1301', 'Assign status unknown'),
-                            $submission->assignment, $submission->id);
+                            $submission->assignment,
+                            $submission->id
+                        );
                         return '';
                 }
             }
@@ -450,7 +472,9 @@ class assign_submission_tipnc extends assign_submission_plugin {
                         tipnc_error::log(
                             'view_summary',
                             new error_log('1302', 'Assign status unknown'),
-                            $submission->assignment, $submission->id);
+                            $submission->assignment,
+                            $submission->id
+                        );
                         return '';
                 }
             }
@@ -463,10 +487,14 @@ class assign_submission_tipnc extends assign_submission_plugin {
             tipnc_error::log(
                 'view_summary',
                 new error_log('1303', 'The NextCloud ID could not be retrieved'),
-                $submission->assignment, $submission->id);
+                $submission->assignment,
+                $submission->id
+            );
 
-            $candiagnose = has_capability('assignsubmission/tipnc:view_errors',
-                $this->assignment->get_context());
+            $candiagnose = has_capability(
+                'assignsubmission/tipnc:view_errors',
+                $this->assignment->get_context()
+            );
 
             return $PAGE->get_renderer('assignsubmission_tipnc')->render(new unavailable(
                 0,
@@ -611,7 +639,7 @@ class assign_submission_tipnc extends assign_submission_plugin {
      * @param string $log record log events here
      * @return bool Was it a success? (false will trigger rollback)
      */
-    public function upgrade_settings(context $oldcontext, stdClass $oldassignment, & $log): bool {
+    public function upgrade_settings(context $oldcontext, stdClass $oldassignment, &$log): bool {
         return true;
     }
 
@@ -625,8 +653,13 @@ class assign_submission_tipnc extends assign_submission_plugin {
      * @param string $log Record upgrade messages in the log
      * @return bool true or false - false will trigger a rollback
      */
-    public function upgrade(context $oldcontext, stdClass $oldassignment,
-                            stdClass $oldsubmission, stdClass $submission, &$log): bool {
+    public function upgrade(
+        context $oldcontext,
+        stdClass $oldassignment,
+        stdClass $oldsubmission,
+        stdClass $submission,
+        &$log
+    ): bool {
         return true;
     }
 
@@ -649,7 +682,8 @@ class assign_submission_tipnc extends assign_submission_plugin {
             tipnc_error::log(
                 'delete_instance',
                 new error_log('1400', $e->getMessage()),
-                $this->assignment->get_instance()->id);
+                $this->assignment->get_instance()->id
+            );
             return false;
         }
     }
@@ -698,7 +732,8 @@ class assign_submission_tipnc extends assign_submission_plugin {
         // outage, and until an account is created for them there is nothing to do.
         if ($submission !== null && $this->owner_missing($submission)) {
             return $PAGE->get_renderer('assignsubmission_tipnc')->render(
-                new unavailable(0, false, null, unavailable::NO_ACCOUNT));
+                new unavailable(0, false, null, unavailable::NO_ACCOUNT)
+            );
         }
 
         $state = health::state();
@@ -849,8 +884,12 @@ class assign_submission_tipnc extends assign_submission_plugin {
             ->reattempt_from($sourcesubmission, $destsubmission);
 
         if (!$response->success) {
-            tipnc_error::log('copy_submission', $response->error,
-                $destsubmission->assignment, $destsubmission->id);
+            tipnc_error::log(
+                'copy_submission',
+                $response->error,
+                $destsubmission->assignment,
+                $destsubmission->id
+            );
 
             return false;
         }

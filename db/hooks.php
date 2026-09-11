@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-// mod_assign offers no gap where a submission subplugin can paint on the
+// There is no gap in mod_assign where a submission subplugin can paint on the
 // assignment page: the status box requires mod/assign:viewownsubmissionsummary,
 // which only students have. Without these callbacks, nobody else sees the brief.
 //

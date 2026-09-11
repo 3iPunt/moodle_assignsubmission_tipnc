@@ -42,7 +42,6 @@ use templatable;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class submission_summary implements renderable, templatable {
-
     /**
      * Constructor.
      *
@@ -56,13 +55,21 @@ class submission_summary implements renderable, templatable {
      * @param document_viewer|null $viewer How the document is shown, when it is shown.
      */
     public function __construct(
+        /** @var string Address where the document is read. */
         private readonly string $url,
+        /** @var string Which of the three documents this is. */
         private readonly string $mode,
+        /** @var bool Show the document, or just describe it. */
         private readonly bool $embed = false,
+        /** @var int When the submission last changed, 0 when unknown. */
         private readonly int $timemodified = 0,
+        /** @var ?string Name in NextCloud, when it is known cheaply. */
         private readonly ?string $filename = null,
+        /** @var bool Whether the document belongs to whoever is looking. */
         private readonly bool $own = true,
+        /** @var string Class that sets the height of the frame. */
         private readonly string $heightclass = '',
+        /** @var ?document_viewer How the document is shown, when it is shown. */
         private readonly ?document_viewer $viewer = null
     ) {
     }
@@ -102,8 +109,11 @@ class submission_summary implements renderable, templatable {
             'filename' => $this->filename,
             'hasfilename' => $this->filename !== null,
             'modified' => $this->timemodified > 0
-                ? get_string('subm_modified', 'assignsubmission_tipnc',
-                    userdate($this->timemodified, get_string('strftimedatetimeshort', 'core_langconfig')))
+                ? get_string(
+                    'subm_modified',
+                    'assignsubmission_tipnc',
+                    userdate($this->timemodified, get_string('strftimedatetimeshort', 'core_langconfig'))
+                )
                 : null,
             'hasmodified' => $this->timemodified > 0,
         ];

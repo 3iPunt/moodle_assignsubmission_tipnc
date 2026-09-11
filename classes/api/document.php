@@ -37,20 +37,25 @@ use stdClass;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class document {
-
-    const PREFIX_ENUN = 'enun_';
-    const PREFIX_OPEN = 'open_';
-    const PREFIX_SUBMISSION = 'subm_';
+    /** @var string Prefix of the brief the teacher publishes. */
+    public const PREFIX_ENUN = 'enun_';
+    /** @var string Prefix of the draft a student writes in. */
+    public const PREFIX_OPEN = 'open_';
+    /** @var string Prefix of the frozen copy made when handing in. */
+    public const PREFIX_SUBMISSION = 'subm_';
 
     /** @var string What stands for a group where an account name would go. */
-    const PREFIX_GROUP = 'grupo';
+    public const PREFIX_GROUP = 'grupo';
 
     /** @var string Owner of a submission that belongs to nobody findable. */
-    const UNKNOWN_OWNER = 'desconocido';
+    public const UNKNOWN_OWNER = 'desconocido';
 
-    const MODE_ENUN = 'enun';
-    const MODE_OPEN = 'open';
-    const MODE_SUBMISSION = 'submission';
+    /** @var string The brief, as asked for by a caller. */
+    public const MODE_ENUN = 'enun';
+    /** @var string The draft, as asked for by a caller. */
+    public const MODE_OPEN = 'open';
+    /** @var string The frozen submission, as asked for by a caller. */
+    public const MODE_SUBMISSION = 'submission';
 
     /** @var int Longest a folder name is allowed to be. */
     protected const NAME_LIMIT = 60;
@@ -195,8 +200,12 @@ class document {
     public function enunciate_path(): string {
         global $DB;
 
-        $path = $DB->get_field('assignsubmission_tipnc_enun', 'path',
-            ['assignment' => $this->instance], IGNORE_MISSING);
+        $path = $DB->get_field(
+            'assignsubmission_tipnc_enun',
+            'path',
+            ['assignment' => $this->instance],
+            IGNORE_MISSING
+        );
 
         return !empty($path) ? $path : $this->get_enunciate();
     }
@@ -214,8 +223,12 @@ class document {
     public function open_path(stdClass $submission): string {
         global $DB;
 
-        $path = $DB->get_field('assignsubmission_tipnc_open', 'path',
-            ['submission' => $submission->id], IGNORE_MISSING);
+        $path = $DB->get_field(
+            'assignsubmission_tipnc_open',
+            'path',
+            ['submission' => $submission->id],
+            IGNORE_MISSING
+        );
 
         return !empty($path) ? $path : $this->open_for($submission);
     }
@@ -230,8 +243,12 @@ class document {
     public function submission_path(stdClass $submission): string {
         global $DB;
 
-        $path = $DB->get_field('assignsubmission_tipnc', 'path',
-            ['submission' => $submission->id], IGNORE_MISSING);
+        $path = $DB->get_field(
+            'assignsubmission_tipnc',
+            'path',
+            ['submission' => $submission->id],
+            IGNORE_MISSING
+        );
 
         return !empty($path) ? $path : $this->submission_for($submission);
     }
@@ -334,5 +351,4 @@ class document {
         $location = get_config('assignsubmission_tipnc', 'location');
         return $host . $location . $ncid;
     }
-
 }

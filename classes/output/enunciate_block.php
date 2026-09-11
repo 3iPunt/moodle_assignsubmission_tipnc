@@ -41,7 +41,6 @@ use templatable;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class enunciate_block implements renderable, templatable {
-
     /**
      * Constructor.
      *
@@ -55,12 +54,19 @@ class enunciate_block implements renderable, templatable {
      *                                    only for whoever is allowed to ask.
      */
     public function __construct(
+        /** @var string Address of the document, empty when there is none. */
         private readonly string $viewurl,
+        /** @var string Name of the document in NextCloud. */
         private readonly string $filename,
+        /** @var ?string Address of the folder holding it. */
         private readonly ?string $folderurl = null,
+        /** @var bool Show the document, or just link to it. */
         private readonly bool $embed = true,
+        /** @var string Class that sets the height of the frame. */
         private readonly string $heightclass = '',
+        /** @var ?document_viewer How the document is shown, when it is shown. */
         private readonly ?document_viewer $viewer = null,
+        /** @var ?moodle_url Where to ask for the document to be made,. */
         private readonly ?moodle_url $prepareurl = null
     ) {
     }
@@ -73,9 +79,12 @@ class enunciate_block implements renderable, templatable {
      * @return self The block.
      * @throws dml_exception If the configuration cannot be read.
      */
-    public static function for_assignment(int $assignment, bool $embed = true,
-                                          ?moodle_url $prepareurl = null,
-                                          bool $canedit = false): self {
+    public static function for_assignment(
+        int $assignment,
+        bool $embed = true,
+        ?moodle_url $prepareurl = null,
+        bool $canedit = false
+    ): self {
         global $USER;
 
         $model = new documents();
@@ -86,9 +95,15 @@ class enunciate_block implements renderable, templatable {
         // Whoever marks writes the brief; everybody else reads it. Always opening
         // it read-only forced teachers out to NextCloud to write it.
         $viewer = ($enunciate && $embed)
-            ? document_viewer::for_document($assignment, $path, (int) $enunciate->ncid,
+            ? document_viewer::for_document(
+                $assignment,
+                $path,
+                (int) $enunciate->ncid,
                 get_string('enunciate_frametitle', 'assignsubmission_tipnc'),
-                $USER, $canedit, $model->frame_height_class())
+                $USER,
+                $canedit,
+                $model->frame_height_class()
+            )
             : null;
 
         return new self(

@@ -40,7 +40,6 @@ use templatable;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class incident_log_page implements renderable, templatable {
-
     /**
      * Constructor.
      *
@@ -52,11 +51,17 @@ class incident_log_page implements renderable, templatable {
      * @param array         $filternames Names of the entities picked in the filters.
      */
     public function __construct(
+        /** @var incident_list The listing, which the filters repaint on its own. */
         private readonly incident_list $list,
+        /** @var array Counters of the header. */
         private readonly array $counters,
+        /** @var ?stdClass The dominant failure, when there is one. */
         private readonly ?stdClass $commoncause,
+        /** @var stdClass State of the connection with NextCloud. */
         private readonly stdClass $connection,
+        /** @var array Filters currently applied. */
         private readonly array $filters = [],
+        /** @var array Names of the entities picked in the filters. */
         private readonly array $filternames = []
     ) {
     }
@@ -89,12 +94,16 @@ class incident_log_page implements renderable, templatable {
             'isfiltered' => !empty($this->filters),
             'diagnosis' => $this->export_diagnosis(),
             'list' => $this->list->export_for_template($output),
-            'settingsurl' => (new moodle_url('/admin/settings.php',
-                ['section' => 'assignsubmission_tipnc']))->out(false),
+            'settingsurl' => (new moodle_url(
+                '/admin/settings.php',
+                ['section' => 'assignsubmission_tipnc']
+            ))->out(false),
             // The export honours the applied filters and carries a sesskey: it is a
             // data download, not a public page.
-            'exporturl' => (new moodle_url('/mod/assign/submission/tipnc/export.php',
-                array_merge($this->filters, ['sesskey' => sesskey()])))->out(false),
+            'exporturl' => (new moodle_url(
+                '/mod/assign/submission/tipnc/export.php',
+                array_merge($this->filters, ['sesskey' => sesskey()])
+            ))->out(false),
         ];
     }
 

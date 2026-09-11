@@ -39,7 +39,6 @@ function xmldb_assignsubmission_tipnc_upgrade(int $oldversion): bool {
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2026090800) {
-
         $table = new xmldb_table('assignsubmission_tipnc_log');
 
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
@@ -82,7 +81,6 @@ function xmldb_assignsubmission_tipnc_upgrade(int $oldversion): bool {
     }
 
     if ($oldversion < 2026090801) {
-
         // The old log is discarded rather than migrated: it only held the
         // method, the code and a message that was almost always an empty
         // response, with no URL, no HTTP status and no document. Useless.
@@ -95,15 +93,16 @@ function xmldb_assignsubmission_tipnc_upgrade(int $oldversion): bool {
     }
 
     if ($oldversion < 2026090805) {
-
         // Where each document really is. It is stored rather than rebuilt
         // because the path carries the course and assignment names, and
         // renaming either of them would make the documents untraceable.
-        foreach ([
+        foreach (
+            [
             'assignsubmission_tipnc',
             'assignsubmission_tipnc_open',
             'assignsubmission_tipnc_enun',
-        ] as $tablename) {
+            ] as $tablename
+        ) {
             $table = new xmldb_table($tablename);
             $field = new xmldb_field('path', XMLDB_TYPE_CHAR, '1333', null, null, null, null, 'ncid');
             if (!$dbman->field_exists($table, $field)) {
@@ -115,22 +114,25 @@ function xmldb_assignsubmission_tipnc_upgrade(int $oldversion): bool {
         // to NextCloud, and an upgrade that waits on the network is an
         // upgrade that can hang: cron does it.
         \core\task\manager::queue_adhoc_task(
-            new \assignsubmission_tipnc\task\migrate_documents(), true);
+            new \assignsubmission_tipnc\task\migrate_documents(),
+            true
+        );
 
         upgrade_plugin_savepoint(true, 2026090805, 'assignsubmission', 'tipnc');
     }
 
     if ($oldversion < 2026090806) {
-
         // The editing session key. It is stored because it has to do two
         // things at once: change when the document changes —or the editor
         // keeps serving the copy it had— and stay put while it is open, or
         // there is no way to ask it to save what it holds.
-        foreach ([
+        foreach (
+            [
             'assignsubmission_tipnc',
             'assignsubmission_tipnc_open',
             'assignsubmission_tipnc_enun',
-        ] as $tablename) {
+            ] as $tablename
+        ) {
             $table = new xmldb_table($tablename);
             $field = new xmldb_field('editorkey', XMLDB_TYPE_CHAR, '32', null, null, null, null, 'path');
             if (!$dbman->field_exists($table, $field)) {
@@ -142,15 +144,16 @@ function xmldb_assignsubmission_tipnc_upgrade(int $oldversion): bool {
     }
 
     if ($oldversion < 2026090807) {
-
         // Which state of the document the key was minted for. Without this
         // there is no telling whether the editor session still serves what is
         // there: the key is renewed when the content changed, and only then.
-        foreach ([
+        foreach (
+            [
             'assignsubmission_tipnc',
             'assignsubmission_tipnc_open',
             'assignsubmission_tipnc_enun',
-        ] as $tablename) {
+            ] as $tablename
+        ) {
             $table = new xmldb_table($tablename);
             $field = new xmldb_field('editorversion', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'editorkey');
             if (!$dbman->field_exists($table, $field)) {

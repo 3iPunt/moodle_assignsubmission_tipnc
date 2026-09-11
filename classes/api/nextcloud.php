@@ -47,13 +47,14 @@ use stdClass;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class nextcloud {
+    /** @var int Seconds a call may take before giving up. */
+    public const TIMEOUT = 30;
 
-    const TIMEOUT = 30;
-
-    const SHARE_TYPE_USER = 0;
+    /** @var int Share type NextCloud uses for a single account. */
+    public const SHARE_TYPE_USER = 0;
 
     /** @var int Read the document. */
-    const PERMISSION_READ = 1;
+    public const PERMISSION_READ = 1;
 
     /** @var int Read, write and pass on: everything a FILE can be given.
      *
@@ -61,7 +62,7 @@ class nextcloud {
      * NextCloud trims the request without saying so. Asking for what suits the
      * resource is what makes it possible to check afterwards what was granted.
      */
-    const PERMISSION_FILE_ALL = 19;
+    public const PERMISSION_FILE_ALL = 19;
 
     /** @var int Instance */
     protected $instance;
@@ -140,14 +141,19 @@ class nextcloud {
         $template = $this->document->get_template();
         $enun = $this->document->get_enunciate();
 
-        $rescopy = $this->copy_file($template, $enun,
-            $this->context('create_enunciate', 'teacher_create:copy_file'));
+        $rescopy = $this->copy_file(
+            $template,
+            $enun,
+            $this->context('create_enunciate', 'teacher_create:copy_file')
+        );
         if (!$rescopy->success) {
             return $rescopy;
         }
 
-        $reslisting = $this->listing($enun,
-            $this->context('lookup_document', 'teacher_create:lookup'));
+        $reslisting = $this->listing(
+            $enun,
+            $this->context('lookup_document', 'teacher_create:lookup')
+        );
         if (!$reslisting->success) {
             return $reslisting;
         }
@@ -165,9 +171,16 @@ class nextcloud {
         // Giving access to whoever creates it is what lets them write the brief.
         // A failure there is serious for that person and nobody else: it counts
         // as a warning inside a response that is still a success.
-        $resshare = $this->grant_or_renew($enun, $USER->username, self::PERMISSION_FILE_ALL,
-            $this->context('share_enunciate', 'teacher_create:share_file',
-                ['affecteduserid' => $USER->id]));
+        $resshare = $this->grant_or_renew(
+            $enun,
+            $USER->username,
+            self::PERMISSION_FILE_ALL,
+            $this->context(
+                'share_enunciate',
+                'teacher_create:share_file',
+                ['affecteduserid' => $USER->id]
+            )
+        );
 
         return $resshare->success
             ? new response(true, $data->ncid)
@@ -192,8 +205,14 @@ class nextcloud {
      * @throws dml_exception If the incident cannot be recorded.
      */
     public function grant_enunciate(stdClass $user, bool $canwrite): void {
-        $this->grant_once(grants::ENUNCIATE, $this->instance, $this->document->enunciate_path(),
-            $user, $canwrite, 'grant_enunciate:share_file');
+        $this->grant_once(
+            grants::ENUNCIATE,
+            $this->instance,
+            $this->document->enunciate_path(),
+            $user,
+            $canwrite,
+            'grant_enunciate:share_file'
+        );
     }
 
     /**
@@ -210,9 +229,14 @@ class nextcloud {
      * @throws dml_exception If the incident cannot be recorded.
      */
     public function grant_submission(stdClass $user, stdClass $submission): void {
-        $this->grant_once(grants::SUBMISSION, (int) $submission->id,
-            $this->document->submission_path($submission), $user, true,
-            'grant_submission:share_file');
+        $this->grant_once(
+            grants::SUBMISSION,
+            (int) $submission->id,
+            $this->document->submission_path($submission),
+            $user,
+            true,
+            'grant_submission:share_file'
+        );
     }
 
     /**
@@ -227,8 +251,14 @@ class nextcloud {
      * @return void
      * @throws dml_exception If the incident cannot be recorded.
      */
-    private function grant_once(string $what, int $id, string $path, stdClass $user,
-                                bool $canwrite, string $method): void {
+    private function grant_once(
+        string $what,
+        int $id,
+        string $path,
+        stdClass $user,
+        bool $canwrite,
+        string $method
+    ): void {
         if (grants::already($what, $id, (int) $user->id)) {
             return;
         }
@@ -265,8 +295,13 @@ class nextcloud {
      * @return response What NextCloud answered.
      * @throws dml_exception If the incident cannot be recorded.
      */
-    protected function grant_or_renew(string $file, string $username, int $permission,
-                                      array $context = [], ?array $shares = null): response {
+    protected function grant_or_renew(
+        string $file,
+        string $username,
+        int $permission,
+        array $context = [],
+        ?array $shares = null
+    ): response {
         $expires = self::expiry_date();
 
         return $this->renew_permission($file, $username, $permission, $expires, $context, $shares)
@@ -284,9 +319,14 @@ class nextcloud {
      * @return response|null What NextCloud answered, null when they had none.
      * @throws dml_exception If the incident cannot be recorded.
      */
-    protected function renew_permission(string $file, string $username, int $permission,
-                                        string $expires, array $context = [],
-                                        ?array $shares = null): ?response {
+    protected function renew_permission(
+        string $file,
+        string $username,
+        int $permission,
+        string $expires,
+        array $context = [],
+        ?array $shares = null
+    ): ?response {
         // The list is asked for once per document, not once per person: handing out
         // access for a group is as many calls as members, and doubling them adds
         // nothing. It is not logged because it is nobody's incident.
@@ -306,15 +346,18 @@ class nextcloud {
                 $form['expireDate'] = $expires;
             }
 
-            $answer = $this->client->request('PUT',
-                '/ocs/v2.php/apps/files_sharing/api/v1/shares/' . (int) $share['id'] . '?format=json', [
+            $answer = $this->client->request(
+                'PUT',
+                '/ocs/v2.php/apps/files_sharing/api/v1/shares/' . (int) $share['id'] . '?format=json',
+                [
                     'headers' => ['OCS-APIRequest' => 'true'],
                     'form' => $form,
                     'context' => array_merge($context, [
                         'errorcode' => code::SHARE_FAILED,
                         'documentpath' => $file,
                     ]),
-                ]);
+                ]
+            );
 
             return $answer->is_success()
                 ? new response(true, (string) $share['id'])
@@ -349,24 +392,45 @@ class nextcloud {
      * @throws dml_exception
      */
     public function student_open(stdClass $submission): response {
-        $this->ensure_folder($this->context('open_draft', 'student_open:folder',
-            ['submission' => $submission->id]));
+        $this->ensure_folder($this->context(
+            'open_draft',
+            'student_open:folder',
+            ['submission' => $submission->id]
+        ));
 
         $enun = $this->document->enunciate_path();
         $open = $this->document->open_path($submission);
-        $rescopy = $this->copy_file($enun, $open,
-            $this->context('open_draft', 'student_open:copy_file',
-                ['submission' => $submission->id]));
+        $rescopy = $this->copy_file(
+            $enun,
+            $open,
+            $this->context(
+                'open_draft',
+                'student_open:copy_file',
+                ['submission' => $submission->id]
+            )
+        );
         if ($rescopy->success) {
             // To whoever it belongs to, not to whoever happened by: in a group
             // submission that is every member, and teachers open this being none.
-            $ressharestudent = $this->share_with_owners($open, $submission, self::PERMISSION_FILE_ALL,
-                $this->context('share_draft', 'student_open:share_file',
-                    ['submission' => $submission->id]));
+            $ressharestudent = $this->share_with_owners(
+                $open,
+                $submission,
+                self::PERMISSION_FILE_ALL,
+                $this->context(
+                    'share_draft',
+                    'student_open:share_file',
+                    ['submission' => $submission->id]
+                )
+            );
             if ($ressharestudent->success) {
-                $reslisting = $this->listing($open,
-                    $this->context('lookup_document', 'student_open:lookup',
-                        ['submission' => $submission->id]));
+                $reslisting = $this->listing(
+                    $open,
+                    $this->context(
+                        'lookup_document',
+                        'student_open:lookup',
+                        ['submission' => $submission->id]
+                    )
+                );
                 if ($reslisting->success) {
                     $tipncopen = tipnc_open::get($submission->id);
                     if ($tipncopen) {
@@ -411,16 +475,27 @@ class nextcloud {
         // what they had a minute ago, which is the bug this closes.
         $this->settle_document($open, $submission);
 
-        $rescopy = $this->copy_file($open, $sub,
-            $this->context('submit_freeze', 'student_submit:copy_file',
-                ['submission' => $submission->id]));
+        $rescopy = $this->copy_file(
+            $open,
+            $sub,
+            $this->context(
+                'submit_freeze',
+                'student_submit:copy_file',
+                ['submission' => $submission->id]
+            )
+        );
         if (!$rescopy->success) {
             return $rescopy;
         }
 
-        $reslisting = $this->listing($sub,
-            $this->context('lookup_document', 'student_submit:lookup',
-                ['submission' => $submission->id]));
+        $reslisting = $this->listing(
+            $sub,
+            $this->context(
+                'lookup_document',
+                'student_submit:lookup',
+                ['submission' => $submission->id]
+            )
+        );
         if (!$reslisting->success) {
             return $reslisting;
         }
@@ -439,9 +514,16 @@ class nextcloud {
         // Whoever handed in drops to read-only on their copy. Teachers are not
         // given it here: they get access when they open the submission to mark it,
         // which is the only thing that works when who teaches changes over time.
-        $resshare = $this->share_with_owners($sub, $submission, self::PERMISSION_READ,
-            $this->context('share_submission', 'student_submit:share_student',
-                ['submission' => $submission->id]));
+        $resshare = $this->share_with_owners(
+            $sub,
+            $submission,
+            self::PERMISSION_READ,
+            $this->context(
+                'share_submission',
+                'student_submit:share_student',
+                ['submission' => $submission->id]
+            )
+        );
 
         return $resshare->success
             ? new response(true, $tipnc->ncid)
@@ -491,8 +573,11 @@ class nextcloud {
      * @throws dml_exception If the incident cannot be recorded.
      */
     public function reattempt_from(stdClass $source, stdClass $destiny): response {
-        $this->ensure_folder($this->context('open_draft', 'reattempt:folder',
-            ['submission' => $destiny->id]));
+        $this->ensure_folder($this->context(
+            'open_draft',
+            'reattempt:folder',
+            ['submission' => $destiny->id]
+        ));
 
         // What was handed in if it ever was, and if not, whatever is left in the
         // draft: it is the last thing that person wrote.
@@ -502,25 +587,43 @@ class nextcloud {
 
         $draft = $this->document->open_for($destiny);
 
-        $rescopy = $this->copy_file($previous, $draft,
-            $this->context('open_draft', 'reattempt:copy_file',
-                ['submission' => $destiny->id]));
+        $rescopy = $this->copy_file(
+            $previous,
+            $draft,
+            $this->context(
+                'open_draft',
+                'reattempt:copy_file',
+                ['submission' => $destiny->id]
+            )
+        );
 
         if (!$rescopy->success) {
             return $rescopy;
         }
 
-        $resshare = $this->share_with_owners($draft, $destiny, self::PERMISSION_FILE_ALL,
-            $this->context('share_draft', 'reattempt:share_file',
-                ['submission' => $destiny->id]));
+        $resshare = $this->share_with_owners(
+            $draft,
+            $destiny,
+            self::PERMISSION_FILE_ALL,
+            $this->context(
+                'share_draft',
+                'reattempt:share_file',
+                ['submission' => $destiny->id]
+            )
+        );
 
         if (!$resshare->success) {
             return $resshare;
         }
 
-        $reslisting = $this->listing($draft,
-            $this->context('lookup_document', 'reattempt:lookup',
-                ['submission' => $destiny->id]));
+        $reslisting = $this->listing(
+            $draft,
+            $this->context(
+                'lookup_document',
+                'reattempt:lookup',
+                ['submission' => $destiny->id]
+            )
+        );
 
         if (!$reslisting->success) {
             return $reslisting;
@@ -553,8 +656,12 @@ class nextcloud {
      *                  cannot work, and finding out later is worse.
      * @throws dml_exception If the incident cannot be recorded.
      */
-    protected function share_with_owners(string $file, stdClass $submission, int $permission,
-                                         array $context = []): response {
+    protected function share_with_owners(
+        string $file,
+        stdClass $submission,
+        int $permission,
+        array $context = []
+    ): response {
         $groupid = (int) ($submission->groupid ?? 0);
 
         if ($groupid === 0) {
@@ -564,8 +671,12 @@ class nextcloud {
                 return new response(false, null, new error(code::SHARE_NO_ACCOUNT, ''));
             }
 
-            return $this->grant_or_renew($file, $owner->username, $permission,
-                array_merge($context, ['affecteduserid' => $owner->id]));
+            return $this->grant_or_renew(
+                $file,
+                $owner->username,
+                $permission,
+                array_merge($context, ['affecteduserid' => $owner->id])
+            );
         }
 
         $members = groups_get_members($groupid, 'u.id, u.username');
@@ -579,8 +690,13 @@ class nextcloud {
 
         $last = new response(true);
         foreach ($members as $member) {
-            $last = $this->grant_or_renew($file, $member->username, $permission,
-                array_merge($context, ['affecteduserid' => $member->id]), $shares);
+            $last = $this->grant_or_renew(
+                $file,
+                $member->username,
+                $permission,
+                array_merge($context, ['affecteduserid' => $member->id]),
+                $shares
+            );
 
             if (!$last->success) {
                 return $last;
@@ -647,9 +763,14 @@ class nextcloud {
         $ncid = (int) (tipnc_open::get($submission->id)->ncid ?? 0);
         if ($ncid === 0) {
             logger::warning(code::SUBMIT_NOT_SAVED, 'submit_freeze', $this->context(
-                'submit_freeze', 'student_submit:nodraft',
+                'submit_freeze',
+                'student_submit:nodraft',
                 ['submission' => $submission->id, 'documentpath' => $open,
-                    'responsebody' => get_string('log_submit_nodraft', 'assignsubmission_tipnc')]));
+                'responsebody' => get_string(
+                    'log_submit_nodraft',
+                    'assignsubmission_tipnc'
+                )]
+            ));
             return;
         }
 
@@ -658,9 +779,14 @@ class nextcloud {
         // The forced save and the wait do not go through the instrumented client, so
         // without this the submission records nothing of the most important step.
         logger::info(code::OK, 'submit_freeze', $this->context(
-            'submit_freeze', 'student_submit:asksave',
+            'submit_freeze',
+            'student_submit:asksave',
             ['submission' => $submission->id, 'documentpath' => $open,
-                'responsebody' => get_string('log_submit_asksave', 'assignsubmission_tipnc')]));
+            'responsebody' => get_string(
+                'log_submit_asksave',
+                'assignsubmission_tipnc'
+            )]
+        ));
 
         // The same key it was opened with, exactly as it was stored: recalculating
         // it would no longer belong to any live session, and the editor would reject
@@ -671,9 +797,14 @@ class nextcloud {
 
         if ($key === '') {
             logger::warning(code::SUBMIT_NOT_SAVED, 'submit_freeze', $this->context(
-                'submit_freeze', 'student_submit:nosession',
+                'submit_freeze',
+                'student_submit:nosession',
                 ['submission' => $submission->id, 'documentpath' => $open,
-                    'responsebody' => get_string('log_submit_nosession', 'assignsubmission_tipnc')]));
+                'responsebody' => get_string(
+                    'log_submit_nosession',
+                    'assignsubmission_tipnc'
+                )]
+            ));
             return;
         }
 
@@ -681,19 +812,29 @@ class nextcloud {
 
         if (!command::saved($answer)) {
             logger::warning(code::SUBMIT_NOT_SAVED, 'submit_freeze', $this->context(
-                'submit_freeze', 'student_submit:forcesave',
+                'submit_freeze',
+                'student_submit:forcesave',
                 ['submission' => $submission->id, 'documentpath' => $open,
-                    'responsebody' => get_string('log_submit_refused', 'assignsubmission_tipnc',
-                        command::describe($answer))]));
+                    'responsebody' => get_string(
+                        'log_submit_refused',
+                        'assignsubmission_tipnc',
+                        command::describe($answer)
+                    )]
+            ));
             return;
         }
 
         // With nobody editing there is nothing to wait for: the document is whole.
         if ($answer === command::NOTHING_TO_SAVE) {
             logger::info(code::OK, 'submit_freeze', $this->context(
-                'submit_freeze', 'student_submit:forcesave',
+                'submit_freeze',
+                'student_submit:forcesave',
                 ['submission' => $submission->id, 'documentpath' => $open,
-                    'responsebody' => get_string('log_submit_nochanges', 'assignsubmission_tipnc')]));
+                'responsebody' => get_string(
+                    'log_submit_nochanges',
+                    'assignsubmission_tipnc'
+                )]
+            ));
             return;
         }
 
@@ -701,16 +842,26 @@ class nextcloud {
         // the submission is sound is that the document has changed.
         if (!$this->wait_for_change($open, $before)) {
             logger::warning(code::SUBMIT_NOT_SAVED, 'submit_freeze', $this->context(
-                'submit_freeze', 'student_submit:wait',
+                'submit_freeze',
+                'student_submit:wait',
                 ['submission' => $submission->id, 'documentpath' => $open,
-                    'responsebody' => get_string('log_submit_late', 'assignsubmission_tipnc')]));
+                'responsebody' => get_string(
+                    'log_submit_late',
+                    'assignsubmission_tipnc'
+                )]
+            ));
             return;
         }
 
         logger::info(code::OK, 'submit_freeze', $this->context(
-            'submit_freeze', 'student_submit:forcesave',
+            'submit_freeze',
+            'student_submit:forcesave',
             ['submission' => $submission->id, 'documentpath' => $open,
-                'responsebody' => get_string('log_submit_saved', 'assignsubmission_tipnc')]));
+            'responsebody' => get_string(
+                'log_submit_saved',
+                'assignsubmission_tipnc'
+            )]
+        ));
     }
 
     /**
@@ -872,12 +1023,15 @@ class nextcloud {
             ]);
 
             if (!$answer->is_success() && $answer->httpcode !== 405) {
-                logger::error(code::FOLDER_FAILED, $context['operation'] ?? 'create_folder',
+                logger::error(
+                    code::FOLDER_FAILED,
+                    $context['operation'] ?? 'create_folder',
                     array_merge($context, [
                         'documentpath' => $folder,
                         'httpcode' => $answer->httpcode,
                         'responsebody' => $answer->body,
-                    ]));
+                    ])
+                );
 
                 return new response(false, null, new error(code::FOLDER_FAILED, $answer->body));
             }
@@ -982,9 +1136,11 @@ class nextcloud {
      * @throws dml_exception If the incident cannot be recorded.
      */
     protected function shares_of(string $file, array $context = [], bool $log = true): ?array {
-        $answer = $this->client->request('GET',
+        $answer = $this->client->request(
+            'GET',
             '/ocs/v2.php/apps/files_sharing/api/v1/shares?format=json&path='
-            . rawurlencode('/' . ltrim($file, '/')), [
+            . rawurlencode('/' . ltrim($file, '/')),
+            [
                 'headers' => ['OCS-APIRequest' => 'true'],
 
                 // At the options level, not inside the context: in there it is just
@@ -994,7 +1150,8 @@ class nextcloud {
                     'errorcode' => code::UNSHARE_FAILED,
                     'documentpath' => $file,
                 ]),
-            ]);
+            ]
+        );
 
         if (!$answer->is_success()) {
             return null;
@@ -1052,8 +1209,13 @@ class nextcloud {
      * @return response The share identifier, or the failure with its code.
      * @throws dml_exception If the incident cannot be recorded.
      */
-    protected function set_permission(string $file, string $username, int $permission,
-                                      array $context = [], string $expires = ''): response {
+    protected function set_permission(
+        string $file,
+        string $username,
+        int $permission,
+        array $context = [],
+        string $expires = ''
+    ): response {
         $form = [
             'path' => '/' . ltrim($file, '/'),
             'shareType' => self::SHARE_TYPE_USER,
@@ -1117,8 +1279,13 @@ class nextcloud {
      * @return void
      * @throws dml_exception If the incident cannot be recorded.
      */
-    protected function settle_permission(int $shareid, int $requested, int $granted,
-                                         string $file, array $context = []): void {
+    protected function settle_permission(
+        int $shareid,
+        int $requested,
+        int $granted,
+        string $file,
+        array $context = []
+    ): void {
         $entry = array_merge($context, [
             'documentpath' => $file,
             'responsebody' => "requested=$requested granted=$granted",
@@ -1131,12 +1298,15 @@ class nextcloud {
             return;
         }
 
-        $answer = $this->client->request('PUT',
-            '/ocs/v2.php/apps/files_sharing/api/v1/shares/' . $shareid . '?format=json', [
+        $answer = $this->client->request(
+            'PUT',
+            '/ocs/v2.php/apps/files_sharing/api/v1/shares/' . $shareid . '?format=json',
+            [
                 'headers' => ['OCS-APIRequest' => 'true'],
                 'form' => ['permissions' => $requested],
                 'context' => array_merge($entry, ['errorcode' => code::SHARE_TOO_WIDE]),
-            ]);
+            ]
+        );
 
         if (!$answer->is_success()) {
             logger::error(code::SHARE_TOO_WIDE, $context['operation'] ?? 'share', $entry);

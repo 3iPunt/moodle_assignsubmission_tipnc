@@ -48,7 +48,6 @@ require_once($CFG->dirroot . '/mod/assign/tests/generator.php');
  * @covers     \assign_submission_tipnc
  */
 final class locallib_test extends advanced_testcase {
-
     use mod_assign_test_generator;
 
     /** @var stdClass The course. */

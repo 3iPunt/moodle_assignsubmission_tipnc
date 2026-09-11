@@ -32,7 +32,6 @@ namespace assignsubmission_tipnc\api;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class http_response {
-
     /**
      * Constructor.
      *
@@ -42,9 +41,13 @@ class http_response {
      * @param string $transport Transport error, empty when there was none.
      */
     public function __construct(
+        /** @var int HTTP status code returned by the server. */
         public readonly int $httpcode,
+        /** @var string Response body. */
         public readonly string $body,
+        /** @var int Time the call took, in milliseconds. */
         public readonly int $duration,
+        /** @var string Transport error, empty when there was none. */
         public readonly string $transport = ''
     ) {
     }

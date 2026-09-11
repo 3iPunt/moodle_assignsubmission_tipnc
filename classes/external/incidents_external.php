@@ -48,7 +48,6 @@ use restricted_context_exception;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class incidents_external extends external_api {
-
     /**
      * Parameters of the search.
      *
@@ -82,12 +81,23 @@ class incidents_external extends external_api {
      * @throws required_capability_exception If the user cannot read the log.
      * @throws restricted_context_exception If the context is not allowed.
      */
-    public static function search(string $severity = '', int $course = 0, int $assign = 0,
-                                  int $user = 0, int $range = 0, int $page = 0): array {
+    public static function search(
+        string $severity = '',
+        int $course = 0,
+        int $assign = 0,
+        int $user = 0,
+        int $range = 0,
+        int $page = 0
+    ): array {
         global $PAGE;
 
         $params = self::validate_parameters(self::search_parameters(), compact(
-            'severity', 'course', 'assign', 'user', 'range', 'page'
+            'severity',
+            'course',
+            'assign',
+            'user',
+            'range',
+            'page'
         ));
 
         $context = context_system::instance();

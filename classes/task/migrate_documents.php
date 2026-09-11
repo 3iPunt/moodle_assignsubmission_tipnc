@@ -40,7 +40,6 @@ use dml_exception;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class migrate_documents extends adhoc_task {
-
     /**
      * Moves every document that is still in the flat folder.
      *
@@ -111,10 +110,12 @@ class migrate_documents extends adhoc_task {
             $documents[] = ['assignsubmission_tipnc_enun', $row, (int) $row->assignment, '', document::PREFIX_ENUN];
         }
 
-        foreach ([
+        foreach (
+            [
             'assignsubmission_tipnc_open' => document::PREFIX_OPEN,
             'assignsubmission_tipnc' => document::PREFIX_SUBMISSION,
-        ] as $table => $prefix) {
+            ] as $table => $prefix
+        ) {
             $rows = $DB->get_records_sql(
                 "SELECT t.*, u.username
                    FROM {" . $table . "} t

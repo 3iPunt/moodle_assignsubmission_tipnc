@@ -46,7 +46,6 @@ use core\event\user_enrolment_deleted;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class observer {
-
     /**
      * Somebody was unenrolled from a course.
      *

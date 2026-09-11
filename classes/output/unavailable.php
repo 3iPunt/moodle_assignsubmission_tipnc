@@ -47,7 +47,6 @@ use templatable;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class unavailable implements renderable, templatable {
-
     /** @var string This person has no account in the document service. */
     public const NO_ACCOUNT = 'noaccount';
 
@@ -69,9 +68,13 @@ class unavailable implements renderable, templatable {
      *                                     on their own.
      */
     public function __construct(
+        /** @var int When it stopped answering, 0 when unknown. */
         private readonly int $since = 0,
+        /** @var bool Whether this person can act on the cause. */
         private readonly bool $candiagnose = false,
+        /** @var ?moodle_url Where the incidents are, for those who can. */
         private readonly ?moodle_url $logurl = null,
+        /** @var string Which of the reasons it is: empty for the. */
         private readonly string $reason = ''
     ) {
     }

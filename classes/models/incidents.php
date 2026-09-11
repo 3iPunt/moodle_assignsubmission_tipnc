@@ -38,7 +38,6 @@ use stdClass;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class incidents {
-
     /** @var int Incidents shown per page. */
     public const PER_PAGE = 20;
 
@@ -94,14 +93,21 @@ class incidents {
         $since = time() - DAYSECS;
 
         return [
-            'lastday' => $DB->count_records_select(logger::TABLE, 'lastseen >= ? AND severity <> ?',
-                [$since, code::SEVERITY_INFO]),
+            'lastday' => $DB->count_records_select(
+                logger::TABLE,
+                'lastseen >= ? AND severity <> ?',
+                [$since, code::SEVERITY_INFO]
+            ),
             'assignments' => $DB->count_records_sql(
                 'SELECT COUNT(DISTINCT assignment) FROM {' . logger::TABLE . '}
-                  WHERE assignment IS NOT NULL AND severity <> ?', [code::SEVERITY_INFO]),
+                  WHERE assignment IS NOT NULL AND severity <> ?',
+                [code::SEVERITY_INFO]
+            ),
             'users' => $DB->count_records_sql(
                 'SELECT COUNT(DISTINCT userid) FROM {' . logger::TABLE . '}
-                  WHERE userid IS NOT NULL AND severity <> ?', [code::SEVERITY_INFO]),
+                  WHERE userid IS NOT NULL AND severity <> ?',
+                [code::SEVERITY_INFO]
+            ),
             'total' => $DB->count_records(logger::TABLE),
             'oldest' => (int) $DB->get_field_sql('SELECT MIN(firstseen) FROM {' . logger::TABLE . '}'),
         ];
@@ -217,8 +223,15 @@ class incidents {
             case 'course':
                 $where = $DB->sql_like('fullname', ':name', false) . ' OR '
                     . $DB->sql_like('shortname', ':shortname', false);
-                $records = $DB->get_records_select('course', "id > 1 AND ($where)",
-                    ['name' => $like, 'shortname' => $like], 'fullname ASC', 'id, fullname', 0, 30);
+                $records = $DB->get_records_select(
+                    'course',
+                    "id > 1 AND ($where)",
+                    ['name' => $like, 'shortname' => $like],
+                    'fullname ASC',
+                    'id, fullname',
+                    0,
+                    30
+                );
                 return array_map(fn($r) => [
                     'value' => (int) $r->id,
                     'label' => format_string($r->fullname),
@@ -236,7 +249,11 @@ class incidents {
                        FROM {assign} a
                        JOIN {course} c ON c.id = a.course
                       WHERE ' . implode(' AND ', $conditions) . '
-                   ORDER BY a.name ASC', $params, 0, 30);
+                   ORDER BY a.name ASC',
+                    $params,
+                    0,
+                    30
+                );
                 return array_map(fn($r) => [
                     'value' => (int) $r->id,
                     'label' => format_string($r->name) . ' · ' . format_string($r->shortname),
@@ -246,9 +263,15 @@ class incidents {
                 $fullname = $DB->sql_fullname('firstname', 'lastname');
                 $where = $DB->sql_like($fullname, ':name', false) . ' OR '
                     . $DB->sql_like('username', ':username', false);
-                $records = $DB->get_records_select('user', "deleted = 0 AND id > 1 AND ($where)",
-                    ['name' => $like, 'username' => $like], 'lastname ASC',
-                    'id, username, ' . implode(', ', fields::get_name_fields()), 0, 30);
+                $records = $DB->get_records_select(
+                    'user',
+                    "deleted = 0 AND id > 1 AND ($where)",
+                    ['name' => $like, 'username' => $like],
+                    'lastname ASC',
+                    'id, username, ' . implode(', ', fields::get_name_fields()),
+                    0,
+                    30
+                );
                 return array_map(fn($r) => [
                     'value' => (int) $r->id,
                     'label' => fullname($r) . ' (' . $r->username . ')',
@@ -299,8 +322,13 @@ class incidents {
         $users = [];
         if ($userids) {
             [$insql, $params] = $DB->get_in_or_equal($userids);
-            $users = $DB->get_records_select('user', "id $insql", $params, '',
-                'id, username, ' . implode(', ', fields::get_name_fields()));
+            $users = $DB->get_records_select(
+                'user',
+                "id $insql",
+                $params,
+                '',
+                'id, username, ' . implode(', ', fields::get_name_fields())
+            );
         }
 
         foreach ($incidents as $incident) {

@@ -56,7 +56,6 @@ use moodle_url;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class hook_callbacks {
-
     /** @var string In the activity header, next to the activity description. */
     public const PLACE_HEADER = 'header';
 
@@ -173,12 +172,14 @@ class hook_callbacks {
             return;
         }
 
-        $hook->add_html(html_writer::tag('style',
+        $hook->add_html(html_writer::tag(
+            'style',
             '@media (min-width: 768px) {'
             . 'body[id^="page-mod-assign-"].pagelayout-standard #page.drawers .main-inner,'
             . 'body[id^="page-mod-assign-"].limitedwidth #page.drawers .main-inner'
             . '{max-width:' . $width . '}'
-            . '}'));
+            . '}'
+        ));
     }
 
     /**
@@ -361,12 +362,18 @@ class hook_callbacks {
         // Without a brief the assignment does not work, and until now the only way
         // out was going into NextCloud. Whoever marks can ask for it from here.
         $prepare = $cangrade
-            ? new moodle_url('/mod/assign/submission/tipnc/prepare.php',
-                ['id' => $cm->id, 'sesskey' => sesskey()])
+            ? new moodle_url(
+                '/mod/assign/submission/tipnc/prepare.php',
+                ['id' => $cm->id, 'sesskey' => sesskey()]
+            )
             : null;
 
         $html = $output->render(enunciate_block::for_assignment(
-            $instance, $own === null && $embed, $prepare, $cangrade));
+            $instance,
+            $own === null && $embed,
+            $prepare,
+            $cangrade
+        ));
 
         if ($own !== null && $own->path !== '') {
             $path = $own->path;
@@ -381,7 +388,6 @@ class hook_callbacks {
                 $USER,
                 $own->mode !== document::MODE_SUBMISSION,
                 $model->frame_height_class(),
-
                 // Frozen, not "not yours": handing in is what closed it.
                 $own->mode === document::MODE_SUBMISSION ? document_viewer::READONLY_FROZEN : ''
             ) : null;

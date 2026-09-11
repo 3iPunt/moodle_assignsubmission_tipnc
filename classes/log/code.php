@@ -34,7 +34,6 @@ use coding_exception;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class code {
-
     /** @var string The service failed: stops the batch and opens the circuit breaker. */
     public const KIND_SYSTEM = 'system';
 
@@ -129,29 +128,29 @@ class code {
      * opens the circuit breaker, an item failure only marks that document.
      */
     private const CATALOGUE = [
-        self::OK                  => [self::SEVERITY_INFO,    self::KIND_ITEM],
-        self::COPY_NOT_FOUND      => [self::SEVERITY_ERROR,   self::KIND_CONFIG],
-        self::COPY_FAILED         => [self::SEVERITY_ERROR,   self::KIND_ITEM],
-        self::FOLDER_FAILED       => [self::SEVERITY_ERROR,   self::KIND_ITEM],
-        self::MOVE_FAILED         => [self::SEVERITY_ERROR,   self::KIND_ITEM],
-        self::DOWNLOAD_FAILED     => [self::SEVERITY_ERROR,   self::KIND_ITEM],
-        self::UPLOAD_FAILED       => [self::SEVERITY_ERROR,   self::KIND_ITEM],
-        self::LOOKUP_FAILED       => [self::SEVERITY_ERROR,   self::KIND_ITEM],
-        self::LOOKUP_MALFORMED    => [self::SEVERITY_ERROR,   self::KIND_ITEM],
-        self::SHARE_FAILED        => [self::SEVERITY_ERROR,   self::KIND_ITEM],
+        self::OK                  => [self::SEVERITY_INFO, self::KIND_ITEM],
+        self::COPY_NOT_FOUND      => [self::SEVERITY_ERROR, self::KIND_CONFIG],
+        self::COPY_FAILED         => [self::SEVERITY_ERROR, self::KIND_ITEM],
+        self::FOLDER_FAILED       => [self::SEVERITY_ERROR, self::KIND_ITEM],
+        self::MOVE_FAILED         => [self::SEVERITY_ERROR, self::KIND_ITEM],
+        self::DOWNLOAD_FAILED     => [self::SEVERITY_ERROR, self::KIND_ITEM],
+        self::UPLOAD_FAILED       => [self::SEVERITY_ERROR, self::KIND_ITEM],
+        self::LOOKUP_FAILED       => [self::SEVERITY_ERROR, self::KIND_ITEM],
+        self::LOOKUP_MALFORMED    => [self::SEVERITY_ERROR, self::KIND_ITEM],
+        self::SHARE_FAILED        => [self::SEVERITY_ERROR, self::KIND_ITEM],
         self::SHARE_NO_ACCOUNT    => [self::SEVERITY_WARNING, self::KIND_ITEM],
         self::SHARE_PERMISSIONS   => [self::SEVERITY_WARNING, self::KIND_ITEM],
-        self::SHARE_TOO_WIDE      => [self::SEVERITY_ERROR,   self::KIND_ITEM],
+        self::SHARE_TOO_WIDE      => [self::SEVERITY_ERROR, self::KIND_ITEM],
         self::UNSHARE_FAILED      => [self::SEVERITY_WARNING, self::KIND_ITEM],
         self::DELETE_FAILED       => [self::SEVERITY_WARNING, self::KIND_ITEM],
-        self::SYSTEM_UNREACHABLE  => [self::SEVERITY_ERROR,   self::KIND_SYSTEM],
-        self::SYSTEM_UNAUTHORISED => [self::SEVERITY_ERROR,   self::KIND_SYSTEM],
-        self::SYSTEM_ERROR        => [self::SEVERITY_ERROR,   self::KIND_SYSTEM],
-        self::SYSTEM_PAUSED       => [self::SEVERITY_INFO,    self::KIND_SYSTEM],
-        self::CONFIG_MISSING      => [self::SEVERITY_ERROR,   self::KIND_CONFIG],
-        self::CONFIG_NO_TEMPLATE  => [self::SEVERITY_ERROR,   self::KIND_CONFIG],
+        self::SYSTEM_UNREACHABLE  => [self::SEVERITY_ERROR, self::KIND_SYSTEM],
+        self::SYSTEM_UNAUTHORISED => [self::SEVERITY_ERROR, self::KIND_SYSTEM],
+        self::SYSTEM_ERROR        => [self::SEVERITY_ERROR, self::KIND_SYSTEM],
+        self::SYSTEM_PAUSED       => [self::SEVERITY_INFO, self::KIND_SYSTEM],
+        self::CONFIG_MISSING      => [self::SEVERITY_ERROR, self::KIND_CONFIG],
+        self::CONFIG_NO_TEMPLATE  => [self::SEVERITY_ERROR, self::KIND_CONFIG],
         self::TASK_NOT_PREPARED   => [self::SEVERITY_WARNING, self::KIND_ITEM],
-        self::SUBMIT_NOT_SAVED    => [self::SEVERITY_ERROR,   self::KIND_ITEM],
+        self::SUBMIT_NOT_SAVED    => [self::SEVERITY_ERROR, self::KIND_ITEM],
     ];
 
     /**

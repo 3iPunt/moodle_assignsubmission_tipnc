@@ -36,7 +36,6 @@ use stdClass;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class logger {
-
     /** @var string Table holding the incidents. */
     public const TABLE = 'assignsubmission_tipnc_log';
 

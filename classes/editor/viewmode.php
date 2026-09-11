@@ -39,7 +39,6 @@ use dml_exception;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class viewmode {
-
     /** @var string Moodle embeds the Document Server and signs the access. */
     public const EDITOR = 'editor';
 

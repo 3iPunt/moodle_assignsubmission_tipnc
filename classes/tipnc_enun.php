@@ -37,8 +37,8 @@ use stdClass;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class tipnc_enun {
-
-    const TABLE_TIPNC_ENUN = 'assignsubmission_tipnc_enun';
+    /** @var string Table holding the briefs. */
+    public const TABLE_TIPNC_ENUN = 'assignsubmission_tipnc_enun';
 
     /**
      * Get tipnc enunciate information from the database
@@ -49,7 +49,7 @@ class tipnc_enun {
      */
     public static function get(int $assignment) {
         global $DB;
-        return $DB->get_record(self::TABLE_TIPNC_ENUN, array('assignment' => $assignment));
+        return $DB->get_record(self::TABLE_TIPNC_ENUN, ['assignment' => $assignment]);
     }
 
     /**
@@ -83,5 +83,4 @@ class tipnc_enun {
             tipnc_error::log('tipnc_enun:delete', new error('2101', $e->getMessage()), $instance);
         }
     }
-
 }

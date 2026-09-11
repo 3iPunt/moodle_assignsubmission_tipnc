@@ -46,7 +46,6 @@ use core_component;
  * @covers     \assignsubmission_tipnc\log\code
  */
 final class code_test extends advanced_testcase {
-
     /**
      * Every code in the catalogue says what it means, in every language the
      * plugin ships.
@@ -64,11 +63,18 @@ final class code_test extends advanced_testcase {
                         . $codevalue . ']] en el registro.'
                 );
 
-                $text = $manager->get_string('logcode_' . $codevalue,
-                    'assignsubmission_tipnc', null, $language);
+                $text = $manager->get_string(
+                    'logcode_' . $codevalue,
+                    'assignsubmission_tipnc',
+                    null,
+                    $language
+                );
 
-                $this->assertNotSame('', trim($text),
-                    'El código ' . $codevalue . ' tiene el texto vacío en ' . $language . '.');
+                $this->assertNotSame(
+                    '',
+                    trim($text),
+                    'El código ' . $codevalue . ' tiene el texto vacío en ' . $language . '.'
+                );
             }
         }
     }
@@ -84,11 +90,17 @@ final class code_test extends advanced_testcase {
         $severities = [code::SEVERITY_ERROR, code::SEVERITY_WARNING, code::SEVERITY_INFO];
 
         foreach (code::all() as $codevalue) {
-            $this->assertContains(code::kind($codevalue), $kinds,
-                'El código ' . $codevalue . ' no está clasificado.');
+            $this->assertContains(
+                code::kind($codevalue),
+                $kinds,
+                'El código ' . $codevalue . ' no está clasificado.'
+            );
 
-            $this->assertContains(code::severity($codevalue), $severities,
-                'El código ' . $codevalue . ' no tiene severidad.');
+            $this->assertContains(
+                code::severity($codevalue),
+                $severities,
+                'El código ' . $codevalue . ' no tiene severidad.'
+            );
         }
     }
 
@@ -104,8 +116,10 @@ final class code_test extends advanced_testcase {
         }
 
         foreach ([code::OK, code::SHARE_NO_ACCOUNT, code::SHARE_FAILED] as $codevalue) {
-            $this->assertFalse(code::is_system_failure($codevalue),
-                'El código ' . $codevalue . ' es de un documento, no del servicio.');
+            $this->assertFalse(
+                code::is_system_failure($codevalue),
+                'El código ' . $codevalue . ' es de un documento, no del servicio.'
+            );
         }
     }
 

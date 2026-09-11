@@ -42,7 +42,6 @@ use stdClass;
  * @covers     \assignsubmission_tipnc\privacy\provider
  */
 final class provider_test extends \mod_assign\tests\provider_testcase {
-
     /** @var stdClass The course. */
     private stdClass $course;
 
@@ -152,13 +151,19 @@ final class provider_test extends \mod_assign\tests\provider_testcase {
 
         provider::delete_submissions($requestdata);
 
-        $this->assertFalse($DB->record_exists('assignsubmission_tipnc',
-            ['submission' => $submission->id]));
-        $this->assertFalse($DB->record_exists('assignsubmission_tipnc_open',
-            ['submission' => $submission->id]));
-        $this->assertSame(0, $DB->count_records_select('assignsubmission_tipnc_log',
+        $this->assertFalse($DB->record_exists(
+            'assignsubmission_tipnc',
+            ['submission' => $submission->id]
+        ));
+        $this->assertFalse($DB->record_exists(
+            'assignsubmission_tipnc_open',
+            ['submission' => $submission->id]
+        ));
+        $this->assertSame(0, $DB->count_records_select(
+            'assignsubmission_tipnc_log',
             'assignment = :a AND (userid = :u OR affecteduserid = :au)',
-            ['a' => $assignid, 'u' => $this->student->id, 'au' => $this->student->id]));
+            ['a' => $assignid, 'u' => $this->student->id, 'au' => $this->student->id]
+        ));
     }
 
     /**
@@ -189,8 +194,10 @@ final class provider_test extends \mod_assign\tests\provider_testcase {
 
         provider::delete_submissions($requestdata);
 
-        $this->assertTrue($DB->record_exists('assignsubmission_tipnc_open',
-            ['submission' => $othersubmission->id]));
+        $this->assertTrue($DB->record_exists(
+            'assignsubmission_tipnc_open',
+            ['submission' => $othersubmission->id]
+        ));
     }
 
     /**
@@ -215,10 +222,15 @@ final class provider_test extends \mod_assign\tests\provider_testcase {
 
         provider::delete_submission_for_context($requestdata);
 
-        foreach (['assignsubmission_tipnc', 'assignsubmission_tipnc_open',
-                  'assignsubmission_tipnc_enun', 'assignsubmission_tipnc_log'] as $table) {
-            $this->assertSame(0, $DB->count_records($table, ['assignment' => $assignid]),
-                'Quedan filas en ' . $table);
+        foreach (
+            ['assignsubmission_tipnc', 'assignsubmission_tipnc_open',
+                  'assignsubmission_tipnc_enun', 'assignsubmission_tipnc_log'] as $table
+        ) {
+            $this->assertSame(
+                0,
+                $DB->count_records($table, ['assignment' => $assignid]),
+                'Quedan filas en ' . $table
+            );
         }
     }
 

@@ -40,7 +40,6 @@ use templatable;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class incident_list implements renderable, templatable {
-
     /**
      * Constructor.
      *
@@ -52,11 +51,17 @@ class incident_list implements renderable, templatable {
      * @param bool       $filtered     Whether any filter is applied.
      */
     public function __construct(
+        /** @var array Incidents of the page, already resolved. */
         private readonly array $incidents,
+        /** @var int Incidents matching the filters. */
         private readonly int $total,
+        /** @var int Page being shown, zero based. */
         private readonly int $page,
+        /** @var int Incidents per page. */
         private readonly int $perpage,
+        /** @var bool Whether NextCloud is answering right now. */
         private readonly bool $connectionok = true,
+        /** @var bool Whether any filter is applied. */
         private readonly bool $filtered = false
     ) {
     }
@@ -83,8 +88,11 @@ class incident_list implements renderable, templatable {
             'isempty' => empty($rows),
             'isfiltered' => $this->filtered,
             'emptyingood' => empty($rows) && !$this->filtered && $this->connectionok,
-            'summary' => get_string('log_showing', 'assignsubmission_tipnc',
-                (object) ['from' => $from, 'to' => $to, 'total' => $this->total]),
+            'summary' => get_string(
+                'log_showing',
+                'assignsubmission_tipnc',
+                (object) ['from' => $from, 'to' => $to, 'total' => $this->total]
+            ),
             'pagination' => $this->export_pagination(),
         ];
     }
@@ -129,14 +137,18 @@ class incident_list implements renderable, templatable {
             $row['coursename'] = format_string($incident->assignmentinfo->coursename);
             $row['assignmenturl'] = empty($incident->assignmentinfo->cmid) ? '' :
                 (new moodle_url('/mod/assign/view.php', ['id' => $incident->assignmentinfo->cmid]))->out(false);
-            $row['courseurl'] = (new moodle_url('/course/view.php',
-                ['id' => $incident->assignmentinfo->course]))->out(false);
+            $row['courseurl'] = (new moodle_url(
+                '/course/view.php',
+                ['id' => $incident->assignmentinfo->course]
+            ))->out(false);
         }
 
         if (!empty($incident->userinfo)) {
             $row['username'] = fullname($incident->userinfo);
-            $row['userurl'] = (new moodle_url('/user/profile.php',
-                ['id' => $incident->userinfo->id]))->out(false);
+            $row['userurl'] = (new moodle_url(
+                '/user/profile.php',
+                ['id' => $incident->userinfo->id]
+            ))->out(false);
         }
 
         if (!empty($incident->affecteduserinfo)) {

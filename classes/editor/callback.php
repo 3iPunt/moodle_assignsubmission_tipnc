@@ -44,7 +44,6 @@ use Throwable;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class callback {
-
     /** @var int Everything went fine. It is what the editor expects to read. */
     public const OK = 0;
 
@@ -133,8 +132,13 @@ class callback {
      * @return bool True when the document is stored.
      * @throws dml_exception If the incident cannot be recorded.
      */
-    public static function store(int $instance, string $path, string $url, int $status,
-                                 string $key = ''): bool {
+    public static function store(
+        int $instance,
+        string $path,
+        string $url,
+        int $status,
+        string $key = ''
+    ): bool {
         $context = [
             'operation' => $status === self::STATUS_FORCED ? 'forced_save' : 'editor_save',
             'method' => 'callback.php',

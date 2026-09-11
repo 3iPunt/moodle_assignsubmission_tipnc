@@ -49,7 +49,6 @@ use stdClass;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class sessions {
-
     /** @var int Length of a key, within what the editor accepts. */
     private const LENGTH = 20;
 
@@ -170,8 +169,12 @@ class sessions {
         global $DB;
 
         foreach (self::TABLES as $table) {
-            $record = $DB->get_record($table, ['ncid' => $ncid],
-                'id, editorkey, editorversion', IGNORE_MULTIPLE);
+            $record = $DB->get_record(
+                $table,
+                ['ncid' => $ncid],
+                'id, editorkey, editorversion',
+                IGNORE_MULTIPLE
+            );
 
             if ($record instanceof stdClass) {
                 return [$table, $record];

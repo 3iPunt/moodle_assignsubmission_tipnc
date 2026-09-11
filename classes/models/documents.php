@@ -36,7 +36,6 @@ use stdClass;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class documents {
-
     /**
      * Heights the site can choose for the embedded document.
      *
@@ -102,10 +101,18 @@ class documents {
         // when the form opens, and until the person saves, mod_assign keeps
         // saying "no attempt" about something that already has work inside.
         $submitted = $submission->status === ASSIGN_SUBMISSION_STATUS_SUBMITTED;
-        $frozen = $DB->get_record('assignsubmission_tipnc',
-            ['submission' => $submission->id], 'ncid, path', IGNORE_MISSING);
-        $draft = $DB->get_record('assignsubmission_tipnc_open',
-            ['submission' => $submission->id], 'ncid, path', IGNORE_MISSING);
+        $frozen = $DB->get_record(
+            'assignsubmission_tipnc',
+            ['submission' => $submission->id],
+            'ncid, path',
+            IGNORE_MISSING
+        );
+        $draft = $DB->get_record(
+            'assignsubmission_tipnc_open',
+            ['submission' => $submission->id],
+            'ncid, path',
+            IGNORE_MISSING
+        );
 
         if ($submitted && !empty($frozen->ncid)) {
             $row = $frozen;

@@ -41,7 +41,6 @@ use stdClass;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class config {
-
     /** @var string The document can be written. */
     public const MODE_EDIT = 'edit';
 
@@ -53,7 +52,10 @@ class config {
      *
      * @param int $instance Assignment the document belongs to.
      */
-    public function __construct(private readonly int $instance) {
+    public function __construct(
+        /** @var int Assignment the document belongs to. */
+        private readonly int $instance
+    ) {
     }
 
     /**
